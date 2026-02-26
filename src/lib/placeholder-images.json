@@ -1,3 +1,22 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "hero-church",
+      "description": "A modern church interior with warm lighting.",
+      "imageUrl": "https://images.unsplash.com/photo-1569759276108-31b8e7e43e7b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxjaHVyY2glMjBpbnRlcmlvcnxlbnwwfHx8fDE3NzIwODIxMDJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "church interior"
+    },
+    {
+      "id": "event-community",
+      "description": "A diverse group of community members gathering.",
+      "imageUrl": "https://images.unsplash.com/photo-1632580254134-94c4a73dab76?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxjb21tdW5pdHklMjBnYXRoZXJpbmd8ZW58MHx8fHwxNzcyMDY5NjU3fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "community gathering"
+    },
+    {
+      "id": "financial-report",
+      "description": "A close up of financial charts and graphs.",
+      "imageUrl": "https://images.unsplash.com/photo-1768055105681-7d2096c5165f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8ZmluYW5jaWFsJTIwZGF0YXxlbnwwfHx8fDE3NzIwNDU1OTF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "financial data"
+    }
+  ]
 }
