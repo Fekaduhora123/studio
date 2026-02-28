@@ -21,7 +21,7 @@ const formSchema = z.object({
   donorName: z.string().min(2, "Name is required"),
   amount: z.string().refine((val) => !isNaN(Number(val)) && Number(val) > 0, "Enter a valid amount"),
   type: z.enum(["Tithe", "Offering", "GoFund", "Special Seed", "Building Purposes"]),
-  receipt: z.any().refine((files) => files?.length > 0, "Receipt upload is required"),
+  receipt: z.any().optional(),
 });
 
 export default function PublicDonatePage() {
@@ -43,45 +43,45 @@ export default function PublicDonatePage() {
     if (!firestore) return;
     setIsSubmitting(true);
 
-    try {
-      const file = values.receipt[0];
-      const reader = new FileReader();
-      
-      const referenceNumber = 'SL-' + Math.random().toString(36).substring(2, 9).toUpperCase();
+    const referenceNumber = 'SL-' + Math.random().toString(36).substring(2, 9).toUpperCase();
 
-      reader.onloadend = async () => {
-        const base64String = reader.result as string;
-        
-        const donationData = {
-          donorName: values.donorName,
-          amount: Number(values.amount),
-          type: values.type,
-          receiptData: base64String,
-          status: 'pending',
-          referenceNumber,
-          timestamp: serverTimestamp(),
-        };
-
-        addDoc(collection(firestore, 'donations'), donationData)
-          .then(() => {
-            setRefNum(referenceNumber);
-            setSubmitted(true);
-            setIsSubmitting(false);
-          })
-          .catch(async (serverError) => {
-            const permissionError = new FirestorePermissionError({
-              path: 'donations',
-              operation: 'create',
-              requestResourceData: donationData,
-            } satisfies SecurityRuleContext);
-            errorEmitter.emit('permission-error', permissionError);
-            setIsSubmitting(false);
-          });
+    const saveDonation = (receiptData?: string) => {
+      const donationData = {
+        donorName: values.donorName,
+        amount: Number(values.amount),
+        type: values.type,
+        receiptData: receiptData || null,
+        status: 'pending',
+        referenceNumber,
+        timestamp: serverTimestamp(),
       };
 
+      addDoc(collection(firestore, 'donations'), donationData)
+        .then(() => {
+          setRefNum(referenceNumber);
+          setSubmitted(true);
+          setIsSubmitting(false);
+        })
+        .catch(async (serverError) => {
+          const permissionError = new FirestorePermissionError({
+            path: 'donations',
+            operation: 'create',
+            requestResourceData: donationData,
+          } satisfies SecurityRuleContext);
+          errorEmitter.emit('permission-error', permissionError);
+          setIsSubmitting(false);
+        });
+    };
+
+    if (values.receipt && values.receipt.length > 0) {
+      const file = values.receipt[0];
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        saveDonation(reader.result as string);
+      };
       reader.readAsDataURL(file);
-    } catch (error) {
-      setIsSubmitting(false);
+    } else {
+      saveDonation();
     }
   }
 
@@ -122,7 +122,7 @@ export default function PublicDonatePage() {
           <CardHeader>
             <CardTitle className="text-xl font-headline">Submit Your Donation</CardTitle>
             <CardDescription>
-              Please fill out the form below and attach your bank transfer receipt.
+              Please fill out the form below. Attaching your bank transfer receipt is optional but helpful for verification.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -185,7 +185,7 @@ export default function PublicDonatePage() {
                   name="receipt"
                   render={({ field: { value, onChange, ...field } }) => (
                     <FormItem>
-                      <FormLabel>Bank Receipt (Image or PDF)</FormLabel>
+                      <FormLabel>Bank Receipt (Optional)</FormLabel>
                       <FormControl>
                         <div className="border-2 border-dashed rounded-lg p-6 flex flex-col items-center justify-center gap-2 bg-muted/30">
                           <Upload className="h-8 w-8 text-muted-foreground" />

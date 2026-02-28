@@ -27,7 +27,8 @@ import {
   X,
   FileText,
   Filter,
-  Loader2
+  Loader2,
+  Upload
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { useCollection, useFirestore } from '@/firebase';
@@ -279,17 +280,24 @@ export default function DonationsPage() {
                             </div>
                             <div className="border rounded-lg p-2 bg-muted/20">
                               <p className="text-xs font-bold mb-2 uppercase tracking-widest text-muted-foreground">Uploaded Receipt</p>
-                              {donation.receiptData?.startsWith('data:application/pdf') ? (
-                                <div className="flex items-center justify-center p-8 bg-white rounded border">
-                                   <FileText className="h-12 w-12 text-muted-foreground" />
-                                   <span className="ml-2 text-sm">PDF Document</span>
-                                </div>
+                              {donation.receiptData ? (
+                                donation.receiptData.startsWith('data:application/pdf') ? (
+                                  <div className="flex items-center justify-center p-8 bg-white rounded border">
+                                     <FileText className="h-12 w-12 text-muted-foreground" />
+                                     <span className="ml-2 text-sm">PDF Document</span>
+                                  </div>
+                                ) : (
+                                  <img 
+                                    src={donation.receiptData} 
+                                    alt="Receipt" 
+                                    className="w-full h-auto rounded border shadow-sm"
+                                  />
+                                )
                               ) : (
-                                <img 
-                                  src={donation.receiptData} 
-                                  alt="Receipt" 
-                                  className="w-full h-auto rounded border shadow-sm"
-                                />
+                                <div className="flex flex-col items-center justify-center p-12 bg-white rounded border border-dashed">
+                                  <Upload className="h-8 w-8 text-muted-foreground/30 mb-2" />
+                                  <span className="text-sm text-muted-foreground italic">No receipt provided</span>
+                                </div>
                               )}
                             </div>
                             {donation.status === 'pending' && (
