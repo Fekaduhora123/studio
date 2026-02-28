@@ -7,7 +7,6 @@ import {
   CardContent, 
   CardHeader, 
   CardTitle,
-  CardDescription
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -21,26 +20,31 @@ import {
 } from '@/components/ui/table';
 import { 
   Search, 
-  Filter, 
   Download,
   Calendar,
-  CreditCard,
-  Banknote,
-  Smartphone,
   Eye,
   Check,
   X,
-  FileText
+  FileText,
+  Filter
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { useCollection, useFirestore } from '@/firebase';
 import { collection, query, orderBy, doc, updateDoc } from 'firebase/firestore';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { format } from 'date-fns';
+import { 
+  Select, 
+  SelectContent, 
+  SelectItem, 
+  SelectTrigger, 
+  SelectValue 
+} from '@/components/ui/select';
 
 export default function DonationsPage() {
   const firestore = useFirestore();
   const [searchTerm, setSearchTerm] = React.useState('');
+  const [typeFilter, setTypeFilter] = React.useState<string>('all');
   
   const donationsQuery = React.useMemo(() => {
     if (!firestore) return null;
@@ -52,26 +56,50 @@ export default function DonationsPage() {
   const handleUpdateStatus = async (id: string, status: 'approved' | 'rejected') => {
     if (!firestore) return;
     const donationRef = doc(firestore, 'donations', id);
-    await updateDoc(donationRef, { status });
+    updateDoc(donationRef, { status });
   };
 
-  const filteredDonations = donations?.filter(d => 
-    d.donorName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    d.type.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    d.referenceNumber?.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const stats = React.useMemo(() => {
+    const initial = {
+      Tithe: 0,
+      Offering: 0,
+      GoFund: 0,
+      'Building Purposes': 0,
+      total: 0,
+      pending: 0
+    };
+    if (!donations) return initial;
+    
+    return donations.reduce((acc, curr) => {
+      if (curr.status === 'approved') {
+        acc.total += curr.amount;
+        if (curr.type === 'Tithe') acc.Tithe += curr.amount;
+        if (curr.type === 'Offering') acc.Offering += curr.amount;
+        if (curr.type === 'GoFund') acc.GoFund += curr.amount;
+        if (curr.type === 'Building Purposes') acc['Building Purposes'] += curr.amount;
+      } else if (curr.status === 'pending') {
+        acc.pending += 1;
+      }
+      return acc;
+    }, initial);
+  }, [donations]);
 
-  const totalThisMonth = donations?.reduce((acc, curr) => {
-    if (curr.status === 'approved') return acc + curr.amount;
-    return acc;
-  }, 0) || 0;
+  const filteredDonations = donations?.filter(d => {
+    const matchesSearch = d.donorName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      d.type.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      d.referenceNumber?.toLowerCase().includes(searchTerm.toLowerCase());
+    
+    const matchesType = typeFilter === 'all' || d.type === typeFilter;
+    
+    return matchesSearch && matchesType;
+  });
 
   return (
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-headline font-bold text-primary">Income Control</h1>
-          <p className="text-muted-foreground">Verify and track Tithes, Offerings, and GoFund contributions.</p>
+          <p className="text-muted-foreground">Verify and track categorized church contributions.</p>
         </div>
         <div className="flex gap-2">
           <Button variant="outline" className="gap-2">
@@ -80,27 +108,53 @@ export default function DonationsPage() {
         </div>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card className="border-none shadow-sm">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Total Approved (MTD)</CardTitle>
+      <div className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
+        <Card className="border-none shadow-sm bg-primary/5">
+          <CardHeader className="p-4 pb-2">
+            <CardTitle className="text-xs font-bold text-primary uppercase tracking-wider">Total Approved</CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">${totalThisMonth.toLocaleString()}</div>
-            <p className="text-xs text-emerald-600 mt-1 flex items-center">
-              Active contributions
-            </p>
+          <CardContent className="p-4 pt-0">
+            <div className="text-xl font-bold">${stats.total.toLocaleString()}</div>
           </CardContent>
         </Card>
         <Card className="border-none shadow-sm">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Pending Approval</CardTitle>
+          <CardHeader className="p-4 pb-2">
+            <CardTitle className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Tithes</CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-accent">
-              {donations?.filter(d => d.status === 'pending').length || 0}
-            </div>
-            <p className="text-xs text-muted-foreground mt-1">Requires admin review</p>
+          <CardContent className="p-4 pt-0">
+            <div className="text-xl font-bold">${stats.Tithe.toLocaleString()}</div>
+          </CardContent>
+        </Card>
+        <Card className="border-none shadow-sm">
+          <CardHeader className="p-4 pb-2">
+            <CardTitle className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Offerings</CardTitle>
+          </CardHeader>
+          <CardContent className="p-4 pt-0">
+            <div className="text-xl font-bold">${stats.Offering.toLocaleString()}</div>
+          </CardContent>
+        </Card>
+        <Card className="border-none shadow-sm">
+          <CardHeader className="p-4 pb-2">
+            <CardTitle className="text-xs font-medium text-muted-foreground uppercase tracking-wider">GoFund</CardTitle>
+          </CardHeader>
+          <CardContent className="p-4 pt-0">
+            <div className="text-xl font-bold">${stats.GoFund.toLocaleString()}</div>
+          </CardContent>
+        </Card>
+        <Card className="border-none shadow-sm">
+          <CardHeader className="p-4 pb-2">
+            <CardTitle className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Building</CardTitle>
+          </CardHeader>
+          <CardContent className="p-4 pt-0">
+            <div className="text-xl font-bold">${stats['Building Purposes'].toLocaleString()}</div>
+          </CardContent>
+        </Card>
+        <Card className="border-none shadow-sm bg-accent/10">
+          <CardHeader className="p-4 pb-2">
+            <CardTitle className="text-xs font-bold text-accent-foreground uppercase tracking-wider">Pending</CardTitle>
+          </CardHeader>
+          <CardContent className="p-4 pt-0">
+            <div className="text-xl font-bold">{stats.pending}</div>
           </CardContent>
         </Card>
       </div>
@@ -111,15 +165,31 @@ export default function DonationsPage() {
             <div className="relative flex-1 max-w-sm">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input 
-                placeholder="Search donor, type or ref..." 
+                placeholder="Search donor or reference..." 
                 className="pl-9 bg-white"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
             <div className="flex items-center gap-2">
+              <Select value={typeFilter} onValueChange={setTypeFilter}>
+                <SelectTrigger className="w-[180px] bg-white">
+                  <div className="flex items-center gap-2">
+                    <Filter className="h-4 w-4 text-muted-foreground" />
+                    <SelectValue placeholder="All Types" />
+                  </div>
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Types</SelectItem>
+                  <SelectItem value="Tithe">Tithe</SelectItem>
+                  <SelectItem value="Offering">Offering</SelectItem>
+                  <SelectItem value="GoFund">GoFund</SelectItem>
+                  <SelectItem value="Building Purposes">Building Purposes</SelectItem>
+                  <SelectItem value="Special Seed">Special Seed</SelectItem>
+                </SelectContent>
+              </Select>
               <Button variant="outline" size="sm" className="gap-2">
-                <Calendar className="h-4 w-4" /> Filter Date
+                <Calendar className="h-4 w-4" /> Date
               </Button>
             </div>
           </div>
@@ -180,7 +250,7 @@ export default function DonationsPage() {
                         </DialogTrigger>
                         <DialogContent className="max-w-md">
                           <DialogHeader>
-                            <DialogTitle>Verification Details</DialogTitle>
+                            <CardTitle>Verification Details</CardTitle>
                           </DialogHeader>
                           <div className="space-y-4">
                             <div className="grid grid-cols-2 gap-2 text-sm">
@@ -188,6 +258,8 @@ export default function DonationsPage() {
                               <span className="font-bold">{donation.donorName}</span>
                               <span className="text-muted-foreground">Amount:</span>
                               <span className="font-bold">${donation.amount}</span>
+                              <span className="text-muted-foreground">Type:</span>
+                              <span className="font-bold text-primary">{donation.type}</span>
                               <span className="text-muted-foreground">Reference:</span>
                               <span className="font-mono">{donation.referenceNumber}</span>
                             </div>
