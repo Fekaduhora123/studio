@@ -6,7 +6,7 @@ import { FirebaseErrorListener } from '@/components/FirebaseErrorListener';
 
 export const metadata: Metadata = {
   title: 'MUGHER FULL GOSPEL CHURCH | SanctuaryLink',
-  description: 'A comprehensive church management system for MUGHER FULL GOSPEL CHURCH with AI insights, secure donations, and community engagement tools.',
+  description: 'A comprehensive church management system for MUGHER FULL GOSPEL CHURCH with AI verification, secure donations, and community engagement tools.',
 };
 
 export default function RootLayout({
