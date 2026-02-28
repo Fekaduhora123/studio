@@ -7,7 +7,7 @@ import * as z from 'zod';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/form-utils';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Church, Upload, CheckCircle2, Loader2, Info, Sparkles, AlertTriangle, ShieldCheck } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -185,133 +185,93 @@ export default function PublicDonatePage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                
-                <FormField
-                  control={form.control}
-                  name="receipt"
-                  render={({ field: { value, onChange, ...field } }) => (
-                    <FormItem>
-                      <FormLabel className="text-sm font-bold uppercase tracking-wider text-muted-foreground">AI Receipt Verification (Optional)</FormLabel>
-                      <FormControl>
-                        <div className={`border-2 border-dashed rounded-lg p-8 flex flex-col items-center justify-center gap-3 transition-all relative ${isAiVerified ? 'bg-emerald-50 border-emerald-200' : 'bg-muted/30 hover:bg-muted/50 border-primary/20'} ${isScanning ? 'opacity-50 pointer-events-none' : ''}`}>
-                          {isScanning ? (
-                            <div className="flex flex-col items-center gap-3 text-primary text-center">
-                              <Loader2 className="h-10 w-10 animate-spin" />
-                              <div className="space-y-1">
-                                <p className="text-sm font-bold uppercase tracking-widest animate-pulse">Scanning Receipt...</p>
-                                <p className="text-[10px] text-muted-foreground">Checking account & donor details</p>
-                              </div>
-                            </div>
-                          ) : isAiVerified ? (
-                            <div className="flex flex-col items-center gap-3 text-emerald-600 animate-in zoom-in duration-300 text-center">
-                              <div className="bg-emerald-100 p-3 rounded-full">
-                                <ShieldCheck className="h-10 w-10" />
-                              </div>
-                              <div className="space-y-1">
-                                <p className="text-sm font-bold uppercase tracking-widest">AI Verification Successful</p>
-                                <p className="text-[10px] text-muted-foreground italic">Raw image data purged successfully</p>
-                              </div>
-                              <Button 
-                                variant="outline" 
-                                size="sm" 
-                                className="mt-2 h-7 text-[10px] border-emerald-200 text-emerald-700 hover:bg-emerald-100"
-                                onClick={(e) => {
-                                  e.preventDefault();
-                                  setIsAiVerified(false);
-                                  form.setValue('donorName', '');
-                                  form.setValue('amount', '');
-                                }}
-                              >
-                                Scan Different Receipt
-                              </Button>
-                            </div>
-                          ) : (
-                            <>
-                              <div className="bg-primary/5 p-4 rounded-full">
-                                <Upload className="h-8 w-8 text-primary/60" />
-                              </div>
-                              <Input
-                                type="file"
-                                accept="image/*,.pdf"
-                                onChange={handleFileChange}
-                                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                                {...field}
-                              />
-                              <div className="text-center space-y-1">
-                                <p className="text-sm font-bold text-muted-foreground">
-                                  Select receipt to auto-fill
-                                </p>
-                                <p className="text-[10px] text-muted-foreground">Secure scan ends in 5978</p>
-                              </div>
-                              <div className="flex items-center gap-2 text-[10px] bg-primary text-white px-3 py-1 rounded-full font-bold uppercase tracking-widest shadow-sm">
-                                <Sparkles className="h-3 w-3" /> Secure & Automated
-                              </div>
-                            </>
-                          )}
-                        </div>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
+            <div className="space-y-6">
+              <div className="space-y-4">
+                <label className="text-sm font-bold uppercase tracking-wider text-muted-foreground">AI Receipt Verification (Optional)</label>
+                <div className={`border-2 border-dashed rounded-lg p-8 flex flex-col items-center justify-center gap-3 transition-all relative ${isAiVerified ? 'bg-emerald-50 border-emerald-200' : 'bg-muted/30 hover:bg-muted/50 border-primary/20'} ${isScanning ? 'opacity-50 pointer-events-none' : ''}`}>
+                  {isScanning ? (
+                    <div className="flex flex-col items-center gap-3 text-primary text-center">
+                      <Loader2 className="h-10 w-10 animate-spin" />
+                      <div className="space-y-1">
+                        <p className="text-sm font-bold uppercase tracking-widest animate-pulse">Scanning Receipt...</p>
+                        <p className="text-[10px] text-muted-foreground">Checking account & donor details</p>
+                      </div>
+                    </div>
+                  ) : isAiVerified ? (
+                    <div className="flex flex-col items-center gap-3 text-emerald-600 animate-in zoom-in duration-300 text-center">
+                      <div className="bg-emerald-100 p-3 rounded-full">
+                        <ShieldCheck className="h-10 w-10" />
+                      </div>
+                      <div className="space-y-1">
+                        <p className="text-sm font-bold uppercase tracking-widest">AI Verification Successful</p>
+                        <p className="text-[10px] text-muted-foreground italic">Raw image data purged successfully</p>
+                      </div>
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        className="mt-2 h-7 text-[10px] border-emerald-200 text-emerald-700 hover:bg-emerald-100"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setIsAiVerified(false);
+                          form.setValue('donorName', '');
+                          form.setValue('amount', '');
+                        }}
+                      >
+                        Scan Different Receipt
+                      </Button>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="bg-primary/5 p-4 rounded-full">
+                        <Upload className="h-8 w-8 text-primary/60" />
+                      </div>
+                      <Input
+                        type="file"
+                        accept="image/*,.pdf"
+                        onChange={handleFileChange}
+                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                      />
+                      <div className="text-center space-y-1">
+                        <p className="text-sm font-bold text-muted-foreground">
+                          Select receipt to auto-fill
+                        </p>
+                        <p className="text-[10px] text-muted-foreground">Secure scan ends in 5978</p>
+                      </div>
+                      <div className="flex items-center gap-2 text-[10px] bg-primary text-white px-3 py-1 rounded-full font-bold uppercase tracking-widest shadow-sm">
+                        <Sparkles className="h-3 w-3" /> Secure & Automated
+                      </div>
+                    </>
                   )}
-                />
+                </div>
+              </div>
 
-                <FormField
-                  control={form.control}
-                  name="donorName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-xs font-bold uppercase tracking-wider">Donor Full Name</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Enter your full name" className="h-12 bg-white" {...field} />
-                      </FormControl>
-                      <FormDescription className="text-[10px]">
-                        Matches the name on the deposit receipt.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                <div className="space-y-2">
+                  <label className="text-xs font-bold uppercase tracking-wider">Donor Full Name</label>
+                  <Input placeholder="Enter your full name" className="h-12 bg-white" {...form.register('donorName')} />
+                  <p className="text-[10px] text-muted-foreground">Matches the name on the deposit receipt.</p>
+                </div>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <FormField
-                    control={form.control}
-                    name="amount"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-xs font-bold uppercase tracking-wider">Donation Amount (ETB)</FormLabel>
-                        <FormControl>
-                          <Input placeholder="0.00" className="h-12 bg-white" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="type"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-xs font-bold uppercase tracking-wider">Donation Category</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                          <FormControl>
-                            <SelectTrigger className="h-12 bg-white">
-                              <SelectValue placeholder="Select type" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            <SelectItem value="Tithe">Tithe</SelectItem>
-                            <SelectItem value="Offering">Offering</SelectItem>
-                            <SelectItem value="GoFund">GoFund</SelectItem>
-                            <SelectItem value="Special Seed">Special Seed</SelectItem>
-                            <SelectItem value="Building Purposes">Building Purposes</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold uppercase tracking-wider">Donation Amount (ETB)</label>
+                    <Input placeholder="0.00" className="h-12 bg-white" {...form.register('amount')} />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold uppercase tracking-wider">Donation Category</label>
+                    <Select onValueChange={(val) => form.setValue('type', val as any)} defaultValue={form.getValues('type')}>
+                      <SelectTrigger className="h-12 bg-white">
+                        <SelectValue placeholder="Select type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Tithe">Tithe</SelectItem>
+                        <SelectItem value="Offering">Offering</SelectItem>
+                        <SelectItem value="GoFund">GoFund</SelectItem>
+                        <SelectItem value="Special Seed">Special Seed</SelectItem>
+                        <SelectItem value="Building Purposes">Building Purposes</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
                 </div>
                 
                 <Button type="submit" className="w-full h-14 text-lg font-bold bg-primary uppercase tracking-widest shadow-lg" disabled={isSubmitting || isScanning}>
@@ -322,7 +282,7 @@ export default function PublicDonatePage() {
                   ) : "Submit Verification"}
                 </Button>
               </form>
-            </Form>
+            </div>
           </CardContent>
           <CardFooter className="justify-center border-t py-4 bg-muted/20">
             <Link href="/login" className="text-xs text-muted-foreground hover:text-primary underline flex items-center gap-1 font-medium">
