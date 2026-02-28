@@ -1,4 +1,3 @@
-
 "use client";
 
 import * as React from 'react';
@@ -10,13 +9,14 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Church, Upload, CheckCircle2, Loader2, FileText, Info } from 'lucide-react';
+import { Church, Upload, CheckCircle2, Loader2, FileText, Info, Sparkles } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import Link from 'next/link';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { useFirestore } from '@/firebase';
 import { errorEmitter } from '@/firebase/error-emitter';
 import { FirestorePermissionError, type SecurityRuleContext } from '@/firebase/errors';
+import { scanReceipt } from '@/ai/flows/scan-receipt-flow';
 
 const formSchema = z.object({
   donorName: z.string().min(2, "Name is required"),
@@ -28,6 +28,7 @@ const formSchema = z.object({
 export default function PublicDonatePage() {
   const firestore = useFirestore();
   const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const [isScanning, setIsScanning] = React.useState(false);
   const [submitted, setSubmitted] = React.useState(false);
   const [refNum, setRefNum] = React.useState("");
   const [mounted, setMounted] = React.useState(false);
@@ -44,6 +45,40 @@ export default function PublicDonatePage() {
       type: "Offering",
     },
   });
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    const file = files[0];
+    
+    // Convert to Data URI for AI Scanning
+    const reader = new FileReader();
+    reader.onloadend = async () => {
+      const dataUri = reader.result as string;
+      
+      // Start AI Scanning
+      setIsScanning(true);
+      try {
+        const result = await scanReceipt({ receiptDataUri: dataUri });
+        
+        if (result.donorName) {
+          form.setValue('donorName', result.donorName, { shouldValidate: true });
+        }
+        if (result.amount > 0) {
+          form.setValue('amount', result.amount.toString(), { shouldValidate: true });
+        }
+      } catch (err) {
+        console.error("AI Scan failed", err);
+      } finally {
+        setIsScanning(false);
+      }
+    };
+    reader.readAsDataURL(file);
+    
+    // Also notify react-hook-form
+    form.setValue('receipt', files);
+  };
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     if (!firestore) return;
@@ -145,6 +180,45 @@ export default function PublicDonatePage() {
           <CardContent>
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                
+                <FormField
+                  control={form.control}
+                  name="receipt"
+                  render={({ field: { value, onChange, ...field } }) => (
+                    <FormItem>
+                      <FormLabel>Bank Receipt (Optional)</FormLabel>
+                      <FormControl>
+                        <div className={`border-2 border-dashed rounded-lg p-6 flex flex-col items-center justify-center gap-2 bg-muted/30 transition-colors hover:bg-muted/50 cursor-pointer relative ${isScanning ? 'opacity-50 pointer-events-none' : ''}`}>
+                          {isScanning ? (
+                            <div className="flex flex-col items-center gap-2 text-primary">
+                              <Loader2 className="h-8 w-8 animate-spin" />
+                              <p className="text-sm font-bold animate-pulse">AI scanning receipt details...</p>
+                            </div>
+                          ) : (
+                            <>
+                              <Upload className="h-8 w-8 text-muted-foreground" />
+                              <Input
+                                type="file"
+                                accept="image/*,.pdf"
+                                onChange={handleFileChange}
+                                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                                {...field}
+                              />
+                              <p className="text-sm font-medium text-muted-foreground">
+                                {value && value[0] ? value[0].name : "Upload image or PDF receipt"}
+                              </p>
+                              <div className="flex items-center gap-1 text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">
+                                <Sparkles className="h-3 w-3" /> Auto-scan enabled
+                              </div>
+                            </>
+                          )}
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
                 <FormField
                   control={form.control}
                   name="donorName"
@@ -154,10 +228,14 @@ export default function PublicDonatePage() {
                       <FormControl>
                         <Input placeholder="Enter your full name" className="h-11" {...field} />
                       </FormControl>
+                      <FormDescription>
+                        As shown on the deposit receipt.
+                      </FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
+                
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <FormField
                     control={form.control}
@@ -197,33 +275,8 @@ export default function PublicDonatePage() {
                     )}
                   />
                 </div>
-                <FormField
-                  control={form.control}
-                  name="receipt"
-                  render={({ field: { value, onChange, ...field } }) => (
-                    <FormItem>
-                      <FormLabel>Bank Receipt (Optional)</FormLabel>
-                      <FormControl>
-                        <div className="border-2 border-dashed rounded-lg p-6 flex flex-col items-center justify-center gap-2 bg-muted/30 transition-colors hover:bg-muted/50 cursor-pointer relative">
-                          <Upload className="h-8 w-8 text-muted-foreground" />
-                          <Input
-                            type="file"
-                            accept="image/*,.pdf"
-                            onChange={(e) => onChange(e.target.files)}
-                            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                            {...field}
-                          />
-                          <p className="text-sm font-medium text-muted-foreground">
-                            {value && value[0] ? value[0].name : "Upload image or PDF receipt"}
-                          </p>
-                          <p className="text-xs text-muted-foreground">Max size: 5MB</p>
-                        </div>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <Button type="submit" className="w-full h-12 text-lg bg-primary" disabled={isSubmitting}>
+                
+                <Button type="submit" className="w-full h-12 text-lg bg-primary" disabled={isSubmitting || isScanning}>
                   {isSubmitting ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Submitting...
