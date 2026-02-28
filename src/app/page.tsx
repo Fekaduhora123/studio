@@ -56,16 +56,13 @@ export default function Home() {
           <Link className="hidden sm:inline-flex text-sm font-medium hover:text-primary transition-colors" href="/donate">
             Donate
           </Link>
-          <div className="flex flex-col gap-1 items-center border-l pl-4 ml-2">
-            <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest leading-none mb-0.5">Admin Access</span>
-            <div className="flex flex-col gap-1">
-              <Button asChild variant="default" size="sm" className="bg-primary hover:bg-primary/90 h-7 px-3 text-[10px] w-28">
-                <Link href="/dashboard">Admin Dashboard</Link>
-              </Button>
-              <Button asChild variant="outline" size="sm" className="h-7 px-3 text-[10px] w-28 border-primary text-primary hover:bg-primary/5">
-                <Link href="/login">Login</Link>
-              </Button>
-            </div>
+          <div className="flex flex-col gap-1 border-l pl-4 ml-2">
+            <Button asChild variant="default" size="sm" className="bg-primary hover:bg-primary/90 h-7 px-3 text-[10px] w-28">
+              <Link href="/dashboard">Admin Dashboard</Link>
+            </Button>
+            <Button asChild variant="outline" size="sm" className="h-7 px-3 text-[10px] w-28 border-primary text-primary hover:bg-primary/5">
+              <Link href="/login">Login</Link>
+            </Button>
           </div>
         </nav>
       </header>
