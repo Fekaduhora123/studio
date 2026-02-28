@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { Church, ShieldCheck, PieChart, Users, Heart, Calendar as CalendarIcon, MapPin, Clock, ArrowRight, Loader2, X } from 'lucide-react';
+import { Church, ShieldCheck, PieChart, Users, Heart, Calendar as CalendarIcon, MapPin, Clock, ArrowRight, Loader2, X, LogIn } from 'lucide-react';
 import { useCollection, useFirestore } from '@/firebase';
 import { collection, query, orderBy, limit } from 'firebase/firestore';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
@@ -42,22 +42,26 @@ export default function Home() {
           <Church className="h-6 w-6 text-primary" />
           <span className="font-headline font-bold text-xl tracking-tight">SanctuaryLink</span>
         </Link>
-        <nav className="ml-auto flex gap-4 sm:gap-6 items-center">
-          <Link className="text-sm font-medium hover:text-primary transition-colors" href="#features">
+        <nav className="ml-auto flex gap-2 sm:gap-4 items-center">
+          <Link className="hidden md:inline-flex text-sm font-medium hover:text-primary transition-colors" href="#features">
             Features
           </Link>
-          <Link className="text-sm font-medium hover:text-primary transition-colors" href="#events">
+          <Link className="hidden md:inline-flex text-sm font-medium hover:text-primary transition-colors" href="#events">
             Events
           </Link>
-          <Link className="text-sm font-medium hover:text-primary transition-colors" href="/donate">
+          <Link className="hidden sm:inline-flex text-sm font-medium hover:text-primary transition-colors" href="/donate">
             Donate
           </Link>
-          <Link className="text-sm font-medium hover:text-primary transition-colors" href="/login">
-            Login
-          </Link>
-          <Button asChild variant="default" size="sm" className="bg-primary hover:bg-primary/90">
-            <Link href="/dashboard">Admin Dashboard</Link>
-          </Button>
+          <div className="flex items-center gap-2 border-l pl-4 ml-2">
+            <Button asChild variant="ghost" size="sm" className="text-muted-foreground hover:text-primary">
+              <Link href="/login" className="flex items-center gap-2">
+                <LogIn className="h-4 w-4" /> Login
+              </Link>
+            </Button>
+            <Button asChild variant="default" size="sm" className="bg-primary hover:bg-primary/90 hidden sm:flex">
+              <Link href="/dashboard">Admin Dashboard</Link>
+            </Button>
+          </div>
         </nav>
       </header>
       <main className="flex-1">
