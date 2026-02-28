@@ -1,8 +1,9 @@
+
 "use client";
 
 import * as React from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import {
   Sidebar,
   SidebarContent,
@@ -25,10 +26,13 @@ import {
   LogOut,
   Church,
   Settings,
-  Bell
+  Bell,
+  Loader2
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useUser, useAuth } from '@/firebase';
+import { signOut } from 'firebase/auth';
 
 const navItems = [
   { icon: LayoutDashboard, label: 'Dashboard', href: '/dashboard' },
@@ -41,6 +45,32 @@ const navItems = [
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
+  const { user, loading } = useUser();
+  const auth = useAuth();
+
+  React.useEffect(() => {
+    if (!loading && !user) {
+      router.push('/login');
+    }
+  }, [user, loading, router]);
+
+  const handleLogout = async () => {
+    await signOut(auth);
+    router.push('/');
+  };
+
+  if (loading) {
+    return (
+      <div className="flex h-screen items-center justify-center bg-background">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  if (!user) {
+    return null; // Will redirect via useEffect
+  }
 
   return (
     <SidebarProvider>
@@ -50,8 +80,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <div className="bg-accent p-1.5 rounded-lg">
               <Church className="h-6 w-6 text-accent-foreground" />
             </div>
-            <span className="font-headline font-bold text-xl tracking-tight hidden group-data-[collapsible=icon]:inline">SanctuaryLink</span>
-            <span className="font-headline font-bold text-xl tracking-tight group-data-[collapsible=icon]:hidden">SanctuaryLink</span>
+            <span className="font-headline font-bold text-xl tracking-tight">SanctuaryLink</span>
           </SidebarHeader>
           <SidebarContent className="px-2">
             <SidebarMenu>
@@ -79,11 +108,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           <SidebarFooter className="p-4 mt-auto">
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton asChild className="hover:bg-sidebar-accent/50 text-sidebar-foreground">
-                  <Link href="/">
-                    <LogOut className="h-5 w-5" />
-                    <span>Logout</span>
-                  </Link>
+                <SidebarMenuButton 
+                  onClick={handleLogout}
+                  className="hover:bg-sidebar-accent/50 text-sidebar-foreground w-full justify-start"
+                >
+                  <LogOut className="h-5 w-5 mr-3" />
+                  <span>Logout</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>
@@ -108,12 +138,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               </Button>
               <div className="flex items-center gap-3 pl-4 border-l">
                 <div className="flex flex-col items-end hidden sm:flex">
-                  <p className="text-sm font-medium leading-none">Pastor James</p>
+                  <p className="text-sm font-medium leading-none">{user.displayName || 'Pastor James'}</p>
                   <p className="text-xs text-muted-foreground">Church Admin</p>
                 </div>
                 <Avatar className="h-9 w-9 border-2 border-primary/20">
-                  <AvatarImage src="https://picsum.photos/seed/pastor/100/100" />
-                  <AvatarFallback>PJ</AvatarFallback>
+                  <AvatarImage src={user.photoURL || `https://picsum.photos/seed/${user.uid}/100/100`} />
+                  <AvatarFallback>{user.email?.charAt(0).toUpperCase() || 'A'}</AvatarFallback>
                 </Avatar>
               </div>
             </div>
