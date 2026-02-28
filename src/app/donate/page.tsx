@@ -10,7 +10,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Church, Upload, CheckCircle2, Loader2, FileText } from 'lucide-react';
+import { Church, Upload, CheckCircle2, Loader2, FileText, Info } from 'lucide-react';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import Link from 'next/link';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { useFirestore } from '@/firebase';
@@ -124,6 +125,15 @@ export default function PublicDonatePage() {
           <Church className="h-8 w-8 text-primary" />
           <h1 className="text-2xl font-headline font-bold text-primary">SanctuaryLink Giving</h1>
         </div>
+
+        <Alert className="mb-6 bg-primary/5 border-primary/20">
+          <Info className="h-4 w-4 text-primary" />
+          <AlertTitle className="text-primary font-bold">Official Deposit Account</AlertTitle>
+          <AlertDescription className="text-sm font-medium leading-relaxed">
+            Please ensure all deposits are made only to account: 
+            <span className="font-bold text-lg block mt-1 tracking-tight">1000221935978</span>
+          </AlertDescription>
+        </Alert>
 
         <Card className="border-none shadow-xl">
           <CardHeader>
