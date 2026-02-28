@@ -21,20 +21,19 @@ import {
 import { 
   Search, 
   Download,
-  Calendar,
   Eye,
   Check,
   X,
   FileText,
   Filter,
   Loader2,
-  Upload,
   ShieldCheck,
-  AlertCircle
+  AlertCircle,
+  Trash2
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { useCollection, useFirestore } from '@/firebase';
-import { collection, query, orderBy, doc, updateDoc } from 'firebase/firestore';
+import { collection, query, orderBy, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { format } from 'date-fns';
 import { 
@@ -45,6 +44,8 @@ import {
   SelectValue 
 } from '@/components/ui/select';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { errorEmitter } from '@/firebase/error-emitter';
+import { FirestorePermissionError, type SecurityRuleContext } from '@/firebase/errors';
 
 export default function DonationsPage() {
   const firestore = useFirestore();
@@ -63,10 +64,29 @@ export default function DonationsPage() {
 
   const { data: donations, loading } = useCollection(donationsQuery);
 
-  const handleUpdateStatus = async (id: string, status: 'approved' | 'rejected') => {
+  const handleUpdateStatus = (id: string, status: 'approved' | 'rejected') => {
     if (!firestore) return;
     const donationRef = doc(firestore, 'donations', id);
-    updateDoc(donationRef, { status });
+    updateDoc(donationRef, { status }).catch(async (err) => {
+      const permissionError = new FirestorePermissionError({
+        path: donationRef.path,
+        operation: 'update',
+        requestResourceData: { status },
+      } satisfies SecurityRuleContext);
+      errorEmitter.emit('permission-error', permissionError);
+    });
+  };
+
+  const handleDeleteDonation = (id: string) => {
+    if (!firestore) return;
+    const donationRef = doc(firestore, 'donations', id);
+    deleteDoc(donationRef).catch(async (err) => {
+      const permissionError = new FirestorePermissionError({
+        path: donationRef.path,
+        operation: 'delete',
+      } satisfies SecurityRuleContext);
+      errorEmitter.emit('permission-error', permissionError);
+    });
   };
 
   const stats = React.useMemo(() => {
@@ -317,23 +337,36 @@ export default function DonationsPage() {
                             </div>
                           </div>
                           
-                          {donation.status === 'pending' && (
-                            <div className="flex gap-2 pt-2">
-                              <Button 
-                                className="flex-1 bg-emerald-600 hover:bg-emerald-700 font-bold uppercase text-xs" 
-                                onClick={() => handleUpdateStatus(donation.id, 'approved')}
-                              >
-                                <Check className="h-4 w-4 mr-2" /> Approve
-                              </Button>
-                              <Button 
-                                variant="destructive" 
-                                className="flex-1 font-bold uppercase text-xs"
-                                onClick={() => handleUpdateStatus(donation.id, 'rejected')}
-                              >
-                                <X className="h-4 w-4 mr-2" /> Reject
-                              </Button>
-                            </div>
-                          )}
+                          <div className="flex flex-col gap-2 pt-2">
+                            {donation.status === 'pending' && (
+                              <div className="flex gap-2">
+                                <Button 
+                                  className="flex-1 bg-emerald-600 hover:bg-emerald-700 font-bold uppercase text-xs" 
+                                  onClick={() => handleUpdateStatus(donation.id, 'approved')}
+                                >
+                                  <Check className="h-4 w-4 mr-2" /> Approve
+                                </Button>
+                                <Button 
+                                  variant="destructive" 
+                                  className="flex-1 font-bold uppercase text-xs"
+                                  onClick={() => handleUpdateStatus(donation.id, 'rejected')}
+                                >
+                                  <X className="h-4 w-4 mr-2" /> Reject
+                                </Button>
+                              </div>
+                            )}
+                            <Button 
+                              variant="outline" 
+                              className="w-full font-bold uppercase text-xs text-rose-600 border-rose-200 hover:bg-rose-50 hover:text-rose-700"
+                              onClick={() => {
+                                if (confirm('Are you sure you want to permanently delete this record?')) {
+                                  handleDeleteDonation(donation.id);
+                                }
+                              }}
+                            >
+                              <Trash2 className="h-4 w-4 mr-2" /> Delete Record
+                            </Button>
+                          </div>
                         </div>
                       </DialogContent>
                     </Dialog>
