@@ -1,4 +1,3 @@
-
 "use client";
 
 import * as React from 'react';
@@ -66,7 +65,7 @@ export default function PublicDonatePage() {
         const result = await scanReceipt({ receiptDataUri: dataUri });
         
         if (!result.isCorrectAccount) {
-          setScanError("The AI couldn't verify this receipt was sent to Muger Full Gospel Church (Account: 1000221935978). Please check your upload.");
+          setScanError("The AI couldn't verify this receipt was sent to MUGHER FULL GOSPEL CHURCH (Account: 1000221935978). Please check your upload.");
           form.setValue('receipt', undefined);
         } else {
           if (result.donorName) {
@@ -75,10 +74,9 @@ export default function PublicDonatePage() {
           if (result.amount > 0) {
             form.setValue('amount', result.amount.toString(), { shouldValidate: true });
           }
-          // Verification successful: Mark as verified and CLEAR the file to save storage
           setIsAiVerified(true);
           form.setValue('receipt', undefined);
-          if (e.target) e.target.value = ''; // Reset input element
+          if (e.target) e.target.value = ''; 
         }
       } catch (err) {
         console.error("AI Scan failed", err);
@@ -99,7 +97,7 @@ export default function PublicDonatePage() {
       donorName: values.donorName,
       amount: Number(values.amount),
       type: values.type,
-      receiptData: null, // Always null because we discard image after scan or it was optional
+      receiptData: null, 
       isAiVerified: isAiVerified,
       status: 'pending',
       referenceNumber,
@@ -155,7 +153,7 @@ export default function PublicDonatePage() {
       <div className="max-w-2xl mx-auto">
         <div className="flex items-center justify-center gap-2 mb-8">
           <Church className="h-8 w-8 text-primary" />
-          <h1 className="text-2xl font-headline font-bold text-primary">SanctuaryLink Giving</h1>
+          <h1 className="text-2xl font-headline font-bold text-primary">MUGHER FULL GOSPEL Giving</h1>
         </div>
 
         <Alert className="mb-6 bg-primary/5 border-primary/20">
@@ -164,7 +162,7 @@ export default function PublicDonatePage() {
           <AlertDescription className="text-sm font-medium leading-relaxed">
             Please ensure all deposits are made only to account: 
             <span className="font-bold text-lg block mt-1 tracking-tight">1000221935978</span>
-            <span className="text-muted-foreground italic font-medium">Muger Full Gospel Church</span>
+            <span className="text-muted-foreground italic font-medium uppercase">MUGHER FULL GOSPEL CHURCH</span>
           </AlertDescription>
         </Alert>
 

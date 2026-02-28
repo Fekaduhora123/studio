@@ -1,4 +1,3 @@
-
 import type {Metadata} from 'next';
 import './globals.css';
 import { FirebaseClientProvider } from '@/firebase';
@@ -6,8 +5,8 @@ import { Toaster } from '@/components/ui/toaster';
 import { FirebaseErrorListener } from '@/components/FirebaseErrorListener';
 
 export const metadata: Metadata = {
-  title: 'SanctuaryLink | Modern Church Management',
-  description: 'A comprehensive church management system with AI insights, secure donations, and community engagement tools.',
+  title: 'MUGHER FULL GOSPEL CHURCH | SanctuaryLink',
+  description: 'A comprehensive church management system for MUGHER FULL GOSPEL CHURCH with AI insights, secure donations, and community engagement tools.',
 };
 
 export default function RootLayout({

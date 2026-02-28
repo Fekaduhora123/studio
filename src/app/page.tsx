@@ -45,7 +45,7 @@ export default function Home() {
       <header className="px-4 lg:px-6 h-16 md:h-20 flex items-center border-b bg-white/95 backdrop-blur-md sticky top-0 z-50">
         <Link className="flex items-center justify-center space-x-2" href="/">
           <Church className="h-6 w-6 text-primary" />
-          <span className="font-headline font-bold text-xl tracking-tight">SanctuaryLink</span>
+          <span className="font-headline font-bold text-xl tracking-tight uppercase">MUGHER FULL GOSPEL</span>
         </Link>
         <nav className="ml-auto flex gap-4 sm:gap-6 items-center">
           <Link className="hidden md:inline-flex text-sm font-medium hover:text-primary transition-colors" href="#features">
@@ -70,11 +70,11 @@ export default function Home() {
             <div className="grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px] items-center">
               <div className="flex flex-col justify-center space-y-4">
                 <div className="space-y-2">
-                  <h1 className="text-3xl font-headline font-bold tracking-tighter sm:text-5xl xl:text-6xl/none text-primary">
-                    Management Built for Faith Communities
+                  <h1 className="text-3xl font-headline font-bold tracking-tighter sm:text-5xl xl:text-6xl/none text-primary uppercase">
+                    MUGHER FULL GOSPEL CHURCH
                   </h1>
                   <p className="max-w-[600px] text-muted-foreground md:text-xl">
-                    SanctuaryLink empowers your church with secure donation tracking, member management, and AI-driven financial insights. Modern ministry, simplified.
+                    Management built for our faith community. SanctuaryLink empowers our church with secure donation tracking and AI-driven insights.
                   </p>
                 </div>
                 <div className="flex flex-col gap-2 min-[400px]:flex-row">
@@ -108,7 +108,7 @@ export default function Home() {
                 <Badge className="bg-accent text-accent-foreground mb-2">What's Happening</Badge>
                 <h2 className="text-3xl font-headline font-bold tracking-tighter sm:text-5xl text-primary">Upcoming Events</h2>
                 <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                  Join us in fellowship and community service.
+                  Join us in fellowship and community service at Mugher Full Gospel.
                 </p>
               </div>
             </div>
@@ -264,7 +264,7 @@ export default function Home() {
         </section>
       </main>
       <footer className="flex flex-col gap-2 sm:flex-row py-6 w-full shrink-0 items-center px-4 md:px-6 border-t bg-white">
-        <p className="text-xs text-muted-foreground">© 2024 SanctuaryLink. All rights reserved.</p>
+        <p className="text-xs text-muted-foreground">© 2024 MUGHER FULL GOSPEL CHURCH. All rights reserved.</p>
         <nav className="sm:ml-auto flex gap-4 sm:gap-6">
           <Link className="text-xs hover:underline underline-offset-4" href="#">
             Terms of Service
