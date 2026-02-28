@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Church, Upload, CheckCircle2, Loader2 } from 'lucide-react';
+import { Church, Upload, CheckCircle2, Loader2, FileText } from 'lucide-react';
 import Link from 'next/link';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { useFirestore } from '@/firebase';
@@ -29,6 +29,11 @@ export default function PublicDonatePage() {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [submitted, setSubmitted] = React.useState(false);
   const [refNum, setRefNum] = React.useState("");
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -85,16 +90,18 @@ export default function PublicDonatePage() {
     }
   }
 
+  if (!mounted) return null;
+
   if (submitted) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center p-4">
-        <Card className="max-w-md w-full text-center p-8">
+        <Card className="max-w-md w-full text-center p-8 animate-in fade-in zoom-in duration-300">
           <div className="flex justify-center mb-6">
             <div className="bg-emerald-100 p-4 rounded-full">
               <CheckCircle2 className="h-12 w-12 text-emerald-600" />
             </div>
           </div>
-          <CardTitle className="text-2xl font-headline mb-2">Thank You!</CardTitle>
+          <CardTitle className="text-2xl font-headline mb-2 text-primary">Thank You!</CardTitle>
           <CardDescription className="text-base mb-6">
             Your donation has been submitted for verification.
           </CardDescription>
@@ -102,7 +109,7 @@ export default function PublicDonatePage() {
             <p className="text-xs uppercase font-bold text-muted-foreground tracking-wider mb-1">Reference Number</p>
             <p className="text-xl font-mono font-bold text-primary">{refNum}</p>
           </div>
-          <Button asChild className="w-full">
+          <Button asChild className="w-full bg-primary h-12">
             <Link href="/">Return Home</Link>
           </Button>
         </Card>
@@ -120,9 +127,9 @@ export default function PublicDonatePage() {
 
         <Card className="border-none shadow-xl">
           <CardHeader>
-            <CardTitle className="text-xl font-headline">Submit Your Donation</CardTitle>
+            <CardTitle className="text-xl font-headline text-primary">Submit Your Donation</CardTitle>
             <CardDescription>
-              Please fill out the form below. Attaching your bank transfer receipt is optional but helpful for verification.
+              Please fill out the form below. Attaching a bank receipt is optional but helps speed up verification.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -135,7 +142,7 @@ export default function PublicDonatePage() {
                     <FormItem>
                       <FormLabel>Full Name</FormLabel>
                       <FormControl>
-                        <Input placeholder="John Doe" {...field} />
+                        <Input placeholder="Enter your full name" className="h-11" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -149,7 +156,7 @@ export default function PublicDonatePage() {
                       <FormItem>
                         <FormLabel>Amount ($)</FormLabel>
                         <FormControl>
-                          <Input placeholder="0.00" {...field} />
+                          <Input placeholder="0.00" className="h-11" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -163,7 +170,7 @@ export default function PublicDonatePage() {
                         <FormLabel>Donation Type</FormLabel>
                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <FormControl>
-                            <SelectTrigger>
+                            <SelectTrigger className="h-11">
                               <SelectValue placeholder="Select type" />
                             </SelectTrigger>
                           </FormControl>
@@ -187,23 +194,26 @@ export default function PublicDonatePage() {
                     <FormItem>
                       <FormLabel>Bank Receipt (Optional)</FormLabel>
                       <FormControl>
-                        <div className="border-2 border-dashed rounded-lg p-6 flex flex-col items-center justify-center gap-2 bg-muted/30">
+                        <div className="border-2 border-dashed rounded-lg p-6 flex flex-col items-center justify-center gap-2 bg-muted/30 transition-colors hover:bg-muted/50 cursor-pointer relative">
                           <Upload className="h-8 w-8 text-muted-foreground" />
                           <Input
                             type="file"
                             accept="image/*,.pdf"
                             onChange={(e) => onChange(e.target.files)}
-                            className="max-w-[250px]"
+                            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                             {...field}
                           />
-                          <p className="text-xs text-muted-foreground mt-2">Max size: 5MB</p>
+                          <p className="text-sm font-medium text-muted-foreground">
+                            {value && value[0] ? value[0].name : "Upload image or PDF receipt"}
+                          </p>
+                          <p className="text-xs text-muted-foreground">Max size: 5MB</p>
                         </div>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-                <Button type="submit" className="w-full h-12 text-lg" disabled={isSubmitting}>
+                <Button type="submit" className="w-full h-12 text-lg bg-primary" disabled={isSubmitting}>
                   {isSubmitting ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Submitting...
@@ -213,9 +223,9 @@ export default function PublicDonatePage() {
               </form>
             </Form>
           </CardContent>
-          <CardFooter className="justify-center border-t py-4">
-            <Link href="/login" className="text-xs text-muted-foreground hover:text-primary underline">
-              Admin Login
+          <CardFooter className="justify-center border-t py-4 bg-muted/20">
+            <Link href="/login" className="text-xs text-muted-foreground hover:text-primary underline flex items-center gap-1">
+               Admin Login
             </Link>
           </CardFooter>
         </Card>
