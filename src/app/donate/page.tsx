@@ -1,3 +1,4 @@
+
 "use client";
 
 import * as React from 'react';
@@ -9,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Church, Upload, CheckCircle2, Loader2, Info, Sparkles, AlertTriangle } from 'lucide-react';
+import { Church, Upload, CheckCircle2, Loader2, Info, Sparkles, AlertTriangle, ShieldCheck } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import Link from 'next/link';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
@@ -33,6 +34,7 @@ export default function PublicDonatePage() {
   const [refNum, setRefNum] = React.useState("");
   const [mounted, setMounted] = React.useState(false);
   const [scanError, setScanError] = React.useState<string | null>(null);
+  const [isAiVerified, setIsAiVerified] = React.useState(false);
 
   React.useEffect(() => {
     setMounted(true);
@@ -53,20 +55,18 @@ export default function PublicDonatePage() {
 
     const file = files[0];
     setScanError(null);
+    setIsAiVerified(false);
     
-    // Convert to Data URI for AI Scanning
     const reader = new FileReader();
     reader.onloadend = async () => {
       const dataUri = reader.result as string;
       
-      // Start AI Scanning
       setIsScanning(true);
       try {
         const result = await scanReceipt({ receiptDataUri: dataUri });
         
         if (!result.isCorrectAccount) {
           setScanError("The AI couldn't verify this receipt was sent to Muger Full Gospel Church (Account: 1000221935978). Please check your upload.");
-          // Clear the file input if it's potentially wrong
           form.setValue('receipt', undefined);
         } else {
           if (result.donorName) {
@@ -75,6 +75,10 @@ export default function PublicDonatePage() {
           if (result.amount > 0) {
             form.setValue('amount', result.amount.toString(), { shouldValidate: true });
           }
+          // Verification successful: Mark as verified and CLEAR the file to save storage
+          setIsAiVerified(true);
+          form.setValue('receipt', undefined);
+          if (e.target) e.target.value = ''; // Reset input element
         }
       } catch (err) {
         console.error("AI Scan failed", err);
@@ -83,9 +87,6 @@ export default function PublicDonatePage() {
       }
     };
     reader.readAsDataURL(file);
-    
-    // Also notify react-hook-form
-    form.setValue('receipt', files);
   };
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
@@ -94,44 +95,32 @@ export default function PublicDonatePage() {
 
     const referenceNumber = 'SL-' + Math.random().toString(36).substring(2, 9).toUpperCase();
 
-    const saveDonation = (receiptData?: string) => {
-      const donationData = {
-        donorName: values.donorName,
-        amount: Number(values.amount),
-        type: values.type,
-        receiptData: receiptData || null,
-        status: 'pending',
-        referenceNumber,
-        timestamp: serverTimestamp(),
-      };
-
-      addDoc(collection(firestore, 'donations'), donationData)
-        .then(() => {
-          setRefNum(referenceNumber);
-          setSubmitted(true);
-          setIsSubmitting(false);
-        })
-        .catch(async (serverError) => {
-          const permissionError = new FirestorePermissionError({
-            path: 'donations',
-            operation: 'create',
-            requestResourceData: donationData,
-          } satisfies SecurityRuleContext);
-          errorEmitter.emit('permission-error', permissionError);
-          setIsSubmitting(false);
-        });
+    const donationData = {
+      donorName: values.donorName,
+      amount: Number(values.amount),
+      type: values.type,
+      receiptData: null, // Always null because we discard image after scan or it was optional
+      isAiVerified: isAiVerified,
+      status: 'pending',
+      referenceNumber,
+      timestamp: serverTimestamp(),
     };
 
-    if (values.receipt && values.receipt.length > 0) {
-      const file = values.receipt[0];
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        saveDonation(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    } else {
-      saveDonation();
-    }
+    addDoc(collection(firestore, 'donations'), donationData)
+      .then(() => {
+        setRefNum(referenceNumber);
+        setSubmitted(true);
+        setIsSubmitting(false);
+      })
+      .catch(async (serverError) => {
+        const permissionError = new FirestorePermissionError({
+          path: 'donations',
+          operation: 'create',
+          requestResourceData: donationData,
+        } satisfies SecurityRuleContext);
+        errorEmitter.emit('permission-error', permissionError);
+        setIsSubmitting(false);
+      });
   }
 
   if (!mounted) return null;
@@ -191,7 +180,7 @@ export default function PublicDonatePage() {
           <CardHeader>
             <CardTitle className="text-xl font-headline text-primary">Submit Your Donation</CardTitle>
             <CardDescription>
-              Please fill out the form below. Attaching a bank receipt is optional but helps speed up verification.
+              Upload your receipt for instant AI verification. The image is discarded after verification to protect your privacy and save space.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -203,13 +192,32 @@ export default function PublicDonatePage() {
                   name="receipt"
                   render={({ field: { value, onChange, ...field } }) => (
                     <FormItem>
-                      <FormLabel>Bank Receipt (Optional)</FormLabel>
+                      <FormLabel>AI Receipt Verification (Optional)</FormLabel>
                       <FormControl>
-                        <div className={`border-2 border-dashed rounded-lg p-6 flex flex-col items-center justify-center gap-2 bg-muted/30 transition-colors hover:bg-muted/50 cursor-pointer relative ${isScanning ? 'opacity-50 pointer-events-none' : ''}`}>
+                        <div className={`border-2 border-dashed rounded-lg p-6 flex flex-col items-center justify-center gap-2 transition-colors relative ${isAiVerified ? 'bg-emerald-50 border-emerald-200' : 'bg-muted/30 hover:bg-muted/50'} ${isScanning ? 'opacity-50 pointer-events-none' : ''}`}>
                           {isScanning ? (
                             <div className="flex flex-col items-center gap-2 text-primary">
                               <Loader2 className="h-8 w-8 animate-spin" />
-                              <p className="text-sm font-bold animate-pulse">AI verifying receipt details...</p>
+                              <p className="text-sm font-bold animate-pulse">Scanning Receipt...</p>
+                            </div>
+                          ) : isAiVerified ? (
+                            <div className="flex flex-col items-center gap-2 text-emerald-600 animate-in zoom-in duration-300">
+                              <ShieldCheck className="h-10 w-10" />
+                              <p className="text-sm font-bold">AI Verification Successful</p>
+                              <p className="text-[10px] text-muted-foreground italic">Image discarded successfully</p>
+                              <Button 
+                                variant="outline" 
+                                size="sm" 
+                                className="mt-2 h-7 text-[10px]"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  setIsAiVerified(false);
+                                  form.setValue('donorName', '');
+                                  form.setValue('amount', '');
+                                }}
+                              >
+                                Scan Different Receipt
+                              </Button>
                             </div>
                           ) : (
                             <>
@@ -222,10 +230,10 @@ export default function PublicDonatePage() {
                                 {...field}
                               />
                               <p className="text-sm font-medium text-muted-foreground">
-                                {value && value[0] ? value[0].name : "Upload image or PDF receipt"}
+                                Upload receipt to auto-fill
                               </p>
                               <div className="flex items-center gap-1 text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">
-                                <Sparkles className="h-3 w-3" /> Smart Verification
+                                <Sparkles className="h-3 w-3" /> Save Storage & Verify
                               </div>
                             </>
                           )}

@@ -28,7 +28,8 @@ import {
   FileText,
   Filter,
   Loader2,
-  Upload
+  Upload,
+  ShieldCheck
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { useCollection, useFirestore } from '@/firebase';
@@ -278,8 +279,19 @@ export default function DonationsPage() {
                               <span className="text-muted-foreground">Reference:</span>
                               <span className="font-mono">{donation.referenceNumber}</span>
                             </div>
+
+                            {donation.isAiVerified && (
+                              <Alert className="bg-emerald-50 border-emerald-200">
+                                <ShieldCheck className="h-4 w-4 text-emerald-600" />
+                                <AlertTitle className="text-emerald-800 text-xs font-bold uppercase tracking-wider">AI Verified</AlertTitle>
+                                <AlertDescription className="text-emerald-700 text-xs">
+                                  This donation was successfully scanned and verified against the church account by Gemini AI.
+                                </AlertDescription>
+                              </Alert>
+                            )}
+
                             <div className="border rounded-lg p-2 bg-muted/20">
-                              <p className="text-xs font-bold mb-2 uppercase tracking-widest text-muted-foreground">Uploaded Receipt</p>
+                              <p className="text-xs font-bold mb-2 uppercase tracking-widest text-muted-foreground">Receipt Storage</p>
                               {donation.receiptData ? (
                                 donation.receiptData.startsWith('data:application/pdf') ? (
                                   <div className="flex items-center justify-center p-8 bg-white rounded border">
@@ -293,6 +305,12 @@ export default function DonationsPage() {
                                     className="w-full h-auto rounded border shadow-sm"
                                   />
                                 )
+                              ) : donation.isAiVerified ? (
+                                <div className="flex flex-col items-center justify-center p-8 bg-white rounded border border-dashed">
+                                  <ShieldCheck className="h-8 w-8 text-emerald-500 mb-2" />
+                                  <span className="text-sm text-emerald-700 font-medium">Image Discarded After Scan</span>
+                                  <span className="text-[10px] text-muted-foreground text-center px-4">Verification was successful, raw file was deleted to save space.</span>
+                                </div>
                               ) : (
                                 <div className="flex flex-col items-center justify-center p-12 bg-white rounded border border-dashed">
                                   <Upload className="h-8 w-8 text-muted-foreground/30 mb-2" />
@@ -300,6 +318,7 @@ export default function DonationsPage() {
                                 </div>
                               )}
                             </div>
+                            
                             {donation.status === 'pending' && (
                               <div className="flex gap-2 pt-4">
                                 <Button 

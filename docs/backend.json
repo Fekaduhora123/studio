@@ -16,7 +16,7 @@
         },
         "receiptData": {
           "type": "string",
-          "description": "Base64 encoded receipt image or PDF data URI."
+          "description": "Base64 encoded receipt image or PDF data URI (Optional if AI verified)."
         },
         "status": {
           "type": "string",
@@ -36,6 +36,10 @@
           "type": "string",
           "enum": ["Tithe", "Offering", "GoFund", "Special Seed", "Building Purposes"],
           "description": "Category of the donation."
+        },
+        "isAiVerified": {
+          "type": "boolean",
+          "description": "Whether the receipt was successfully scanned and verified by AI."
         }
       },
       "required": ["donorName", "amount", "status", "referenceNumber", "timestamp"]
