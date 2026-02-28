@@ -15,7 +15,8 @@ import {
   TableCell, 
   TableHead, 
   TableHeader, 
-  TableRow 
+  TableRow,
+  TableFooter
 } from '@/components/ui/table';
 import { 
   Search, 
@@ -106,6 +107,10 @@ export default function DonationsPage() {
     
     return matchesSearch && matchesType;
   });
+
+  const filteredTotal = React.useMemo(() => {
+    return filteredDonations?.reduce((sum, d) => sum + d.amount, 0) || 0;
+  }, [filteredDonations]);
 
   if (!mounted) {
     return (
@@ -336,6 +341,19 @@ export default function DonationsPage() {
                 </TableRow>
               ))}
             </TableBody>
+            {!loading && filteredDonations && filteredDonations.length > 0 && (
+              <TableFooter className="bg-muted/50 border-t-2 border-primary/10">
+                <TableRow>
+                  <TableCell colSpan={5} className="text-right font-bold uppercase tracking-wider text-[10px] text-muted-foreground">
+                    Filtered Subtotal
+                  </TableCell>
+                  <TableCell className="text-right font-bold text-emerald-600 tabular-nums">
+                    ${filteredTotal.toLocaleString()}
+                  </TableCell>
+                  <TableCell />
+                </TableRow>
+              </TableFooter>
+            )}
           </Table>
         </CardContent>
       </Card>
