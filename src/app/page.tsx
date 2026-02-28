@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { Church, ShieldCheck, PieChart, Users, Heart, Calendar as CalendarIcon, MapPin, Clock, ArrowRight, Loader2, LogIn } from 'lucide-react';
+import { Church, ShieldCheck, PieChart, Users, Heart, Calendar as CalendarIcon, MapPin, Clock, ArrowRight, Loader2 } from 'lucide-react';
 import { useCollection, useFirestore } from '@/firebase';
 import { collection, query, orderBy, limit } from 'firebase/firestore';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
@@ -40,8 +40,8 @@ export default function Home() {
   const { data: events, loading } = useCollection(eventsQuery);
 
   return (
-    <div className="flex flex-col min-h-screen font-body">
-      <header className="px-4 lg:px-6 h-16 flex items-center border-b bg-white/80 backdrop-blur-md sticky top-0 z-50">
+    <div className="flex flex-col min-h-screen font-body text-slate-900">
+      <header className="px-4 lg:px-6 h-16 md:h-20 flex items-center border-b bg-white/95 backdrop-blur-md sticky top-0 z-50">
         <Link className="flex items-center justify-center space-x-2" href="/">
           <Church className="h-6 w-6 text-primary" />
           <span className="font-headline font-bold text-xl tracking-tight">SanctuaryLink</span>
@@ -56,13 +56,16 @@ export default function Home() {
           <Link className="hidden sm:inline-flex text-sm font-medium hover:text-primary transition-colors" href="/donate">
             Donate
           </Link>
-          <div className="flex flex-col items-center gap-0.5 border-l pl-4 ml-2">
-            <Button asChild variant="default" size="sm" className="bg-primary hover:bg-primary/90 h-8 px-3 text-xs">
-              <Link href="/dashboard">Admin Dashboard</Link>
-            </Button>
-            <Link href="/login" className="text-[10px] text-muted-foreground hover:text-primary transition-colors font-medium uppercase tracking-wider">
-              Admin Login
-            </Link>
+          <div className="flex flex-col gap-1 items-center border-l pl-4 ml-2">
+            <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest leading-none mb-0.5">Admin Access</span>
+            <div className="flex flex-col gap-1">
+              <Button asChild variant="default" size="sm" className="bg-primary hover:bg-primary/90 h-7 px-3 text-[10px] w-28">
+                <Link href="/dashboard">Admin Dashboard</Link>
+              </Button>
+              <Button asChild variant="outline" size="sm" className="h-7 px-3 text-[10px] w-28 border-primary text-primary hover:bg-primary/5">
+                <Link href="/login">Login</Link>
+              </Button>
+            </div>
           </div>
         </nav>
       </header>
