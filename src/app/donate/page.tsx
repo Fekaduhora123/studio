@@ -65,7 +65,7 @@ export default function PublicDonatePage() {
         const result = await scanReceipt({ receiptDataUri: dataUri });
         
         if (!result.isCorrectAccount) {
-          setScanError("Verification Failed: The AI couldn't verify this receipt was sent to MUGHER FULL GOSPEL CHURCH (Account: 1000221935978). Please ensure you have uploaded the correct receipt.");
+          setScanError("Verification Failed: This receipt was not sent to MUGHER FULL GOSPEL CHURCH (Account: 1000221935978). Please check your transaction.");
           form.setValue('receipt', undefined);
         } else {
           if (result.donorName) {
@@ -98,7 +98,7 @@ export default function PublicDonatePage() {
       donorName: values.donorName,
       amount: Number(values.amount),
       type: values.type,
-      receiptData: null, // Always null because we discard verified images or don't store unverified ones
+      receiptData: null, // Always null because we discard verified images to save storage
       isAiVerified: isAiVerified,
       status: 'pending',
       referenceNumber,
@@ -135,7 +135,7 @@ export default function PublicDonatePage() {
           </div>
           <CardTitle className="text-2xl font-headline mb-2 text-primary">Thank You!</CardTitle>
           <CardDescription className="text-base mb-6">
-            Your donation has been submitted for verification.
+            Your contribution has been submitted for validation.
           </CardDescription>
           <div className="bg-muted p-4 rounded-lg mb-8">
             <p className="text-xs uppercase font-bold text-muted-foreground tracking-wider mb-1">Reference Number</p>
@@ -154,7 +154,7 @@ export default function PublicDonatePage() {
       <div className="max-w-2xl mx-auto">
         <div className="flex items-center justify-center gap-2 mb-8">
           <Church className="h-8 w-8 text-primary" />
-          <h1 className="text-2xl font-headline font-bold text-primary uppercase">MUGHER FULL GOSPEL Giving</h1>
+          <h1 className="text-2xl font-headline font-bold text-primary uppercase">MUGHER FULL GOSPEL CHURCH</h1>
         </div>
 
         <Alert className="mb-6 bg-primary/5 border-primary/20 shadow-sm">
@@ -181,7 +181,7 @@ export default function PublicDonatePage() {
           <CardHeader>
             <CardTitle className="text-xl font-headline text-primary">Submit Your Donation</CardTitle>
             <CardDescription>
-              Upload your receipt for instant AI verification. To protect your privacy and optimize storage, images are discarded after verification.
+              Upload your bank receipt for automated AI verification. Images are discarded after scanning to save storage and protect privacy.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -201,7 +201,7 @@ export default function PublicDonatePage() {
                               <Loader2 className="h-10 w-10 animate-spin" />
                               <div className="space-y-1">
                                 <p className="text-sm font-bold uppercase tracking-widest animate-pulse">Scanning Receipt...</p>
-                                <p className="text-[10px] text-muted-foreground">Checking account & amount with AI</p>
+                                <p className="text-[10px] text-muted-foreground">Checking account & donor details</p>
                               </div>
                             </div>
                           ) : isAiVerified ? (
@@ -211,7 +211,7 @@ export default function PublicDonatePage() {
                               </div>
                               <div className="space-y-1">
                                 <p className="text-sm font-bold uppercase tracking-widest">AI Verification Successful</p>
-                                <p className="text-[10px] text-muted-foreground italic">Raw image data discarded successfully</p>
+                                <p className="text-[10px] text-muted-foreground italic">Raw image data purged successfully</p>
                               </div>
                               <Button 
                                 variant="outline" 
@@ -243,7 +243,7 @@ export default function PublicDonatePage() {
                                 <p className="text-sm font-bold text-muted-foreground">
                                   Select receipt to auto-fill
                                 </p>
-                                <p className="text-[10px] text-muted-foreground">Supported: Jpeg, Png, Pdf</p>
+                                <p className="text-[10px] text-muted-foreground">Secure scan ends in 5978</p>
                               </div>
                               <div className="flex items-center gap-2 text-[10px] bg-primary text-white px-3 py-1 rounded-full font-bold uppercase tracking-widest shadow-sm">
                                 <Sparkles className="h-3 w-3" /> Secure & Automated
@@ -262,12 +262,12 @@ export default function PublicDonatePage() {
                   name="donorName"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-xs font-bold uppercase tracking-wider">Full Name</FormLabel>
+                      <FormLabel className="text-xs font-bold uppercase tracking-wider">Donor Full Name</FormLabel>
                       <FormControl>
                         <Input placeholder="Enter your full name" className="h-12 bg-white" {...field} />
                       </FormControl>
                       <FormDescription className="text-[10px]">
-                        As shown on the bank deposit or transfer receipt.
+                        Matches the name on the deposit receipt.
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
@@ -280,7 +280,7 @@ export default function PublicDonatePage() {
                     name="amount"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-xs font-bold uppercase tracking-wider">Amount</FormLabel>
+                        <FormLabel className="text-xs font-bold uppercase tracking-wider">Donation Amount (ETB)</FormLabel>
                         <FormControl>
                           <Input placeholder="0.00" className="h-12 bg-white" {...field} />
                         </FormControl>
@@ -293,7 +293,7 @@ export default function PublicDonatePage() {
                     name="type"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-xs font-bold uppercase tracking-wider">Donation Type</FormLabel>
+                        <FormLabel className="text-xs font-bold uppercase tracking-wider">Donation Category</FormLabel>
                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <FormControl>
                             <SelectTrigger className="h-12 bg-white">
@@ -317,16 +317,16 @@ export default function PublicDonatePage() {
                 <Button type="submit" className="w-full h-14 text-lg font-bold bg-primary uppercase tracking-widest shadow-lg" disabled={isSubmitting || isScanning}>
                   {isSubmitting ? (
                     <>
-                      <Loader2 className="mr-2 h-5 w-5 animate-spin" /> Processing...
+                      <Loader2 className="mr-2 h-5 w-5 animate-spin" /> Verifying...
                     </>
-                  ) : "Submit Donation"}
+                  ) : "Submit Verification"}
                 </Button>
               </form>
             </Form>
           </CardContent>
           <CardFooter className="justify-center border-t py-4 bg-muted/20">
             <Link href="/login" className="text-xs text-muted-foreground hover:text-primary underline flex items-center gap-1 font-medium">
-               Admin Login
+               Admin Dashboard Login
             </Link>
           </CardFooter>
         </Card>

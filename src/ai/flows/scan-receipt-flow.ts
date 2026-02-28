@@ -25,7 +25,7 @@ const ScanReceiptOutputSchema = z.object({
   currency: z.string().optional().describe('The currency symbol or code found on the receipt.'),
   detectedAccountNumber: z.string().optional().describe('The destination account number found on the receipt.'),
   detectedBeneficiary: z.string().optional().describe('The name of the bank account recipient found on the receipt.'),
-  isCorrectAccount: z.boolean().describe('True if the receipt shows a transfer to account 1000221935978 or MUGHER FULL GOSPEL CHURCH (including abbreviations like FULL GOS, BEL CHU, or MUGHER).'),
+  isCorrectAccount: z.boolean().describe('True if the receipt shows a transfer to account 1000221935978 or MUGHER FULL GOSPEL CHURCH (including abbreviations like FULL GOS, BEL CHU, or ETHIOPIAN FULL GOS).'),
 });
 export type ScanReceiptOutput = z.infer<typeof ScanReceiptOutputSchema>;
 
@@ -40,16 +40,16 @@ const scanReceiptPrompt = ai.definePrompt({
   prompt: `You are an expert financial auditor for MUGHER FULL GOSPEL CHURCH. Your task is to extract information and verify if a donation was sent to the correct church account.
 
 Please analyze the receipt image and extract:
-1. The full name of the donor/sender (e.g., "FIKADU HORA REGASSA").
+1. The full name of the donor/sender (e.g., "FIKADU HORA REGASSA" usually follows "debited from").
 2. The exact total amount of the transaction (e.g., 1000.00).
 3. The currency (e.g., ETB, USD).
 4. The destination account number or partial number (e.g., "5978").
-5. The name of the beneficiary/recipient.
+5. The name of the beneficiary/recipient (usually follows "for").
 
 VERIFICATION RULES:
 Set 'isCorrectAccount' to true if you find ANY of the following:
 - The account number matches or ends with "1000221935978" or "5978".
-- The beneficiary name is "MUGHER FULL GOSPEL CHURCH" or similar abbreviations like "FULL GOS", "BEL CHU", "ETHIOPIAN FULL GOS", "MU/M/", "MUGHER".
+- The beneficiary name contains "MUGHER", "FULL GOS", "BEL CHU", "ETHIOPIAN FULL GOS", or "MU/M/".
 
 If the receipt is for a different church or account, set 'isCorrectAccount' to false.
 

@@ -94,9 +94,13 @@ export default function DonationsPage() {
   }, [donations]);
 
   const filteredDonations = donations?.filter(d => {
-    const matchesSearch = d.donorName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      d.type.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      d.referenceNumber?.toLowerCase().includes(searchTerm.toLowerCase());
+    const donorName = d.donorName || '';
+    const type = d.type || '';
+    const ref = d.referenceNumber || '';
+    
+    const matchesSearch = donorName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      type.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      ref.toLowerCase().includes(searchTerm.toLowerCase());
     
     const matchesType = typeFilter === 'all' || d.type === typeFilter;
     
@@ -116,7 +120,7 @@ export default function DonationsPage() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-headline font-bold text-primary uppercase tracking-tight">Income Control</h1>
-          <p className="text-muted-foreground font-medium">Verified categorization for MUGHER FULL GOSPEL CHURCH.</p>
+          <p className="text-muted-foreground font-medium">MUGHER FULL GOSPEL CHURCH verified categorization.</p>
         </div>
         <div className="flex gap-2">
           <Button variant="outline" className="gap-2 font-bold uppercase text-xs">
@@ -268,7 +272,7 @@ export default function DonationsPage() {
                               <ShieldCheck className="h-4 w-4 text-emerald-600" />
                               <AlertTitle className="text-emerald-800 text-xs font-bold uppercase tracking-widest">AI Verified Secure</AlertTitle>
                               <AlertDescription className="text-emerald-700 text-[10px] leading-relaxed">
-                                Gemini AI successfully verified this deposit was made to **MUGHER FULL GOSPEL CHURCH** (Account ends in **5978**).
+                                AI successfully verified this deposit was made to **MUGHER FULL GOSPEL CHURCH** (Account ends in **5978**).
                               </AlertDescription>
                             </Alert>
                           )}
