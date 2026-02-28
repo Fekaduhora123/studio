@@ -58,7 +58,7 @@ export default function Home() {
             Donate
           </Link>
           <div className="border-l pl-4 ml-2">
-            <Button asChild variant="default" size="sm" className="bg-primary hover:bg-primary/90 h-9 px-4">
+            <Button asChild variant="default" size="sm" className="bg-primary hover:bg-primary/90 h-9 px-4 uppercase font-bold text-[10px] tracking-widest">
               <Link href="/login">{user ? 'Admin Dashboard' : 'Admin Login'}</Link>
             </Button>
           </div>
@@ -69,30 +69,34 @@ export default function Home() {
           <div className="container px-4 md:px-6 mx-auto">
             <div className="grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px] items-center">
               <div className="flex flex-col justify-center space-y-4">
-                <div className="space-y-2">
-                  <h1 className="text-3xl font-headline font-bold tracking-tighter sm:text-5xl xl:text-6xl/none text-primary uppercase">
+                <div className="space-y-4">
+                  <Badge className="w-fit bg-accent text-accent-foreground font-bold tracking-widest uppercase text-[10px]">
+                    Welcome to our community
+                  </Badge>
+                  <h1 className="text-4xl font-headline font-bold tracking-tighter sm:text-6xl xl:text-7xl/none text-primary uppercase">
                     MUGHER FULL GOSPEL CHURCH
                   </h1>
-                  <p className="max-w-[600px] text-muted-foreground md:text-xl">
-                    Management built for our faith community. SanctuaryLink empowers our church with secure donation tracking and AI-driven insights.
+                  <p className="max-w-[600px] text-muted-foreground md:text-xl leading-relaxed">
+                    Faith-driven management for our growing congregation. SanctuaryLink ensures transparency and secure contribution tracking for every member.
                   </p>
                 </div>
-                <div className="flex flex-col gap-2 min-[400px]:flex-row">
-                  <Button asChild size="lg" className="px-8 bg-primary">
-                    <Link href="/donate">Submit a Donation</Link>
+                <div className="flex flex-col gap-3 min-[400px]:flex-row pt-4">
+                  <Button asChild size="lg" className="px-8 bg-primary font-bold uppercase tracking-widest shadow-lg">
+                    <Link href="/donate">Contribute Now</Link>
                   </Button>
-                  <Button asChild variant="outline" size="lg" className="px-8 border-primary text-primary hover:bg-primary/10">
-                    <Link href="#events">View Upcoming Events</Link>
+                  <Button asChild variant="outline" size="lg" className="px-8 border-primary text-primary hover:bg-primary/10 font-bold uppercase tracking-widest">
+                    <Link href="#events">Upcoming Fellowship</Link>
                   </Button>
                 </div>
               </div>
-              <div className="relative aspect-video lg:aspect-square rounded-2xl overflow-hidden shadow-2xl border-4 border-white">
+              <div className="relative aspect-video lg:aspect-square rounded-2xl overflow-hidden shadow-2xl border-8 border-white">
                 {heroImage && (
                   <Image
                     src={heroImage.imageUrl}
                     alt={heroImage.description}
                     fill
                     className="object-cover"
+                    priority
                     data-ai-hint={heroImage.imageHint}
                   />
                 )}
@@ -105,10 +109,10 @@ export default function Home() {
           <div className="container px-4 md:px-6 mx-auto">
             <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
               <div className="space-y-2">
-                <Badge className="bg-accent text-accent-foreground mb-2">What's Happening</Badge>
-                <h2 className="text-3xl font-headline font-bold tracking-tighter sm:text-5xl text-primary">Upcoming Events</h2>
-                <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                  Join us in fellowship and community service at Mugher Full Gospel.
+                <Badge className="bg-primary/10 text-primary mb-2 font-bold uppercase tracking-widest text-[10px]">Fellowship</Badge>
+                <h2 className="text-3xl font-headline font-bold tracking-tighter sm:text-5xl text-primary uppercase">Upcoming Events</h2>
+                <p className="max-w-[900px] text-muted-foreground md:text-xl leading-relaxed mx-auto">
+                  Be a part of our ministry. Join us in worship, community service, and spiritual growth at MUGHER FULL GOSPEL CHURCH.
                 </p>
               </div>
             </div>
@@ -120,17 +124,17 @@ export default function Home() {
                 </div>
               ) : events && events.length > 0 ? (
                 events.map((event) => (
-                  <Card key={event.id} className="border-none shadow-sm hover:shadow-md transition-shadow flex flex-col">
+                  <Card key={event.id} className="border-none shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col group bg-white">
                     <CardHeader className="pb-2">
                       <div className="flex items-center justify-between mb-2">
-                        <Badge variant="outline" className="text-primary border-primary/20">
+                        <Badge variant="outline" className="text-[10px] font-bold uppercase tracking-tighter border-primary/20 text-primary bg-primary/5">
                           {event.category || 'Worship'}
                         </Badge>
                       </div>
-                      <CardTitle className="text-xl font-headline font-bold line-clamp-2">{event.title}</CardTitle>
+                      <CardTitle className="text-xl font-headline font-bold line-clamp-2 text-primary group-hover:text-accent transition-colors">{event.title}</CardTitle>
                     </CardHeader>
                     <CardContent className="flex-1">
-                      <div className="space-y-2 text-sm text-muted-foreground mb-4">
+                      <div className="space-y-3 text-sm text-muted-foreground mb-4 font-medium">
                         <div className="flex items-center gap-2">
                           <CalendarIcon className="h-4 w-4 text-accent" /> {event.date}
                         </div>
@@ -151,50 +155,50 @@ export default function Home() {
                           <DialogTrigger asChild>
                             <Button 
                               variant="ghost" 
-                              className="w-full group gap-2 text-primary hover:bg-primary/5 p-0 justify-start"
+                              className="w-full group/btn gap-2 text-primary hover:bg-primary/5 p-0 justify-start font-bold uppercase text-xs tracking-widest"
                             >
-                              View Details <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                              Explore Details <ArrowRight className="h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
                             </Button>
                           </DialogTrigger>
-                          <DialogContent className="max-w-2xl">
+                          <DialogContent className="max-w-2xl border-none shadow-2xl">
                             <DialogHeader>
-                              <Badge className="w-fit mb-2 bg-accent text-accent-foreground">
+                              <Badge className="w-fit mb-2 bg-accent text-accent-foreground font-bold uppercase tracking-widest text-[10px]">
                                 {event.category || 'Worship'}
                               </Badge>
-                              <DialogTitle className="text-2xl font-headline font-bold text-primary">
+                              <DialogTitle className="text-3xl font-headline font-bold text-primary uppercase tracking-tight">
                                 {event.title}
                               </DialogTitle>
                               <DialogDescription className="sr-only">
-                                Full details for {event.title}
+                                Event details for {event.title}
                               </DialogDescription>
                             </DialogHeader>
                             <div className="space-y-6 pt-4">
                               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/50 border">
+                                <div className="flex items-center gap-3 p-4 rounded-xl bg-muted/30 border border-primary/5">
                                   <CalendarIcon className="h-5 w-5 text-accent" />
                                   <div className="text-sm">
-                                    <p className="font-bold text-xs uppercase tracking-wider text-muted-foreground">Date</p>
-                                    <p className="font-medium">{event.date}</p>
+                                    <p className="font-bold text-[10px] uppercase tracking-widest text-muted-foreground">Date</p>
+                                    <p className="font-bold">{event.date}</p>
                                   </div>
                                 </div>
-                                <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/50 border">
+                                <div className="flex items-center gap-3 p-4 rounded-xl bg-muted/30 border border-primary/5">
                                   <Clock className="h-5 w-5 text-accent" />
                                   <div className="text-sm">
-                                    <p className="font-bold text-xs uppercase tracking-wider text-muted-foreground">Time</p>
-                                    <p className="font-medium">{event.time}</p>
+                                    <p className="font-bold text-[10px] uppercase tracking-widest text-muted-foreground">Time</p>
+                                    <p className="font-bold">{event.time}</p>
                                   </div>
                                 </div>
-                                <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/50 border">
+                                <div className="flex items-center gap-3 p-4 rounded-xl bg-muted/30 border border-primary/5">
                                   <MapPin className="h-5 w-5 text-accent" />
                                   <div className="text-sm">
-                                    <p className="font-bold text-xs uppercase tracking-wider text-muted-foreground">Location</p>
-                                    <p className="font-medium">{event.location}</p>
+                                    <p className="font-bold text-[10px] uppercase tracking-widest text-muted-foreground">Location</p>
+                                    <p className="font-bold">{event.location}</p>
                                   </div>
                                 </div>
                               </div>
-                              <div className="space-y-2">
-                                <p className="font-bold text-xs uppercase tracking-wider text-muted-foreground">About this Event</p>
-                                <div className="text-base leading-relaxed whitespace-pre-wrap text-slate-700 bg-white p-4 rounded-lg border">
+                              <div className="space-y-3">
+                                <p className="font-bold text-[10px] uppercase tracking-widest text-muted-foreground">Event Overview</p>
+                                <div className="text-base leading-relaxed whitespace-pre-wrap text-slate-700 bg-white p-6 rounded-xl border shadow-inner">
                                   {event.description}
                                 </div>
                               </div>
@@ -206,8 +210,9 @@ export default function Home() {
                   </Card>
                 ))
               ) : (
-                <div className="col-span-full text-center py-12 text-muted-foreground italic">
-                  No upcoming events scheduled at this time.
+                <div className="col-span-full text-center py-24 text-muted-foreground italic bg-white rounded-2xl shadow-sm">
+                  <CalendarIcon className="h-12 w-12 mx-auto mb-4 opacity-10" />
+                  <p>No upcoming fellowships currently listed. Check back soon.</p>
                 </div>
               )}
             </div>
@@ -216,61 +221,77 @@ export default function Home() {
 
         <section id="features" className="w-full py-12 md:py-24 lg:py-32 bg-white">
           <div className="container px-4 md:px-6 mx-auto">
-            <div className="flex flex-col items-center justify-center space-y-4 text-center">
+            <div className="flex flex-col items-center justify-center space-y-4 text-center mb-16">
               <div className="space-y-2">
-                <h2 className="text-3xl font-headline font-bold tracking-tighter sm:text-5xl text-primary">Key Features</h2>
+                <h2 className="text-3xl font-headline font-bold tracking-tighter sm:text-5xl text-primary uppercase">Secure Management</h2>
                 <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                  Everything you need to manage your church efficiently and transparently.
+                  SANCTUARYLINK provides the tools necessary for efficient and transparent church operations.
                 </p>
               </div>
             </div>
-            <div className="mx-auto grid max-w-5xl items-center gap-6 py-12 lg:grid-cols-3 lg:gap-12">
-              <div className="flex flex-col items-center space-y-4 p-6 rounded-xl border bg-background shadow-sm hover:shadow-md transition-shadow">
-                <Users className="h-10 w-10 text-accent" />
-                <h3 className="text-xl font-bold font-headline">Member Management</h3>
-                <p className="text-sm text-muted-foreground text-center">
-                  Register and track members, ministry groups, and community involvement with ease.
+            <div className="mx-auto grid max-w-5xl items-center gap-8 py-12 lg:grid-cols-3">
+              <div className="flex flex-col items-center space-y-4 p-8 rounded-2xl border bg-background shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all">
+                <div className="bg-primary/5 p-4 rounded-2xl">
+                  <Users className="h-10 w-10 text-primary" />
+                </div>
+                <h3 className="text-xl font-bold font-headline uppercase tracking-tight">Congregation</h3>
+                <p className="text-sm text-muted-foreground text-center leading-relaxed">
+                  A centralized database for members, ministry groups, and community outreach efforts.
                 </p>
               </div>
-              <div className="flex flex-col items-center space-y-4 p-6 rounded-xl border bg-background shadow-sm hover:shadow-md transition-shadow">
-                <Heart className="h-10 w-10 text-accent" />
-                <h3 className="text-xl font-bold font-headline">Donation Control</h3>
-                <p className="text-sm text-muted-foreground text-center">
-                  Securely track Tithes, Offerings, and GoFund campaigns with detailed history.
+              <div className="flex flex-col items-center space-y-4 p-8 rounded-2xl border bg-background shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all">
+                <div className="bg-accent/10 p-4 rounded-2xl">
+                  <Heart className="h-10 w-10 text-accent" />
+                </div>
+                <h3 className="text-xl font-bold font-headline uppercase tracking-tight">Contributions</h3>
+                <p className="text-sm text-muted-foreground text-center leading-relaxed">
+                  Automated AI verification for Tithes and Offerings ensure every seed is accounted for.
                 </p>
               </div>
-              <div className="flex flex-col items-center space-y-4 p-6 rounded-xl border bg-background shadow-sm hover:shadow-md transition-shadow">
-                <PieChart className="h-10 w-10 text-accent" />
-                <h3 className="text-xl font-bold font-headline">AI Reporting</h3>
-                <p className="text-sm text-muted-foreground text-center">
-                  Get automated financial summaries and anomaly alerts powered by advanced AI.
+              <div className="flex flex-col items-center space-y-4 p-8 rounded-2xl border bg-background shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all">
+                <div className="bg-primary/5 p-4 rounded-2xl">
+                  <PieChart className="h-10 w-10 text-primary" />
+                </div>
+                <h3 className="text-xl font-bold font-headline uppercase tracking-tight">Insights</h3>
+                <p className="text-sm text-muted-foreground text-center leading-relaxed">
+                  Advanced AI reporting provides financial summaries and health metrics for the leadership.
                 </p>
               </div>
             </div>
           </div>
         </section>
 
-        <section className="w-full py-12 md:py-24 lg:py-32 bg-primary text-white">
-          <div className="container px-4 md:px-6 mx-auto flex flex-col items-center space-y-4 text-center">
-            <ShieldCheck className="h-16 w-16 text-accent mb-4" />
-            <h2 className="text-3xl font-headline font-bold tracking-tighter sm:text-5xl">Secure and Transparent</h2>
-            <p className="max-w-[700px] text-primary-foreground/80 md:text-xl/relaxed">
-              Role-based access ensures that financial data is only seen by those who need it, fostering trust within your congregation.
+        <section className="w-full py-24 md:py-32 bg-primary text-white overflow-hidden relative">
+          <div className="container px-4 md:px-6 mx-auto flex flex-col items-center space-y-6 text-center relative z-10">
+            <div className="bg-white/10 p-6 rounded-full backdrop-blur-sm mb-4">
+              <ShieldCheck className="h-16 w-16 text-accent" />
+            </div>
+            <h2 className="text-4xl font-headline font-bold tracking-tighter sm:text-6xl uppercase">Trust and Integrity</h2>
+            <p className="max-w-[800px] text-primary-foreground/80 md:text-xl leading-relaxed">
+              We leverage cutting-edge AI to ensure every financial contribution to **MUGHER FULL GOSPEL CHURCH** is verified and handled with the highest level of security.
             </p>
-            <Button asChild size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90">
-              <Link href="/donate">Contribute Now</Link>
-            </Button>
+            <div className="pt-4">
+              <Button asChild size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 px-12 h-14 font-bold uppercase tracking-widest text-lg shadow-xl">
+                <Link href="/donate">Support Our Ministry</Link>
+              </Button>
+            </div>
           </div>
+          {/* Decorative background elements */}
+          <div className="absolute top-0 left-0 w-64 h-64 bg-accent/20 rounded-full blur-[100px] -translate-x-1/2 -translate-y-1/2" />
+          <div className="absolute bottom-0 right-0 w-96 h-96 bg-accent/10 rounded-full blur-[120px] translate-x-1/3 translate-y-1/3" />
         </section>
       </main>
-      <footer className="flex flex-col gap-2 sm:flex-row py-6 w-full shrink-0 items-center px-4 md:px-6 border-t bg-white">
-        <p className="text-xs text-muted-foreground">© 2024 MUGHER FULL GOSPEL CHURCH. All rights reserved.</p>
-        <nav className="sm:ml-auto flex gap-4 sm:gap-6">
-          <Link className="text-xs hover:underline underline-offset-4" href="#">
-            Terms of Service
+      <footer className="flex flex-col gap-4 sm:flex-row py-8 w-full shrink-0 items-center px-4 md:px-6 border-t bg-white">
+        <div className="flex items-center gap-2">
+          <Church className="h-5 w-5 text-primary" />
+          <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">© 2024 MUGHER FULL GOSPEL CHURCH</p>
+        </div>
+        <nav className="sm:ml-auto flex gap-6">
+          <Link className="text-[10px] font-bold uppercase tracking-widest hover:text-primary transition-colors" href="#">
+            Policy
           </Link>
-          <Link className="text-xs hover:underline underline-offset-4" href="#">
-            Privacy
+          <Link className="text-[10px] font-bold uppercase tracking-widest hover:text-primary transition-colors" href="#">
+            Contact
           </Link>
         </nav>
       </footer>
