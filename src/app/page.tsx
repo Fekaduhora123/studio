@@ -1,12 +1,30 @@
+'use client';
 
+import * as React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { Church, ShieldCheck, PieChart, Users, Heart } from 'lucide-react';
+import { Church, ShieldCheck, PieChart, Users, Heart, Calendar as CalendarIcon, MapPin, Clock, ArrowRight, Loader2 } from 'lucide-react';
+import { useCollection, useFirestore } from '@/firebase';
+import { collection, query, orderBy, limit } from 'firebase/firestore';
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 
 export default function Home() {
+  const firestore = useFirestore();
   const heroImage = PlaceHolderImages.find(img => img.id === 'hero-church');
+
+  const eventsQuery = React.useMemo(() => {
+    if (!firestore) return null;
+    return query(
+      collection(firestore, 'events'), 
+      orderBy('createdAt', 'desc'),
+      limit(3)
+    );
+  }, [firestore]);
+
+  const { data: events, loading } = useCollection(eventsQuery);
 
   return (
     <div className="flex flex-col min-h-screen font-body">
@@ -18,6 +36,9 @@ export default function Home() {
         <nav className="ml-auto flex gap-4 sm:gap-6 items-center">
           <Link className="text-sm font-medium hover:text-primary transition-colors" href="#features">
             Features
+          </Link>
+          <Link className="text-sm font-medium hover:text-primary transition-colors" href="#events">
+            Events
           </Link>
           <Link className="text-sm font-medium hover:text-primary transition-colors" href="/donate">
             Donate
@@ -48,7 +69,7 @@ export default function Home() {
                     <Link href="/donate">Submit a Donation</Link>
                   </Button>
                   <Button asChild variant="outline" size="lg" className="px-8 border-primary text-primary hover:bg-primary/10">
-                    <Link href="#features">Learn More</Link>
+                    <Link href="#events">View Upcoming Events</Link>
                   </Button>
                 </div>
               </div>
@@ -63,6 +84,74 @@ export default function Home() {
                   />
                 )}
               </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="events" className="w-full py-12 md:py-24 lg:py-32 bg-muted/30">
+          <div className="container px-4 md:px-6 mx-auto">
+            <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
+              <div className="space-y-2">
+                <Badge className="bg-accent text-accent-foreground mb-2">What's Happening</Badge>
+                <h2 className="text-3xl font-headline font-bold tracking-tighter sm:text-5xl text-primary">Upcoming Events</h2>
+                <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+                  Join us in fellowship and community service.
+                </p>
+              </div>
+            </div>
+            
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {loading ? (
+                <div className="col-span-full flex justify-center py-12">
+                  <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                </div>
+              ) : events && events.length > 0 ? (
+                events.map((event) => (
+                  <Card key={event.id} className="border-none shadow-sm hover:shadow-md transition-shadow flex flex-col">
+                    <CardHeader className="pb-2">
+                      <div className="flex items-center justify-between mb-2">
+                        <Badge variant="outline" className="text-primary border-primary/20">
+                          {event.category || 'Worship'}
+                        </Badge>
+                      </div>
+                      <CardTitle className="text-xl font-headline font-bold line-clamp-2">{event.title}</CardTitle>
+                    </CardHeader>
+                    <CardContent className="flex-1">
+                      <div className="space-y-2 text-sm text-muted-foreground mb-4">
+                        <div className="flex items-center gap-2">
+                          <CalendarIcon className="h-4 w-4 text-accent" /> {event.date}
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Clock className="h-4 w-4 text-accent" /> {event.time}
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <MapPin className="h-4 w-4 text-accent" /> {event.location}
+                        </div>
+                      </div>
+                      <p className="text-sm line-clamp-3 text-slate-600 leading-relaxed">
+                        {event.description}
+                      </p>
+                    </CardContent>
+                    <CardFooter className="pt-0">
+                      <Button variant="ghost" className="w-full group gap-2 text-primary hover:bg-primary/5 p-0 justify-start" asChild>
+                        <Link href="/login">
+                          View Details <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                        </Link>
+                      </Button>
+                    </CardFooter>
+                  </Card>
+                ))
+              ) : (
+                <div className="col-span-full text-center py-12 text-muted-foreground italic">
+                  No upcoming events scheduled at this time.
+                </div>
+              )}
+            </div>
+            
+            <div className="mt-12 text-center">
+              <Button asChild variant="outline" className="border-primary text-primary">
+                <Link href="/login">View All Events</Link>
+              </Button>
             </div>
           </div>
         </section>
