@@ -52,46 +52,46 @@ const financialReportSummaryPrompt = ai.definePrompt({
 
 ---
 Monthly Financial Report (Period: {{{monthlyReport.period}}})
-Total Income: ${{monthlyReport.totalIncome}}
-Total Expenses: ${{monthlyReport.totalExpenses}}
-Balance: ${{monthlyReport.balance}}
+Total Income: $ {{monthlyReport.totalIncome}}
+Total Expenses: $ {{monthlyReport.totalExpenses}}
+Balance: $ {{monthlyReport.balance}}
 
 Income Breakdown:
 {{#each monthlyReport.incomeBreakdown}}
-- {{{this.source}}}: ${{this.amount}}
+- {{{this.source}}}: $ {{this.amount}}
 {{/each}}
 
 Expense Breakdown:
 {{#each monthlyReport.expenseBreakdown}}
-- {{{this.category}}}: ${{this.amount}}
+- {{{this.category}}}: $ {{this.amount}}
 {{/each}}
 
 {{#if monthlyReport.previousPeriodIncome}}
 Compared to previous month:
-Previous Month's Income: ${{monthlyReport.previousPeriodIncome}}
-Previous Month's Expenses: ${{monthlyReport.previousPeriodExpenses}}
+Previous Month's Income: $ {{monthlyReport.previousPeriodIncome}}
+Previous Month's Expenses: $ {{monthlyReport.previousPeriodExpenses}}
 {{/if}}
 
 ---
 Yearly Financial Report (Period: {{{yearlyReport.period}}})
-Total Income: ${{yearlyReport.totalIncome}}
-Total Expenses: ${{yearlyReport.totalExpenses}}
-Balance: ${{yearlyReport.balance}}
+Total Income: $ {{yearlyReport.totalIncome}}
+Total Expenses: $ {{yearlyReport.totalExpenses}}
+Balance: $ {{yearlyReport.balance}}
 
 Income Breakdown:
 {{#each yearlyReport.incomeBreakdown}}
-- {{{this.source}}}: ${{this.amount}}
+- {{{this.source}}}: $ {{this.amount}}
 {{/each}}
 
 Expense Breakdown:
 {{#each yearlyReport.expenseBreakdown}}
-- {{{this.category}}}: ${{this.amount}}
+- {{{this.category}}}: $ {{this.amount}}
 {{/each}}
 
 {{#if yearlyReport.previousPeriodIncome}}
 Compared to previous year:
-Previous Year's Income: ${{yearlyReport.previousPeriodIncome}}
-Previous Year's Expenses: ${{yearlyReport.previousPeriodExpenses}}
+Previous Year's Income: $ {{yearlyReport.previousPeriodIncome}}
+Previous Year's Expenses: $ {{yearlyReport.previousPeriodExpenses}}
 {{/if}}
 
 ---
