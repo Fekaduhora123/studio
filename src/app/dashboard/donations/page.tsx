@@ -265,7 +265,7 @@ export default function DonationsPage() {
                         </DialogTrigger>
                         <DialogContent className="max-w-md">
                           <DialogHeader>
-                            <CardTitle>Verification Details</CardTitle>
+                            <DialogTitle>Verification Details</DialogTitle>
                           </DialogHeader>
                           <div className="space-y-4">
                             <div className="grid grid-cols-2 gap-2 text-sm">
