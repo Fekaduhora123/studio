@@ -1,0 +1,53 @@
+
+{
+  "entities": {
+    "Donation": {
+      "title": "Donation",
+      "description": "A donation record submitted by a user for approval.",
+      "type": "object",
+      "properties": {
+        "donorName": {
+          "type": "string",
+          "description": "Full name of the donor."
+        },
+        "amount": {
+          "type": "number",
+          "description": "Amount donated."
+        },
+        "receiptData": {
+          "type": "string",
+          "description": "Base64 encoded receipt image or PDF data URI."
+        },
+        "status": {
+          "type": "string",
+          "enum": ["pending", "approved", "rejected"],
+          "description": "Current status of the donation."
+        },
+        "referenceNumber": {
+          "type": "string",
+          "description": "Unique reference number for the transaction."
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When the donation was submitted."
+        },
+        "type": {
+          "type": "string",
+          "enum": ["Tithe", "Offering", "GoFund", "Special Seed"],
+          "description": "Category of the donation."
+        }
+      },
+      "required": ["donorName", "amount", "status", "referenceNumber", "timestamp"]
+    }
+  },
+  "auth": {
+    "providers": ["google.com", "password"]
+  },
+  "firestore": {
+    "/donations/{donationId}": {
+      "schema": "Donation",
+      "description": "Collection of donations submitted for review."
+    }
+  }
+}

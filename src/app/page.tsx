@@ -1,3 +1,4 @@
+
 import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
@@ -18,16 +19,19 @@ export default function Home() {
           <Link className="text-sm font-medium hover:text-primary transition-colors" href="#features">
             Features
           </Link>
+          <Link className="text-sm font-medium hover:text-primary transition-colors" href="/donate">
+            Donate
+          </Link>
           <Link className="text-sm font-medium hover:text-primary transition-colors" href="/login">
             Login
           </Link>
           <Button asChild variant="default" size="sm" className="bg-primary hover:bg-primary/90">
-            <Link href="/dashboard">Get Started</Link>
+            <Link href="/dashboard">Admin Dashboard</Link>
           </Button>
         </nav>
       </header>
       <main className="flex-1">
-        <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48 bg-background overflow-hidden">
+        <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48 bg-background overflow-hidden border-b">
           <div className="container px-4 md:px-6 mx-auto">
             <div className="grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px] items-center">
               <div className="flex flex-col justify-center space-y-4">
@@ -41,7 +45,7 @@ export default function Home() {
                 </div>
                 <div className="flex flex-col gap-2 min-[400px]:flex-row">
                   <Button asChild size="lg" className="px-8 bg-primary">
-                    <Link href="/dashboard">Access Dashboard</Link>
+                    <Link href="/donate">Submit a Donation</Link>
                   </Button>
                   <Button asChild variant="outline" size="lg" className="px-8 border-primary text-primary hover:bg-primary/10">
                     <Link href="#features">Learn More</Link>
@@ -107,7 +111,7 @@ export default function Home() {
               Role-based access ensures that financial data is only seen by those who need it, fostering trust within your congregation.
             </p>
             <Button asChild size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90">
-              <Link href="/login">Join the SanctuaryLink Family</Link>
+              <Link href="/donate">Contribute Now</Link>
             </Button>
           </div>
         </section>
