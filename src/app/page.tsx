@@ -5,22 +5,31 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { Church, ShieldCheck, PieChart, Users, Heart, Calendar as CalendarIcon, MapPin, Clock, ArrowRight, Loader2 } from 'lucide-react';
+import { Church, ShieldCheck, PieChart, Users, Heart, Calendar as CalendarIcon, MapPin, Clock, ArrowRight, Loader2, X } from 'lucide-react';
 import { useCollection, useFirestore } from '@/firebase';
 import { collection, query, orderBy, limit } from 'firebase/firestore';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 export default function Home() {
   const firestore = useFirestore();
   const heroImage = PlaceHolderImages.find(img => img.id === 'hero-church');
+  const [selectedEvent, setSelectedEvent] = React.useState<any>(null);
 
   const eventsQuery = React.useMemo(() => {
     if (!firestore) return null;
     return query(
       collection(firestore, 'events'), 
       orderBy('createdAt', 'desc'),
-      limit(3)
+      limit(6)
     );
   }, [firestore]);
 
@@ -133,11 +142,61 @@ export default function Home() {
                       </p>
                     </CardContent>
                     <CardFooter className="pt-0">
-                      <Button variant="ghost" className="w-full group gap-2 text-primary hover:bg-primary/5 p-0 justify-start" asChild>
-                        <Link href="/login">
-                          View Details <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                        </Link>
-                      </Button>
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button 
+                            variant="ghost" 
+                            className="w-full group gap-2 text-primary hover:bg-primary/5 p-0 justify-start"
+                            onClick={() => setSelectedEvent(event)}
+                          >
+                            View Details <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent className="max-w-2xl">
+                          <DialogHeader>
+                            <Badge className="w-fit mb-2 bg-accent text-accent-foreground">
+                              {event.category || 'Worship'}
+                            </Badge>
+                            <DialogTitle className="text-2xl font-headline font-bold text-primary">
+                              {event.title}
+                            </DialogTitle>
+                            <DialogDescription className="sr-only">
+                              Full details for {event.title}
+                            </DialogDescription>
+                          </DialogHeader>
+                          <div className="space-y-6 pt-4">
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                              <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/50 border">
+                                <CalendarIcon className="h-5 w-5 text-accent" />
+                                <div className="text-sm">
+                                  <p className="font-bold text-xs uppercase tracking-wider text-muted-foreground">Date</p>
+                                  <p className="font-medium">{event.date}</p>
+                                </div>
+                              </div>
+                              <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/50 border">
+                                <Clock className="h-5 w-5 text-accent" />
+                                <div className="text-sm">
+                                  <p className="font-bold text-xs uppercase tracking-wider text-muted-foreground">Time</p>
+                                  <p className="font-medium">{event.time}</p>
+                                </div>
+                              </div>
+                              <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/50 border">
+                                <MapPin className="h-5 w-5 text-accent" />
+                                <div className="text-sm">
+                                  <p className="font-bold text-xs uppercase tracking-wider text-muted-foreground">Location</p>
+                                  <p className="font-medium">{event.location}</p>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="space-y-2">
+                              <p className="font-bold text-xs uppercase tracking-wider text-muted-foreground">About this Event</p>
+                              <div className="text-base leading-relaxed whitespace-pre-wrap text-slate-700 bg-white p-4 rounded-lg border">
+                                {event.description}
+                              </div>
+                            </div>
+                          </div>
+                        </DialogContent>
+                      </Dialog>
                     </CardFooter>
                   </Card>
                 ))
