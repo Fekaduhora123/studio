@@ -1,3 +1,4 @@
+
 "use client";
 
 import * as React from 'react';
@@ -306,18 +307,11 @@ export default function DonationsPage() {
                             <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Verification Asset</p>
                             <div className="border rounded-xl p-4 bg-muted/5 min-h-[200px] flex flex-col items-center justify-center text-center">
                               {donation.receiptData ? (
-                                donation.receiptData.startsWith('data:application/pdf') ? (
-                                  <div className="space-y-2">
-                                     <FileText className="h-16 w-16 text-muted-foreground mx-auto" />
-                                     <span className="text-xs font-bold text-muted-foreground">PDF Document</span>
-                                  </div>
-                                ) : (
-                                  <img 
-                                    src={donation.receiptData} 
-                                    alt="Receipt" 
-                                    className="w-full h-auto rounded-lg border shadow-sm"
-                                  />
-                                )
+                                <img 
+                                  src={donation.receiptData} 
+                                  alt="Receipt" 
+                                  className="w-full h-auto rounded-lg border shadow-sm"
+                                />
                               ) : donation.isAiVerified ? (
                                 <div className="space-y-3 p-6">
                                   <div className="bg-emerald-100 p-4 rounded-full w-fit mx-auto">
