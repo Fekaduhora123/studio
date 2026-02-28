@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Church, Upload, CheckCircle2, Loader2, FileText, Info, Sparkles } from 'lucide-react';
+import { Church, Upload, CheckCircle2, Loader2, Info, Sparkles } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import Link from 'next/link';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
@@ -167,6 +167,7 @@ export default function PublicDonatePage() {
           <AlertDescription className="text-sm font-medium leading-relaxed">
             Please ensure all deposits are made only to account: 
             <span className="font-bold text-lg block mt-1 tracking-tight">1000221935978</span>
+            <span className="text-muted-foreground italic font-medium">Muger Full Gospel Church</span>
           </AlertDescription>
         </Alert>
 
