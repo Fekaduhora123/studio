@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Church, ShieldCheck, PieChart, Users, Heart, Calendar as CalendarIcon, MapPin, Clock, ArrowRight, Loader2 } from 'lucide-react';
-import { useCollection, useFirestore } from '@/firebase';
+import { useCollection, useFirestore, useUser } from '@/firebase';
 import { collection, query, orderBy, limit } from 'firebase/firestore';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -21,6 +21,7 @@ import {
 
 export default function Home() {
   const firestore = useFirestore();
+  const { user } = useUser();
   const heroImage = PlaceHolderImages.find(img => img.id === 'hero-church');
   const [mounted, setMounted] = React.useState(false);
 
@@ -56,12 +57,9 @@ export default function Home() {
           <Link className="hidden sm:inline-flex text-sm font-medium hover:text-primary transition-colors" href="/donate">
             Donate
           </Link>
-          <div className="flex flex-col gap-1 border-l pl-4 ml-2">
-            <Button asChild variant="default" size="sm" className="bg-primary hover:bg-primary/90 h-7 px-3 text-[10px] w-28">
-              <Link href="/dashboard">Admin Dashboard</Link>
-            </Button>
-            <Button asChild variant="outline" size="sm" className="h-7 px-3 text-[10px] w-28 border-primary text-primary hover:bg-primary/5">
-              <Link href="/login">Login</Link>
+          <div className="border-l pl-4 ml-2">
+            <Button asChild variant="default" size="sm" className="bg-primary hover:bg-primary/90 h-9 px-4">
+              <Link href="/login">{user ? 'Admin Dashboard' : 'Admin Login'}</Link>
             </Button>
           </div>
         </nav>
