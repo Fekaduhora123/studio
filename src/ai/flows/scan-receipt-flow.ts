@@ -25,7 +25,7 @@ const ScanReceiptOutputSchema = z.object({
   currency: z.string().optional().describe('The currency symbol or code found on the receipt.'),
   detectedAccountNumber: z.string().optional().describe('The destination account number found on the receipt.'),
   detectedBeneficiary: z.string().optional().describe('The name of the bank account recipient found on the receipt.'),
-  isCorrectAccount: z.boolean().describe('True if the receipt explicitly shows a transfer to account 1000221935978 for Muger Full Gospel Church.'),
+  isCorrectAccount: z.boolean().describe('True if the receipt shows a transfer to account 1000221935978 or Muger Full Gospel Church (including abbreviations like FULL GOS/BEL CHU).'),
 });
 export type ScanReceiptOutput = z.infer<typeof ScanReceiptOutputSchema>;
 
@@ -37,23 +37,21 @@ const scanReceiptPrompt = ai.definePrompt({
   name: 'scanReceiptPrompt',
   input: { schema: ScanReceiptInputSchema },
   output: { schema: ScanReceiptOutputSchema },
-  prompt: `You are an expert financial auditor. Your task is to extract specific information from the provided bank receipt image.
+  prompt: `You are an expert financial auditor for Muger Full Gospel Church. Your task is to extract information and verify if a donation was sent to the correct church account.
 
-Please analyze the receipt and extract:
-1. The full name of the donor/sender.
-2. The exact total amount of the transaction.
-3. The currency (e.g., USD, NGN, etc.).
-4. The destination account number.
-5. The name of the beneficiary (the person or organization receiving the money).
+Please analyze the receipt image and extract:
+1. The full name of the donor/sender (e.g., "FIKADU HORA REGASSA").
+2. The exact total amount of the transaction (e.g., 1000.00).
+3. The currency (e.g., ETB, USD).
+4. The destination account number or partial number (e.g., "5978").
+5. The name of the beneficiary/recipient.
 
-IMPORTANT VERIFICATION:
-Determine if this receipt is for a deposit to:
-- Account Number: 1000221935978
-- Beneficiary: Muger Full Gospel Church
+VERIFICATION RULES:
+Set 'isCorrectAccount' to true if you find ANY of the following:
+- The account number matches or ends with "1000221935978" or "5978".
+- The beneficiary name is "Muger Full Gospel Church" or similar abbreviations like "FULL GOS", "BEL CHU", "ETHIOPIAN FULL GOS", "MU/M/".
 
-Set 'isCorrectAccount' to true ONLY if you can clearly identify that the destination account matches 1000221935978 or the recipient name is Muger Full Gospel Church.
-
-If you cannot find a specific field, return an empty string for text fields or 0 for numeric fields. Be precise and do not hallucinate information.
+If the receipt is for a different church or account, set 'isCorrectAccount' to false.
 
 Receipt Image: {{media url=receiptDataUri}}`,
 });
