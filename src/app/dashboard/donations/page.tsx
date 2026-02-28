@@ -26,7 +26,8 @@ import {
   Check,
   X,
   FileText,
-  Filter
+  Filter,
+  Loader2
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { useCollection, useFirestore } from '@/firebase';
@@ -43,9 +44,14 @@ import {
 
 export default function DonationsPage() {
   const firestore = useFirestore();
+  const [mounted, setMounted] = React.useState(false);
   const [searchTerm, setSearchTerm] = React.useState('');
   const [typeFilter, setTypeFilter] = React.useState<string>('all');
   
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const donationsQuery = React.useMemo(() => {
     if (!firestore) return null;
     return query(collection(firestore, 'donations'), orderBy('timestamp', 'desc'));
@@ -93,6 +99,14 @@ export default function DonationsPage() {
     
     return matchesSearch && matchesType;
   });
+
+  if (!mounted) {
+    return (
+      <div className="flex justify-center items-center py-24">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">

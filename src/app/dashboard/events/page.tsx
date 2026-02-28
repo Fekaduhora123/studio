@@ -46,11 +46,16 @@ type EventFormValues = z.infer<typeof eventSchema>;
 
 export default function EventsPage() {
   const firestore = useFirestore();
+  const [mounted, setMounted] = React.useState(false);
   const [draftInput, setDraftInput] = React.useState('');
   const [draftResult, setDraftResult] = React.useState('');
   const [isDrafting, setIsDrafting] = React.useState(false);
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
   const [editingEvent, setEditingEvent] = React.useState<any>(null);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const eventsQuery = React.useMemo(() => {
     if (!firestore) return null;
@@ -104,7 +109,7 @@ export default function EventsPage() {
       setDraftResult(result.draftedContent);
       form.setValue('description', result.draftedContent);
     } catch (err) {
-      console.error(err);
+      // Error handled by AI flow if needed, or ignored for simple MVP
     } finally {
       setIsDrafting(false);
     }
@@ -154,6 +159,14 @@ export default function EventsPage() {
       errorEmitter.emit('permission-error', permissionError);
     });
   };
+
+  if (!mounted) {
+    return (
+      <div className="flex justify-center items-center py-24">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
