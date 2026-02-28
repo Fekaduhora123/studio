@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Church, Upload, CheckCircle2, Loader2, Info, Sparkles } from 'lucide-react';
+import { Church, Upload, CheckCircle2, Loader2, Info, Sparkles, AlertTriangle } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import Link from 'next/link';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
@@ -32,6 +32,7 @@ export default function PublicDonatePage() {
   const [submitted, setSubmitted] = React.useState(false);
   const [refNum, setRefNum] = React.useState("");
   const [mounted, setMounted] = React.useState(false);
+  const [scanError, setScanError] = React.useState<string | null>(null);
 
   React.useEffect(() => {
     setMounted(true);
@@ -51,6 +52,7 @@ export default function PublicDonatePage() {
     if (!files || files.length === 0) return;
 
     const file = files[0];
+    setScanError(null);
     
     // Convert to Data URI for AI Scanning
     const reader = new FileReader();
@@ -62,11 +64,17 @@ export default function PublicDonatePage() {
       try {
         const result = await scanReceipt({ receiptDataUri: dataUri });
         
-        if (result.donorName) {
-          form.setValue('donorName', result.donorName, { shouldValidate: true });
-        }
-        if (result.amount > 0) {
-          form.setValue('amount', result.amount.toString(), { shouldValidate: true });
+        if (!result.isCorrectAccount) {
+          setScanError("The AI couldn't verify this receipt was sent to Muger Full Gospel Church (Account: 1000221935978). Please check your upload.");
+          // Clear the file input if it's potentially wrong
+          form.setValue('receipt', undefined);
+        } else {
+          if (result.donorName) {
+            form.setValue('donorName', result.donorName, { shouldValidate: true });
+          }
+          if (result.amount > 0) {
+            form.setValue('amount', result.amount.toString(), { shouldValidate: true });
+          }
         }
       } catch (err) {
         console.error("AI Scan failed", err);
@@ -171,6 +179,14 @@ export default function PublicDonatePage() {
           </AlertDescription>
         </Alert>
 
+        {scanError && (
+          <Alert variant="destructive" className="mb-6 animate-in fade-in slide-in-from-top-2">
+            <AlertTriangle className="h-4 w-4" />
+            <AlertTitle>Validation Error</AlertTitle>
+            <AlertDescription>{scanError}</AlertDescription>
+          </Alert>
+        )}
+
         <Card className="border-none shadow-xl">
           <CardHeader>
             <CardTitle className="text-xl font-headline text-primary">Submit Your Donation</CardTitle>
@@ -193,7 +209,7 @@ export default function PublicDonatePage() {
                           {isScanning ? (
                             <div className="flex flex-col items-center gap-2 text-primary">
                               <Loader2 className="h-8 w-8 animate-spin" />
-                              <p className="text-sm font-bold animate-pulse">AI scanning receipt details...</p>
+                              <p className="text-sm font-bold animate-pulse">AI verifying receipt details...</p>
                             </div>
                           ) : (
                             <>
@@ -209,7 +225,7 @@ export default function PublicDonatePage() {
                                 {value && value[0] ? value[0].name : "Upload image or PDF receipt"}
                               </p>
                               <div className="flex items-center gap-1 text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">
-                                <Sparkles className="h-3 w-3" /> Auto-scan enabled
+                                <Sparkles className="h-3 w-3" /> Smart Verification
                               </div>
                             </>
                           )}
