@@ -39,6 +39,21 @@
         }
       },
       "required": ["donorName", "amount", "status", "referenceNumber", "timestamp"]
+    },
+    "Event": {
+      "title": "Event",
+      "description": "A church event or announcement.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "date": { "type": "string" },
+        "time": { "type": "string" },
+        "location": { "type": "string" },
+        "description": { "type": "string" },
+        "category": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "date", "description"]
     }
   },
   "auth": {
@@ -48,6 +63,10 @@
     "/donations/{donationId}": {
       "schema": "Donation",
       "description": "Collection of donations submitted for review."
+    },
+    "/events/{eventId}": {
+      "schema": "Event",
+      "description": "Collection of church events and announcements."
     }
   }
 }
