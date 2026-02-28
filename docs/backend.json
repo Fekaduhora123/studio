@@ -34,7 +34,7 @@
         },
         "type": {
           "type": "string",
-          "enum": ["Tithe", "Offering", "GoFund", "Special Seed"],
+          "enum": ["Tithe", "Offering", "GoFund", "Special Seed", "Building Purposes"],
           "description": "Category of the donation."
         }
       },

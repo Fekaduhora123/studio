@@ -14,11 +14,13 @@ import { Church, Upload, CheckCircle2, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { useFirestore } from '@/firebase';
+import { errorEmitter } from '@/firebase/error-emitter';
+import { FirestorePermissionError, type SecurityRuleContext } from '@/firebase/errors';
 
 const formSchema = z.object({
   donorName: z.string().min(2, "Name is required"),
   amount: z.string().refine((val) => !isNaN(Number(val)) && Number(val) > 0, "Enter a valid amount"),
-  type: z.enum(["Tithe", "Offering", "GoFund", "Special Seed"]),
+  type: z.enum(["Tithe", "Offering", "GoFund", "Special Seed", "Building Purposes"]),
   receipt: z.any().refine((files) => files?.length > 0, "Receipt upload is required"),
 });
 
@@ -50,7 +52,7 @@ export default function PublicDonatePage() {
       reader.onloadend = async () => {
         const base64String = reader.result as string;
         
-        await addDoc(collection(firestore, 'donations'), {
+        const donationData = {
           donorName: values.donorName,
           amount: Number(values.amount),
           type: values.type,
@@ -58,16 +60,27 @@ export default function PublicDonatePage() {
           status: 'pending',
           referenceNumber,
           timestamp: serverTimestamp(),
-        });
+        };
 
-        setRefNum(referenceNumber);
-        setSubmitted(true);
-        setIsSubmitting(false);
+        addDoc(collection(firestore, 'donations'), donationData)
+          .then(() => {
+            setRefNum(referenceNumber);
+            setSubmitted(true);
+            setIsSubmitting(false);
+          })
+          .catch(async (serverError) => {
+            const permissionError = new FirestorePermissionError({
+              path: 'donations',
+              operation: 'create',
+              requestResourceData: donationData,
+            } satisfies SecurityRuleContext);
+            errorEmitter.emit('permission-error', permissionError);
+            setIsSubmitting(false);
+          });
       };
 
       reader.readAsDataURL(file);
     } catch (error) {
-      console.error("Submission error:", error);
       setIsSubmitting(false);
     }
   }
@@ -159,6 +172,7 @@ export default function PublicDonatePage() {
                             <SelectItem value="Offering">Offering</SelectItem>
                             <SelectItem value="GoFund">GoFund</SelectItem>
                             <SelectItem value="Special Seed">Special Seed</SelectItem>
+                            <SelectItem value="Building Purposes">Building Purposes</SelectItem>
                           </SelectContent>
                         </Select>
                         <FormMessage />
