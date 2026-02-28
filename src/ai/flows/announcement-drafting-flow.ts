@@ -53,7 +53,14 @@ const draftAnnouncementFlow = ai.defineFlow(
     outputSchema: DraftAnnouncementOutputSchema,
   },
   async input => {
-    const {output} = await draftAnnouncementPrompt(input);
-    return output!;
+    try {
+      const {output} = await draftAnnouncementPrompt(input);
+      return output!;
+    } catch (e: any) {
+      if (e.message?.includes('429') || e.message?.includes('quota')) {
+        return { draftedContent: "AI drafting service is currently busy. Please wait a moment before trying again." };
+      }
+      return { draftedContent: "An error occurred while generating the draft." };
+    }
   }
 );

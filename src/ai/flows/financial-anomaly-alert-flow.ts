@@ -52,11 +52,8 @@ const financialAnomalyAlertFlow = ai.defineFlow(
     if (previousMonthIncome > 0) {
       percentageChange = ((currentMonthIncome - previousMonthIncome) / previousMonthIncome) * 100;
     } else if (currentMonthIncome > 0) {
-      // If previous income was 0 but current is positive, it's an increase, not a decrease relevant to the anomaly.
-      // We'll set a high positive percentage so it doesn't trigger a decrease anomaly.
-      percentageChange = 10000; // A very large increase, effectively not a decrease
+      percentageChange = 10000; 
     } else {
-      // Both are 0
       percentageChange = 0;
     }
 
@@ -65,16 +62,24 @@ const financialAnomalyAlertFlow = ai.defineFlow(
     let insight = `No significant anomaly detected. Income changed by ${percentageChange.toFixed(2)}%.`;
 
     if (isAnomalyDetected) {
-      // Call the AI prompt to get insight
       const promptInput = {
         currentMonthIncome,
         previousMonthIncome,
         averageHistoricalIncome,
-        percentageChange: parseFloat(Math.abs(percentageChange).toFixed(2)), // Pass absolute value for readability in prompt
-        thresholdPercentage, // Not strictly used by prompt, but part of the input schema
+        percentageChange: parseFloat(Math.abs(percentageChange).toFixed(2)),
+        thresholdPercentage,
       };
-      const { output } = await financialAnomalyInsightPrompt(promptInput);
-      insight = output?.insight || 'AI failed to generate insight.';
+
+      try {
+        const { output } = await financialAnomalyInsightPrompt(promptInput);
+        insight = output?.insight || 'AI failed to generate insight.';
+      } catch (e: any) {
+        if (e.message?.includes('429') || e.message?.includes('quota')) {
+          insight = 'AI analysis is temporarily unavailable due to high demand. Please try again in a few moments.';
+        } else {
+          insight = 'An error occurred while generating financial insights.';
+        }
+      }
     }
 
     return {

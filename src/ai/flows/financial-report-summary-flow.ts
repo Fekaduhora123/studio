@@ -123,8 +123,23 @@ const financialReportSummaryFlow = ai.defineFlow(
     outputSchema: FinancialReportSummaryOutputSchema,
   },
   async (input) => {
-    const { output } = await financialReportSummaryPrompt(input);
-    return output!;
+    try {
+      const { output } = await financialReportSummaryPrompt(input);
+      return output!;
+    } catch (e: any) {
+      if (e.message?.includes('429') || e.message?.includes('quota')) {
+        return {
+          summary: "AI summary is currently unavailable due to rate limits. Please try again in a few moments.",
+          keyTrends: ["Trend analysis temporarily unavailable"],
+          insights: ["Insight engine reached its current quota"]
+        };
+      }
+      return {
+        summary: "An error occurred while generating the report summary.",
+        keyTrends: ["Error during analysis"],
+        insights: ["Unable to provide insights at this time"]
+      };
+    }
   }
 );
 
