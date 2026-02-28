@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { Church, ShieldCheck, PieChart, Users, Heart, Calendar as CalendarIcon, MapPin, Clock, ArrowRight, Loader2, X, LogIn } from 'lucide-react';
+import { Church, ShieldCheck, PieChart, Users, Heart, Calendar as CalendarIcon, MapPin, Clock, ArrowRight, Loader2, LogIn } from 'lucide-react';
 import { useCollection, useFirestore } from '@/firebase';
 import { collection, query, orderBy, limit } from 'firebase/firestore';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
@@ -22,7 +22,11 @@ import {
 export default function Home() {
   const firestore = useFirestore();
   const heroImage = PlaceHolderImages.find(img => img.id === 'hero-church');
-  const [selectedEvent, setSelectedEvent] = React.useState<any>(null);
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const eventsQuery = React.useMemo(() => {
     if (!firestore) return null;
@@ -42,7 +46,7 @@ export default function Home() {
           <Church className="h-6 w-6 text-primary" />
           <span className="font-headline font-bold text-xl tracking-tight">SanctuaryLink</span>
         </Link>
-        <nav className="ml-auto flex gap-2 sm:gap-4 items-center">
+        <nav className="ml-auto flex gap-4 sm:gap-6 items-center">
           <Link className="hidden md:inline-flex text-sm font-medium hover:text-primary transition-colors" href="#features">
             Features
           </Link>
@@ -52,15 +56,13 @@ export default function Home() {
           <Link className="hidden sm:inline-flex text-sm font-medium hover:text-primary transition-colors" href="/donate">
             Donate
           </Link>
-          <div className="flex items-center gap-2 border-l pl-4 ml-2">
-            <Button asChild variant="ghost" size="sm" className="text-muted-foreground hover:text-primary">
-              <Link href="/login" className="flex items-center gap-2">
-                <LogIn className="h-4 w-4" /> Login
-              </Link>
-            </Button>
-            <Button asChild variant="default" size="sm" className="bg-primary hover:bg-primary/90 hidden sm:flex">
+          <div className="flex flex-col items-center gap-0.5 border-l pl-4 ml-2">
+            <Button asChild variant="default" size="sm" className="bg-primary hover:bg-primary/90 h-8 px-3 text-xs">
               <Link href="/dashboard">Admin Dashboard</Link>
             </Button>
+            <Link href="/login" className="text-[10px] text-muted-foreground hover:text-primary transition-colors font-medium uppercase tracking-wider">
+              Admin Login
+            </Link>
           </div>
         </nav>
       </header>
@@ -146,61 +148,62 @@ export default function Home() {
                       </p>
                     </CardContent>
                     <CardFooter className="pt-0">
-                      <Dialog>
-                        <DialogTrigger asChild>
-                          <Button 
-                            variant="ghost" 
-                            className="w-full group gap-2 text-primary hover:bg-primary/5 p-0 justify-start"
-                            onClick={() => setSelectedEvent(event)}
-                          >
-                            View Details <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                          </Button>
-                        </DialogTrigger>
-                        <DialogContent className="max-w-2xl">
-                          <DialogHeader>
-                            <Badge className="w-fit mb-2 bg-accent text-accent-foreground">
-                              {event.category || 'Worship'}
-                            </Badge>
-                            <DialogTitle className="text-2xl font-headline font-bold text-primary">
-                              {event.title}
-                            </DialogTitle>
-                            <DialogDescription className="sr-only">
-                              Full details for {event.title}
-                            </DialogDescription>
-                          </DialogHeader>
-                          <div className="space-y-6 pt-4">
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                              <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/50 border">
-                                <CalendarIcon className="h-5 w-5 text-accent" />
-                                <div className="text-sm">
-                                  <p className="font-bold text-xs uppercase tracking-wider text-muted-foreground">Date</p>
-                                  <p className="font-medium">{event.date}</p>
+                      {mounted && (
+                        <Dialog>
+                          <DialogTrigger asChild>
+                            <Button 
+                              variant="ghost" 
+                              className="w-full group gap-2 text-primary hover:bg-primary/5 p-0 justify-start"
+                            >
+                              View Details <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent className="max-w-2xl">
+                            <DialogHeader>
+                              <Badge className="w-fit mb-2 bg-accent text-accent-foreground">
+                                {event.category || 'Worship'}
+                              </Badge>
+                              <DialogTitle className="text-2xl font-headline font-bold text-primary">
+                                {event.title}
+                              </DialogTitle>
+                              <DialogDescription className="sr-only">
+                                Full details for {event.title}
+                              </DialogDescription>
+                            </DialogHeader>
+                            <div className="space-y-6 pt-4">
+                              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/50 border">
+                                  <CalendarIcon className="h-5 w-5 text-accent" />
+                                  <div className="text-sm">
+                                    <p className="font-bold text-xs uppercase tracking-wider text-muted-foreground">Date</p>
+                                    <p className="font-medium">{event.date}</p>
+                                  </div>
+                                </div>
+                                <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/50 border">
+                                  <Clock className="h-5 w-5 text-accent" />
+                                  <div className="text-sm">
+                                    <p className="font-bold text-xs uppercase tracking-wider text-muted-foreground">Time</p>
+                                    <p className="font-medium">{event.time}</p>
+                                  </div>
+                                </div>
+                                <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/50 border">
+                                  <MapPin className="h-5 w-5 text-accent" />
+                                  <div className="text-sm">
+                                    <p className="font-bold text-xs uppercase tracking-wider text-muted-foreground">Location</p>
+                                    <p className="font-medium">{event.location}</p>
+                                  </div>
                                 </div>
                               </div>
-                              <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/50 border">
-                                <Clock className="h-5 w-5 text-accent" />
-                                <div className="text-sm">
-                                  <p className="font-bold text-xs uppercase tracking-wider text-muted-foreground">Time</p>
-                                  <p className="font-medium">{event.time}</p>
-                                </div>
-                              </div>
-                              <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/50 border">
-                                <MapPin className="h-5 w-5 text-accent" />
-                                <div className="text-sm">
-                                  <p className="font-bold text-xs uppercase tracking-wider text-muted-foreground">Location</p>
-                                  <p className="font-medium">{event.location}</p>
+                              <div className="space-y-2">
+                                <p className="font-bold text-xs uppercase tracking-wider text-muted-foreground">About this Event</p>
+                                <div className="text-base leading-relaxed whitespace-pre-wrap text-slate-700 bg-white p-4 rounded-lg border">
+                                  {event.description}
                                 </div>
                               </div>
                             </div>
-                            <div className="space-y-2">
-                              <p className="font-bold text-xs uppercase tracking-wider text-muted-foreground">About this Event</p>
-                              <div className="text-base leading-relaxed whitespace-pre-wrap text-slate-700 bg-white p-4 rounded-lg border">
-                                {event.description}
-                              </div>
-                            </div>
-                          </div>
-                        </DialogContent>
-                      </Dialog>
+                          </DialogContent>
+                        </Dialog>
+                      )}
                     </CardFooter>
                   </Card>
                 ))
@@ -209,12 +212,6 @@ export default function Home() {
                   No upcoming events scheduled at this time.
                 </div>
               )}
-            </div>
-            
-            <div className="mt-12 text-center">
-              <Button asChild variant="outline" className="border-primary text-primary">
-                <Link href="/login">View All Events</Link>
-              </Button>
             </div>
           </div>
         </section>
