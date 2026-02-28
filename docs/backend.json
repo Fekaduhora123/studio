@@ -3,20 +3,20 @@
   "entities": {
     "Donation": {
       "title": "Donation",
-      "description": "A donation record submitted by a user for approval.",
+      "description": "A donation record submitted by a user for approval. Verified via AI to match MUGHER FULL GOSPEL CHURCH.",
       "type": "object",
       "properties": {
         "donorName": {
           "type": "string",
-          "description": "Full name of the donor."
+          "description": "Full name of the donor extracted from receipt or entered manually."
         },
         "amount": {
           "type": "number",
-          "description": "Amount donated."
+          "description": "Amount donated in ETB."
         },
         "receiptData": {
           "type": "string",
-          "description": "Base64 encoded receipt image or PDF data URI (Optional if AI verified)."
+          "description": "Stored as null for AI-verified donations to save space."
         },
         "status": {
           "type": "string",
@@ -39,7 +39,7 @@
         },
         "isAiVerified": {
           "type": "boolean",
-          "description": "Whether the receipt was successfully scanned and verified by AI."
+          "description": "Whether the receipt was successfully scanned and verified against account 1000221935978."
         }
       },
       "required": ["donorName", "amount", "status", "referenceNumber", "timestamp"]
@@ -66,7 +66,7 @@
   "firestore": {
     "/donations/{donationId}": {
       "schema": "Donation",
-      "description": "Collection of donations submitted for review."
+      "description": "Collection of donations for MUGHER FULL GOSPEL CHURCH."
     },
     "/events/{eventId}": {
       "schema": "Event",

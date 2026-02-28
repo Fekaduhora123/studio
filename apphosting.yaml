@@ -5,3 +5,7 @@ runConfig:
   # Increase this value if you'd like to automatically spin up
   # more instances in response to increased traffic.
   maxInstances: 1
+  # Increased timeout to 60s to allow Genkit AI enough time to scan and verify bank receipts.
+  timeoutSeconds: 60
+  # Ensure sufficient memory for processing image scans.
+  memory: 512Mi
