@@ -1,3 +1,4 @@
+
 'use client';
 
 import * as React from 'react';
@@ -23,6 +24,7 @@ export default function Home() {
   const firestore = useFirestore();
   const { user } = useUser();
   const heroImage = PlaceHolderImages.find(img => img.id === 'hero-church');
+  const sanctuaryImage = PlaceHolderImages.find(img => img.id === 'church-sanctuary');
   const [mounted, setMounted] = React.useState(false);
 
   React.useEffect(() => {
@@ -68,7 +70,7 @@ export default function Home() {
         <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48 bg-background overflow-hidden border-b">
           <div className="container px-4 md:px-6 mx-auto">
             <div className="grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px] items-center">
-              <div className="flex flex-col justify-center space-y-4 animate-in fade-in slide-in-from-left duration-1000">
+              <div className="flex flex-col justify-center space-y-4 animate-in fade-in slide-in-from-left duration-1000 fill-mode-forwards">
                 <div className="space-y-4">
                   <Badge className="w-fit bg-accent text-accent-foreground font-bold tracking-widest uppercase text-[10px]">
                     Welcome to our community
@@ -89,18 +91,45 @@ export default function Home() {
                   </Button>
                 </div>
               </div>
-              <div className="relative aspect-video lg:aspect-square rounded-2xl overflow-hidden shadow-2xl border-8 border-white animate-in fade-in zoom-in duration-1000">
+              <div className="relative aspect-video lg:aspect-square rounded-2xl overflow-hidden shadow-2xl border-8 border-white animate-in fade-in zoom-in duration-1000 fill-mode-forwards">
                 {heroImage && (
                   <Image
                     src={heroImage.imageUrl}
                     alt={heroImage.description}
                     fill
-                    className="object-cover hover:scale-110 transition-transform duration-700"
+                    className="object-cover"
                     priority
                     data-ai-hint={heroImage.imageHint}
                   />
                 )}
                 <div className="absolute inset-0 bg-gradient-to-t from-primary/20 to-transparent pointer-events-none" />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="sanctuary" className="w-full py-12 md:py-24 bg-white border-b">
+          <div className="container px-4 md:px-6 mx-auto">
+            <div className="grid gap-6 lg:grid-cols-2 items-center">
+              <div className="relative aspect-video rounded-2xl overflow-hidden shadow-lg border">
+                {sanctuaryImage && (
+                  <Image
+                    src={sanctuaryImage.imageUrl}
+                    alt={sanctuaryImage.description}
+                    fill
+                    className="object-cover"
+                    data-ai-hint={sanctuaryImage.imageHint}
+                  />
+                )}
+              </div>
+              <div className="flex flex-col justify-center space-y-4">
+                <h2 className="text-3xl font-headline font-bold tracking-tighter text-primary uppercase">Our Sanctuary</h2>
+                <p className="text-muted-foreground leading-relaxed italic">
+                  "For where two or three are gathered together in my name, there am I in the midst of them." - Matthew 18:20
+                </p>
+                <p className="text-muted-foreground leading-relaxed">
+                  Located in the heart of Mugher, our sanctuary is a place of peace, reflection, and vibrant worship. We welcome everyone to experience the love of Christ in a community that cares.
+                </p>
               </div>
             </div>
           </div>
@@ -263,7 +292,7 @@ export default function Home() {
         </section>
 
         <section className="w-full py-24 md:py-32 bg-primary text-white overflow-hidden relative">
-          <div className="container px-4 md:px-6 mx-auto flex flex-col items-center space-y-6 text-center relative z-10 animate-in fade-in slide-in-from-bottom duration-1000">
+          <div className="container px-4 md:px-6 mx-auto flex flex-col items-center space-y-6 text-center relative z-10 animate-in fade-in slide-in-from-bottom duration-1000 fill-mode-forwards">
             <div className="bg-white/10 p-6 rounded-full backdrop-blur-sm mb-4">
               <ShieldCheck className="h-16 w-16 text-accent" />
             </div>

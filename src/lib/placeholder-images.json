@@ -7,6 +7,12 @@
       "imageHint": "church interior"
     },
     {
+      "id": "church-sanctuary",
+      "description": "An exterior view of a peaceful church building.",
+      "imageUrl": "https://images.unsplash.com/photo-1548625361-195feee10f8c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjaHVyY2glMjBleHRlcmlvcnxlbnwwfHx8fDE3NzIxNTAwMDB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "church exterior"
+    },
+    {
       "id": "event-community",
       "description": "A diverse group of community members gathering.",
       "imageUrl": "https://images.unsplash.com/photo-1632580254134-94c4a73dab76?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxjb21tdW5pdHklMjBnYXRoZXJpbmd8ZW58MHx8fHwxNzcyMDY5NjU3fDA&ixlib=rb-4.1.0&q=80&w=1080",
