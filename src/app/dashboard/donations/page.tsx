@@ -27,14 +27,14 @@ import {
   Filter,
   Loader2,
   ShieldCheck,
-  AlertCircle,
   Trash2,
   MoreVertical,
-  Eraser
+  Eraser,
+  TrendingDown
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { useCollection, useFirestore } from '@/firebase';
-import { collection, query, orderBy, doc, updateDoc, deleteDoc } from 'firebase/firestore';
+import { collection, query, orderBy, doc, updateDoc, deleteDoc, where } from 'firebase/firestore';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { 
   DropdownMenu, 
@@ -73,7 +73,13 @@ export default function DonationsPage() {
     return query(collection(firestore, 'donations'), orderBy('timestamp', 'desc'));
   }, [firestore]);
 
-  const { data: donations, loading } = useCollection(donationsQuery);
+  const expensesQuery = React.useMemo(() => {
+    if (!firestore) return null;
+    return query(collection(firestore, 'expenses'), where('status', '==', 'Approved'));
+  }, [firestore]);
+
+  const { data: donations, loading: donationsLoading } = useCollection(donationsQuery);
+  const { data: expenses } = useCollection(expensesQuery);
 
   const handleUpdateStatus = (id: string, status: 'approved' | 'rejected') => {
     if (!firestore) return;
@@ -121,7 +127,7 @@ export default function DonationsPage() {
   };
 
   const stats = React.useMemo(() => {
-    const initial = {
+    const res = {
       Tithe: 0,
       Offering: 0,
       GoFund: 0,
@@ -129,21 +135,33 @@ export default function DonationsPage() {
       total: 0,
       pending: 0
     };
-    if (!donations) return initial;
+    if (!donations) return res;
     
-    return donations.reduce((acc, curr) => {
+    donations.forEach((curr) => {
       if (curr.status === 'approved') {
-        acc.total += curr.amount;
-        if (curr.type === 'Tithe') acc.Tithe += curr.amount;
-        if (curr.type === 'Offering') acc.Offering += curr.amount;
-        if (curr.type === 'GoFund') acc.GoFund += curr.amount;
-        if (curr.type === 'Building Purposes') acc['Building Purposes'] += curr.amount;
+        res.total += curr.amount;
+        if (curr.type === 'Tithe') res.Tithe += curr.amount;
+        if (curr.type === 'Offering') res.Offering += curr.amount;
+        if (curr.type === 'GoFund') res.GoFund += curr.amount;
+        if (curr.type === 'Building Purposes') res['Building Purposes'] += curr.amount;
       } else if (curr.status === 'pending') {
-        acc.pending += 1;
+        res.pending += 1;
       }
-      return acc;
-    }, initial);
-  }, [donations]);
+    });
+
+    // Subtract approved expenses for "Building Purposes" to show net balance
+    if (expenses) {
+      const buildingExpenses = expenses
+        .filter(e => e.category === 'Building Purposes')
+        .reduce((sum, e) => sum + e.amount, 0);
+      
+      res['Building Purposes'] -= buildingExpenses;
+      // Adjust total to reflect net position
+      res.total -= buildingExpenses;
+    }
+
+    return res;
+  }, [donations, expenses]);
 
   const filteredDonations = donations?.filter(d => {
     const donorName = d.donorName || '';
@@ -188,28 +206,36 @@ export default function DonationsPage() {
       <div className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
         <Card className="border-none shadow-sm bg-primary text-white">
           <CardHeader className="p-4 pb-2">
-            <CardTitle className="text-[9px] font-bold uppercase tracking-widest opacity-80">Total Approved</CardTitle>
+            <CardTitle className="text-[9px] font-bold uppercase tracking-widest opacity-80">Net Balance</CardTitle>
           </CardHeader>
           <CardContent className="p-4 pt-0">
             <div className="text-2xl font-bold">${stats.total.toLocaleString()}</div>
           </CardContent>
         </Card>
         {['Tithe', 'Offering', 'GoFund', 'Building Purposes'].map((category) => (
-          <Card key={category} className="border-none shadow-sm">
+          <Card key={category} className={`border-none shadow-sm ${category === 'Building Purposes' ? 'ring-2 ring-primary/20 bg-primary/5' : ''}`}>
             <CardHeader className="p-4 pb-2">
-              <CardTitle className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">{category}</CardTitle>
+              <CardTitle className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest flex items-center gap-2">
+                {category}
+                {category === 'Building Purposes' && <TrendingDown className="h-3 w-3 text-rose-500" />}
+              </CardTitle>
             </CardHeader>
             <CardContent className="p-4 pt-0">
-              <div className="text-xl font-bold">${(stats as any)[category].toLocaleString()}</div>
+              <div className={`text-xl font-bold ${category === 'Building Purposes' && stats['Building Purposes'] < 0 ? 'text-rose-600' : ''}`}>
+                ${(stats as any)[category].toLocaleString()}
+              </div>
+              {category === 'Building Purposes' && (
+                <p className="text-[8px] text-muted-foreground uppercase font-bold mt-1">Expenses Subtracted</p>
+              )}
             </CardContent>
           </Card>
         ))}
-        <Card className="border-none shadow-sm bg-accent/10">
+        <Card className="border-none shadow-sm bg-amber-500/10">
           <CardHeader className="p-4 pb-2">
-            <CardTitle className="text-[9px] font-bold text-accent-foreground uppercase tracking-widest">Pending</CardTitle>
+            <CardTitle className="text-[9px] font-bold text-amber-700 uppercase tracking-widest">Pending</CardTitle>
           </CardHeader>
           <CardContent className="p-4 pt-0">
-            <div className="text-xl font-bold text-accent-foreground">{stats.pending}</div>
+            <div className="text-xl font-bold text-amber-700">{stats.pending}</div>
           </CardContent>
         </Card>
       </div>
@@ -260,7 +286,7 @@ export default function DonationsPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {loading ? (
+              {donationsLoading ? (
                 <TableRow>
                   <TableCell colSpan={7} className="text-center py-12 text-muted-foreground text-xs italic">Loading contributions...</TableCell>
                 </TableRow>
@@ -362,7 +388,7 @@ export default function DonationsPage() {
                                     </div>
                                     <div className="space-y-1">
                                       <p className="text-xs font-bold text-muted-foreground">Image Not Available</p>
-                                      <p className="text-[9px] text-muted-foreground italic">Discarded to save storage space.</p>
+                                      <p className="text-[9px] text-muted-foreground italic">Discarded or Purged.</p>
                                     </div>
                                   </div>
                                 )}
@@ -445,7 +471,7 @@ export default function DonationsPage() {
                 </TableRow>
               ))}
             </TableBody>
-            {!loading && filteredDonations && filteredDonations.length > 0 && (
+            {!donationsLoading && filteredDonations && filteredDonations.length > 0 && (
               <TableFooter className="bg-muted/50 border-t-2 border-primary/10">
                 <TableRow>
                   <TableCell colSpan={5} className="text-right font-bold uppercase tracking-wider text-[10px] text-muted-foreground">

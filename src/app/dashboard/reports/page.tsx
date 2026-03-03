@@ -5,19 +5,17 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { 
   FileText, 
-  Download, 
   Printer, 
   Sparkles, 
   TrendingUp, 
   AlertCircle,
   Lightbulb,
   Calendar,
-  ChevronDown,
   ArrowUpRight,
-  ArrowDownRight
+  ArrowDownRight,
+  Loader2
 } from 'lucide-react';
 import { financialReportSummary, type FinancialReportSummaryOutput } from '@/ai/flows/financial-report-summary-flow';
-import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { 
   Select, 
@@ -26,91 +24,143 @@ import {
   SelectTrigger, 
   SelectValue 
 } from '@/components/ui/select';
-
-const mockFinancialData = {
-  monthlyReport: {
-    period: "May 2024",
-    totalIncome: 12450,
-    totalExpenses: 8230,
-    balance: 4220,
-    incomeBreakdown: [
-      { source: "Tithe", amount: 8200 },
-      { source: "Offering", amount: 2450 },
-      { source: "GoFund", amount: 1800 }
-    ],
-    expenseBreakdown: [
-      { category: "Utility", amount: 1200 },
-      { category: "Salary", amount: 4500 },
-      { category: "Charity", amount: 1530 },
-      { category: "Rent", amount: 1000 }
-    ],
-    previousPeriodIncome: 13100,
-    previousPeriodExpenses: 8000
-  },
-  yearlyReport: {
-    period: "2024 YTD",
-    totalIncome: 75400,
-    totalExpenses: 52100,
-    balance: 23300,
-    incomeBreakdown: [
-      { source: "Tithe", amount: 52000 },
-      { source: "Offering", amount: 14400 },
-      { source: "GoFund", amount: 9000 }
-    ],
-    expenseBreakdown: [
-      { category: "Utility", amount: 7200 },
-      { category: "Salary", amount: 31500 },
-      { category: "Charity", amount: 8400 },
-      { category: "Rent", amount: 5000 }
-    ]
-  }
-};
+import { useCollection, useFirestore } from '@/firebase';
+import { collection, query, orderBy, where } from 'firebase/firestore';
+import { startOfMonth, endOfMonth, subMonths, format, isWithinInterval } from 'date-fns';
 
 export default function ReportsPage() {
+  const firestore = useFirestore();
   const [summary, setSummary] = React.useState<FinancialReportSummaryOutput | null>(null);
-  const [loading, setLoading] = React.useState(false);
-  const [selectedMonth, setSelectedMonth] = React.useState("May 2024");
+  const [analyzing, setAnalyzing] = React.useState(false);
+  const [selectedMonthLabel, setSelectedMonthLabel] = React.useState(format(new Date(), 'MMMM yyyy'));
+
+  // Fetch all approved data for reporting
+  const donationsQuery = React.useMemo(() => {
+    if (!firestore) return null;
+    return query(collection(firestore, 'donations'), where('status', '==', 'approved'));
+  }, [firestore]);
+
+  const expensesQuery = React.useMemo(() => {
+    if (!firestore) return null;
+    return query(collection(firestore, 'expenses'), where('status', '==', 'Approved'));
+  }, [firestore]);
+
+  const { data: donations, loading: donationsLoading } = useCollection(donationsQuery);
+  const { data: expenses, loading: expensesLoading } = useCollection(expensesQuery);
+
+  const reportData = React.useMemo(() => {
+    if (!donations || !expenses) return null;
+
+    const now = new Date();
+    const currentMonthStart = startOfMonth(now);
+    const currentMonthEnd = endOfMonth(now);
+    const prevMonthStart = startOfMonth(subMonths(now, 1));
+    const prevMonthEnd = endOfMonth(subMonths(now, 1));
+
+    const calculateMetrics = (start: Date, end: Date) => {
+      const monthDonations = donations.filter(d => d.timestamp?.toDate && isWithinInterval(d.timestamp.toDate(), { start, end }));
+      const monthExpenses = expenses.filter(e => e.date?.toDate && isWithinInterval(e.date.toDate(), { start, end }));
+
+      const totalIncome = monthDonations.reduce((sum, d) => sum + d.amount, 0);
+      const totalExpenses = monthExpenses.reduce((sum, e) => sum + e.amount, 0);
+
+      // Income Breakdown
+      const incomeMap: Record<string, number> = {};
+      monthDonations.forEach(d => {
+        incomeMap[d.type] = (incomeMap[d.type] || 0) + d.amount;
+      });
+
+      // Expense Breakdown
+      const expenseMap: Record<string, number> = {};
+      monthExpenses.forEach(e => {
+        expenseMap[e.category] = (expenseMap[e.category] || 0) + e.amount;
+      });
+
+      return {
+        totalIncome,
+        totalExpenses,
+        balance: totalIncome - totalExpenses,
+        incomeBreakdown: Object.entries(incomeMap).map(([source, amount]) => ({ source, amount })),
+        expenseBreakdown: Object.entries(expenseMap).map(([category, amount]) => ({ category, amount }))
+      };
+    };
+
+    const current = calculateMetrics(currentMonthStart, currentMonthEnd);
+    const previous = calculateMetrics(prevMonthStart, prevMonthEnd);
+
+    // Special logic for "Building Purposes" net balance
+    const buildingDonations = current.incomeBreakdown.find(i => i.source === 'Building Purposes')?.amount || 0;
+    const buildingExpenses = current.expenseBreakdown.find(e => e.category === 'Building Purposes')?.amount || 0;
+    const buildingNet = buildingDonations - buildingExpenses;
+
+    return {
+      monthly: {
+        period: selectedMonthLabel,
+        ...current,
+        previousPeriodIncome: previous.totalIncome,
+        previousPeriodExpenses: previous.totalExpenses,
+        buildingNet
+      },
+      yearly: {
+        period: `${format(now, 'yyyy')} YTD`,
+        // Simply use all approved for YTD in MVP
+        totalIncome: donations.reduce((sum, d) => sum + d.amount, 0),
+        totalExpenses: expenses.reduce((sum, e) => sum + e.amount, 0),
+        balance: donations.reduce((sum, d) => sum + d.amount, 0) - expenses.reduce((sum, e) => sum + e.amount, 0),
+        incomeBreakdown: current.incomeBreakdown, // Simplified for brevity
+        expenseBreakdown: current.expenseBreakdown
+      }
+    };
+  }, [donations, expenses, selectedMonthLabel]);
 
   const generateAISummary = async () => {
-    setLoading(true);
+    if (!reportData) return;
+    setAnalyzing(true);
     try {
-      const result = await financialReportSummary(mockFinancialData);
+      const result = await financialReportSummary({
+        monthlyReport: reportData.monthly,
+        yearlyReport: reportData.yearly
+      });
       setSummary(result);
     } catch (err) {
       console.error(err);
     } finally {
-      setLoading(false);
+      setAnalyzing(false);
     }
   };
 
-  const incomeGrowth = mockFinancialData.monthlyReport.previousPeriodIncome 
-    ? ((mockFinancialData.monthlyReport.totalIncome - mockFinancialData.monthlyReport.previousPeriodIncome) / mockFinancialData.monthlyReport.previousPeriodIncome * 100).toFixed(1)
+  if (donationsLoading || expensesLoading) {
+    return (
+      <div className="flex justify-center items-center py-24">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  const incomeGrowth = reportData?.monthly.previousPeriodIncome 
+    ? (((reportData.monthly.totalIncome - reportData.monthly.previousPeriodIncome) / reportData.monthly.previousPeriodIncome) * 100).toFixed(1)
     : "0";
 
   return (
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-headline font-bold text-primary uppercase tracking-tight">Monthly Financials</h1>
-          <p className="text-muted-foreground font-medium">Detailed performance analysis for MUGHER FULL GOSPEL CHURCH.</p>
+          <h1 className="text-3xl font-headline font-bold text-primary uppercase tracking-tight">Financial Performance</h1>
+          <p className="text-muted-foreground font-medium">Real-time ledger analysis for MUGHER FULL GOSPEL CHURCH.</p>
         </div>
         <div className="flex flex-wrap gap-2">
-          <Select value={selectedMonth} onValueChange={setSelectedMonth}>
+          <Select value={selectedMonthLabel} onValueChange={setSelectedMonthLabel}>
             <SelectTrigger className="w-[180px] bg-white font-bold uppercase text-xs tracking-widest border-primary/20">
               <Calendar className="h-4 w-4 mr-2 text-primary" />
               <SelectValue placeholder="Select Month" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="May 2024">May 2024</SelectItem>
-              <SelectItem value="April 2024">April 2024</SelectItem>
-              <SelectItem value="March 2024">March 2024</SelectItem>
+              <SelectItem value={format(new Date(), 'MMMM yyyy')}>{format(new Date(), 'MMMM yyyy')}</SelectItem>
+              <SelectItem value={format(subMonths(new Date(), 1), 'MMMM yyyy')}>{format(subMonths(new Date(), 1), 'MMMM yyyy')}</SelectItem>
             </SelectContent>
           </Select>
-          <Button variant="outline" className="gap-2 font-bold uppercase text-[10px] tracking-widest border-primary/20">
-            <Printer className="h-4 w-4" /> Print
-          </Button>
           <Button className="gap-2 bg-accent text-accent-foreground hover:bg-accent/90 font-bold uppercase text-[10px] tracking-widest shadow-sm" onClick={generateAISummary}>
-            <Sparkles className="h-4 w-4" /> Analyze Month
+            <Sparkles className="h-4 w-4" /> Run AI Audit
           </Button>
         </div>
       </div>
@@ -120,32 +170,34 @@ export default function ReportsPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <Card className="border-none shadow-sm bg-primary text-white">
               <CardHeader className="p-4 pb-0">
-                <CardTitle className="text-[10px] font-bold uppercase tracking-widest opacity-80">Monthly Income</CardTitle>
+                <CardTitle className="text-[10px] font-bold uppercase tracking-widest opacity-80">Total Income</CardTitle>
               </CardHeader>
               <CardContent className="p-4 pt-2">
-                <div className="text-2xl font-bold">${mockFinancialData.monthlyReport.totalIncome.toLocaleString()}</div>
+                <div className="text-2xl font-bold">${reportData?.monthly.totalIncome.toLocaleString()}</div>
                 <div className="flex items-center gap-1 mt-1 text-[10px] font-bold">
-                  {Number(incomeGrowth) > 0 ? <ArrowUpRight className="h-3 w-3" /> : <ArrowDownRight className="h-3 w-3" />}
-                  {Math.abs(Number(incomeGrowth))}% vs Last Month
+                  {Number(incomeGrowth) >= 0 ? <ArrowUpRight className="h-3 w-3" /> : <ArrowDownRight className="h-3 w-3" />}
+                  {Math.abs(Number(incomeGrowth))}% vs Previous
                 </div>
               </CardContent>
             </Card>
             <Card className="border-none shadow-sm bg-rose-600 text-white">
               <CardHeader className="p-4 pb-0">
-                <CardTitle className="text-[10px] font-bold uppercase tracking-widest opacity-80">Monthly Expenses</CardTitle>
+                <CardTitle className="text-[10px] font-bold uppercase tracking-widest opacity-80">Total Expenses</CardTitle>
               </CardHeader>
               <CardContent className="p-4 pt-2">
-                <div className="text-2xl font-bold">${mockFinancialData.monthlyReport.totalExpenses.toLocaleString()}</div>
-                <div className="text-[10px] font-bold mt-1 opacity-80 uppercase tracking-tight">Budget: $10,000</div>
+                <div className="text-2xl font-bold">${reportData?.monthly.totalExpenses.toLocaleString()}</div>
+                <div className="text-[10px] font-bold mt-1 opacity-80 uppercase tracking-tight">Active Burn Rate</div>
               </CardContent>
             </Card>
             <Card className="border-none shadow-sm bg-emerald-600 text-white">
               <CardHeader className="p-4 pb-0">
-                <CardTitle className="text-[10px] font-bold uppercase tracking-widest opacity-80">Net Balance</CardTitle>
+                <CardTitle className="text-[10px] font-bold uppercase tracking-widest opacity-80">Net Building Fund</CardTitle>
               </CardHeader>
               <CardContent className="p-4 pt-2">
-                <div className="text-2xl font-bold">${mockFinancialData.monthlyReport.balance.toLocaleString()}</div>
-                <div className="text-[10px] font-bold mt-1 opacity-80 uppercase tracking-tight">Health: Positive</div>
+                <div className={`text-2xl font-bold ${reportData?.monthly.buildingNet && reportData.monthly.buildingNet < 0 ? 'text-rose-200' : ''}`}>
+                  ${reportData?.monthly.buildingNet.toLocaleString()}
+                </div>
+                <div className="text-[10px] font-bold mt-1 opacity-80 uppercase tracking-tight">Allocated Balance</div>
               </CardContent>
             </Card>
           </div>
@@ -153,10 +205,10 @@ export default function ReportsPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Card className="border-none shadow-sm">
               <CardHeader className="border-b bg-muted/20">
-                <CardTitle className="text-sm font-bold uppercase tracking-widest text-primary">Income Streams</CardTitle>
+                <CardTitle className="text-sm font-bold uppercase tracking-widest text-primary">Inflow Sources</CardTitle>
               </CardHeader>
               <CardContent className="p-6 space-y-4">
-                {mockFinancialData.monthlyReport.incomeBreakdown.map((item, i) => (
+                {reportData?.monthly.incomeBreakdown.map((item, i) => (
                   <div key={i} className="flex flex-col gap-1">
                     <div className="flex items-center justify-between text-xs font-bold uppercase">
                       <span className="text-muted-foreground">{item.source}</span>
@@ -165,7 +217,7 @@ export default function ReportsPage() {
                     <div className="w-full bg-muted rounded-full h-1.5 overflow-hidden">
                       <div 
                         className="bg-primary h-full transition-all" 
-                        style={{ width: `${(item.amount / mockFinancialData.monthlyReport.totalIncome) * 100}%` }}
+                        style={{ width: `${(item.amount / (reportData?.monthly.totalIncome || 1)) * 100}%` }}
                       />
                     </div>
                   </div>
@@ -175,10 +227,10 @@ export default function ReportsPage() {
 
             <Card className="border-none shadow-sm">
               <CardHeader className="border-b bg-muted/20">
-                <CardTitle className="text-sm font-bold uppercase tracking-widest text-rose-600">Expense Categories</CardTitle>
+                <CardTitle className="text-sm font-bold uppercase tracking-widest text-rose-600">Outflow Categories</CardTitle>
               </CardHeader>
               <CardContent className="p-6 space-y-4">
-                {mockFinancialData.monthlyReport.expenseBreakdown.map((item, i) => (
+                {reportData?.monthly.expenseBreakdown.map((item, i) => (
                   <div key={i} className="flex flex-col gap-1">
                     <div className="flex items-center justify-between text-xs font-bold uppercase">
                       <span className="text-muted-foreground">{item.category}</span>
@@ -187,7 +239,7 @@ export default function ReportsPage() {
                     <div className="w-full bg-muted rounded-full h-1.5 overflow-hidden">
                       <div 
                         className="bg-rose-600 h-full transition-all" 
-                        style={{ width: `${(item.amount / mockFinancialData.monthlyReport.totalExpenses) * 100}%` }}
+                        style={{ width: `${(item.amount / (reportData?.monthly.totalExpenses || 1)) * 100}%` }}
                       />
                     </div>
                   </div>
@@ -202,26 +254,26 @@ export default function ReportsPage() {
             <CardHeader className="bg-primary/5 border-b border-primary/10">
               <div className="flex items-center gap-2">
                 <Sparkles className="h-5 w-5 text-accent" />
-                <CardTitle className="text-lg font-headline font-bold text-primary uppercase tracking-tight">AI Monthly Analysis</CardTitle>
+                <CardTitle className="text-lg font-headline font-bold text-primary uppercase tracking-tight">AI Financial Summary</CardTitle>
               </div>
             </CardHeader>
             <CardContent className="p-6">
-              {!summary && !loading ? (
+              {!summary && !analyzing ? (
                 <div className="flex flex-col items-center justify-center py-12 text-center space-y-6">
                   <div className="bg-muted p-6 rounded-full">
                     <Lightbulb className="h-10 w-10 text-muted-foreground/50" />
                   </div>
                   <div className="space-y-2">
-                    <h4 className="font-bold text-primary">Intelligence Needed</h4>
+                    <h4 className="font-bold text-primary">Analysis Required</h4>
                     <p className="text-xs text-muted-foreground leading-relaxed">
-                      Our AI analyst can scan your monthly data to identify trends and growth opportunities.
+                      AI can analyze the correlation between specific donation categories and expenditures.
                     </p>
                   </div>
                   <Button variant="outline" className="w-full border-primary text-primary font-bold uppercase text-[10px] tracking-widest hover:bg-primary/5" onClick={generateAISummary}>
-                    Generate Analysis
+                    Start Analysis
                   </Button>
                 </div>
-              ) : loading ? (
+              ) : analyzing ? (
                 <div className="space-y-6">
                   <Skeleton className="h-4 w-3/4" />
                   <div className="space-y-2">
@@ -236,7 +288,7 @@ export default function ReportsPage() {
                 <div className="space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-700">
                   <div className="space-y-3">
                     <h4 className="font-bold text-[10px] uppercase tracking-widest text-muted-foreground flex items-center gap-2">
-                      <FileText className="h-4 w-4 text-primary" /> Executive Summary
+                      <FileText className="h-4 w-4 text-primary" /> Auditor Notes
                     </h4>
                     <div className="text-sm leading-relaxed text-slate-700 bg-muted/30 p-4 rounded-xl border border-primary/5 font-medium italic">
                       "{summary?.summary}"
@@ -245,7 +297,7 @@ export default function ReportsPage() {
                   
                   <div className="space-y-4">
                     <h4 className="font-bold text-[10px] uppercase tracking-widest text-muted-foreground flex items-center gap-2">
-                      <TrendingUp className="h-4 w-4 text-emerald-600" /> Key Trends Identified
+                      <TrendingUp className="h-4 w-4 text-emerald-600" /> Fund Health
                     </h4>
                     <div className="space-y-2">
                       {summary?.keyTrends.map((trend, i) => (
@@ -258,7 +310,7 @@ export default function ReportsPage() {
 
                   <div className="space-y-4">
                     <h4 className="font-bold text-[10px] uppercase tracking-widest text-muted-foreground flex items-center gap-2">
-                      <AlertCircle className="h-4 w-4 text-accent" /> Actionable Insights
+                      <AlertCircle className="h-4 w-4 text-accent" /> Leadership Insights
                     </h4>
                     <div className="space-y-2">
                       {summary?.insights.map((insight, i) => (
@@ -270,7 +322,7 @@ export default function ReportsPage() {
                   </div>
 
                   <Button variant="ghost" className="w-full text-[10px] font-bold uppercase tracking-widest text-primary/60 hover:text-primary transition-colors" onClick={() => setSummary(null)}>
-                    Refresh Analysis
+                    Clear Report
                   </Button>
                 </div>
               )}
