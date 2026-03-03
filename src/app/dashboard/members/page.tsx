@@ -1,4 +1,3 @@
-
 "use client";
 
 import * as React from 'react';
@@ -17,7 +16,6 @@ import {
   CardContent, 
   CardHeader, 
   CardTitle,
-  CardDescription
 } from '@/components/ui/card';
 import { 
   DropdownMenu, 
@@ -33,16 +31,9 @@ import {
   Filter, 
   MoreVertical, 
   Download,
-  Mail,
-  Phone,
-  UserPlus,
-  UserCheck,
-  Users,
   Loader2,
   Trash2,
-  Edit,
-  VenetianMask,
-  Heart
+  Edit
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -199,13 +190,13 @@ export default function MembersPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-headline font-bold text-primary uppercase tracking-tight">Congregation</h1>
-          <p className="text-muted-foreground font-medium text-sm">Manage church membership data and demographic insights.</p>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="text-center sm:text-left">
+          <h1 className="text-2xl md:text-3xl font-headline font-bold text-primary uppercase tracking-tight">Congregation</h1>
+          <p className="text-muted-foreground font-medium text-xs md:text-sm">Manage church membership data and demographic insights.</p>
         </div>
-        <div className="flex gap-2">
-          <Button variant="outline" className="gap-2 font-bold uppercase text-[10px] tracking-widest">
+        <div className="flex justify-center sm:justify-end gap-2">
+          <Button variant="outline" className="hidden sm:flex gap-2 font-bold uppercase text-[10px] tracking-widest h-9">
             <Download className="h-4 w-4" /> Export
           </Button>
           <Dialog open={isDialogOpen} onOpenChange={(open) => {
@@ -213,18 +204,18 @@ export default function MembersPage() {
             if (!open) setEditingMember(null);
           }}>
             <DialogTrigger asChild>
-              <Button className="gap-2 bg-primary font-bold uppercase text-[10px] tracking-widest">
+              <Button className="gap-2 bg-primary font-bold uppercase text-[10px] tracking-widest h-9">
                 <Plus className="h-4 w-4" /> Add Member
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-2xl">
+            <DialogContent className="max-w-[95vw] sm:max-w-2xl rounded-xl">
               <DialogHeader>
                 <DialogTitle className="text-xl font-headline font-bold text-primary uppercase tracking-tight">
-                  {editingMember ? 'Edit Member Profile' : 'Register New Member'}
+                  {editingMember ? 'Edit Profile' : 'Register Member'}
                 </DialogTitle>
               </DialogHeader>
               <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 pt-4">
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 pt-4 max-h-[75vh] overflow-y-auto px-1">
                   <FormField
                     control={form.control}
                     name="name"
@@ -236,7 +227,7 @@ export default function MembersPage() {
                       </FormItem>
                     )}
                   />
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <FormField
                       control={form.control}
                       name="email"
@@ -253,7 +244,7 @@ export default function MembersPage() {
                       name="phone"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-[10px] font-bold uppercase tracking-wider">Phone Number</FormLabel>
+                          <FormLabel className="text-[10px] font-bold uppercase tracking-wider">Phone</FormLabel>
                           <FormControl><Input placeholder="+251 ..." {...field} /></FormControl>
                           <FormMessage />
                         </FormItem>
@@ -270,7 +261,7 @@ export default function MembersPage() {
                           <Select onValueChange={field.onChange} defaultValue={field.value}>
                             <FormControl>
                               <SelectTrigger>
-                                <SelectValue placeholder="Select gender" />
+                                <SelectValue placeholder="Gender" />
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
@@ -287,11 +278,11 @@ export default function MembersPage() {
                       name="maritalStatus"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-[10px] font-bold uppercase tracking-wider">Marital Status</FormLabel>
+                          <FormLabel className="text-[10px] font-bold uppercase tracking-wider">Marital</FormLabel>
                           <Select onValueChange={field.onChange} defaultValue={field.value}>
                             <FormControl>
                               <SelectTrigger>
-                                <SelectValue placeholder="Select status" />
+                                <SelectValue placeholder="Status" />
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
@@ -304,14 +295,14 @@ export default function MembersPage() {
                       )}
                     />
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <FormField
                       control={form.control}
                       name="group"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel className="text-[10px] font-bold uppercase tracking-wider">Ministry/Group</FormLabel>
-                          <FormControl><Input placeholder="e.g. Choir, Youth" {...field} /></FormControl>
+                          <FormControl><Input placeholder="e.g. Choir" {...field} /></FormControl>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -321,11 +312,11 @@ export default function MembersPage() {
                       name="status"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-[10px] font-bold uppercase tracking-wider">Membership Status</FormLabel>
+                          <FormLabel className="text-[10px] font-bold uppercase tracking-wider">Status</FormLabel>
                           <Select onValueChange={field.onChange} defaultValue={field.value}>
                             <FormControl>
                               <SelectTrigger>
-                                <SelectValue placeholder="Select status" />
+                                <SelectValue placeholder="Status" />
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
@@ -339,8 +330,8 @@ export default function MembersPage() {
                     />
                   </div>
                   <DialogFooter className="pt-4">
-                    <Button type="submit" className="w-full bg-primary font-bold uppercase text-[10px] tracking-widest">
-                      {editingMember ? 'Update Member Profile' : 'Complete Registration'}
+                    <Button type="submit" className="w-full bg-primary font-bold uppercase text-[10px] tracking-widest h-11">
+                      {editingMember ? 'Update Profile' : 'Register Member'}
                     </Button>
                   </DialogFooter>
                 </form>
@@ -350,53 +341,53 @@ export default function MembersPage() {
         </div>
       </div>
 
-      <div className="grid gap-4 grid-cols-2 md:grid-cols-5">
-        <Card className="border-none shadow-sm bg-primary text-white">
-          <CardHeader className="p-4 pb-0">
-            <CardTitle className="text-[10px] font-bold uppercase tracking-widest opacity-80">Total Members</CardTitle>
+      <div className="grid gap-3 grid-cols-2 sm:grid-cols-3 md:grid-cols-5">
+        <Card className="border-none shadow-sm bg-primary text-white col-span-2 sm:col-span-1">
+          <CardHeader className="p-3 pb-0">
+            <CardTitle className="text-[9px] md:text-[10px] font-bold uppercase tracking-widest opacity-80">Total</CardTitle>
           </CardHeader>
-          <CardContent className="p-4 pt-2">
-            <div className="text-2xl font-bold">{stats.total}</div>
+          <CardContent className="p-3 pt-1">
+            <div className="text-xl md:text-2xl font-bold">{stats.total}</div>
           </CardContent>
         </Card>
         <Card className="border-none shadow-sm">
-          <CardHeader className="p-4 pb-0">
-            <CardTitle className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Male</CardTitle>
+          <CardHeader className="p-3 pb-0">
+            <CardTitle className="text-[9px] md:text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Male</CardTitle>
           </CardHeader>
-          <CardContent className="p-4 pt-2">
-            <div className="text-xl font-bold text-blue-600">{stats.male}</div>
+          <CardContent className="p-3 pt-1">
+            <div className="text-lg md:text-xl font-bold text-blue-600">{stats.male}</div>
           </CardContent>
         </Card>
         <Card className="border-none shadow-sm">
-          <CardHeader className="p-4 pb-0">
-            <CardTitle className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Female</CardTitle>
+          <CardHeader className="p-3 pb-0">
+            <CardTitle className="text-[9px] md:text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Female</CardTitle>
           </CardHeader>
-          <CardContent className="p-4 pt-2">
-            <div className="text-xl font-bold text-rose-500">{stats.female}</div>
+          <CardContent className="p-3 pt-1">
+            <div className="text-lg md:text-xl font-bold text-rose-500">{stats.female}</div>
           </CardContent>
         </Card>
         <Card className="border-none shadow-sm bg-emerald-50">
-          <CardHeader className="p-4 pb-0">
-            <CardTitle className="text-[10px] font-bold text-emerald-700 uppercase tracking-widest">Married</CardTitle>
+          <CardHeader className="p-3 pb-0">
+            <CardTitle className="text-[9px] md:text-[10px] font-bold text-emerald-700 uppercase tracking-widest">Married</CardTitle>
           </CardHeader>
-          <CardContent className="p-4 pt-2">
-            <div className="text-xl font-bold text-emerald-700">{stats.married}</div>
+          <CardContent className="p-3 pt-1">
+            <div className="text-lg md:text-xl font-bold text-emerald-700">{stats.married}</div>
           </CardContent>
         </Card>
         <Card className="border-none shadow-sm bg-accent/10">
-          <CardHeader className="p-4 pb-0">
-            <CardTitle className="text-[10px] font-bold text-accent-foreground uppercase tracking-widest">Active</CardTitle>
+          <CardHeader className="p-3 pb-0">
+            <CardTitle className="text-[9px] md:text-[10px] font-bold text-accent-foreground uppercase tracking-widest">Active</CardTitle>
           </CardHeader>
-          <CardContent className="p-4 pt-2">
-            <div className="text-xl font-bold text-accent-foreground">{stats.active}</div>
+          <CardContent className="p-3 pt-1">
+            <div className="text-lg md:text-xl font-bold text-accent-foreground">{stats.active}</div>
           </CardContent>
         </Card>
       </div>
 
       <Card className="border-none shadow-sm overflow-hidden">
-        <CardHeader className="bg-white/50 border-b">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div className="relative flex-1 max-w-sm">
+        <CardHeader className="bg-white/50 border-b p-4 md:p-6">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+            <div className="relative flex-1 lg:max-w-sm">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input 
                 placeholder="Search name or email..." 
@@ -406,19 +397,19 @@ export default function MembersPage() {
               />
             </div>
             <div className="flex items-center gap-2">
-              <Button variant="outline" size="sm" className="gap-2 font-bold uppercase text-[10px] border-primary/20">
+              <Button variant="outline" size="sm" className="w-full sm:w-auto gap-2 font-bold uppercase text-[10px] border-primary/20 h-9">
                 <Filter className="h-4 w-4" /> Filter
               </Button>
             </div>
           </div>
         </CardHeader>
-        <CardContent className="p-0">
-          <Table>
+        <CardContent className="p-0 overflow-x-auto">
+          <Table className="min-w-[800px] lg:min-w-full">
             <TableHeader className="bg-muted/30">
               <TableRow>
                 <TableHead className="text-[10px] font-bold uppercase tracking-wider">Member</TableHead>
                 <TableHead className="text-[10px] font-bold uppercase tracking-wider">Gender</TableHead>
-                <TableHead className="text-[10px] font-bold uppercase tracking-wider">Marital Status</TableHead>
+                <TableHead className="text-[10px] font-bold uppercase tracking-wider">Marital</TableHead>
                 <TableHead className="text-[10px] font-bold uppercase tracking-wider">Ministry</TableHead>
                 <TableHead className="text-[10px] font-bold uppercase tracking-wider">Joined</TableHead>
                 <TableHead className="text-[10px] font-bold uppercase tracking-wider">Status</TableHead>
@@ -443,8 +434,8 @@ export default function MembersPage() {
                         <AvatarFallback>{member.name.split(' ').map((n: string) => n[0]).join('')}</AvatarFallback>
                       </Avatar>
                       <div className="flex flex-col">
-                        <span className="font-bold text-xs text-primary">{member.name}</span>
-                        <span className="text-[9px] text-muted-foreground font-medium">{member.email || member.phone || 'No contact info'}</span>
+                        <span className="font-bold text-xs text-primary truncate max-w-[120px]">{member.name}</span>
+                        <span className="text-[9px] text-muted-foreground font-medium truncate max-w-[120px]">{member.email || member.phone || 'No contact'}</span>
                       </div>
                     </div>
                   </TableCell>
@@ -463,7 +454,7 @@ export default function MembersPage() {
                       {member.group || 'General'}
                     </Badge>
                   </TableCell>
-                  <TableCell className="text-[10px] text-muted-foreground font-medium">
+                  <TableCell className="text-[10px] text-muted-foreground font-medium whitespace-nowrap">
                     {member.joinedDate?.toDate ? format(member.joinedDate.toDate(), 'MMM d, yyyy') : 'Recently'}
                   </TableCell>
                   <TableCell>
@@ -479,7 +470,7 @@ export default function MembersPage() {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end" className="w-48">
-                        <DropdownMenuLabel className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Member profile</DropdownMenuLabel>
+                        <DropdownMenuLabel className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Member Profile</DropdownMenuLabel>
                         <DropdownMenuItem onClick={() => {
                           setEditingMember(member);
                           setIsDialogOpen(true);

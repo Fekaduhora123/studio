@@ -149,14 +149,12 @@ export default function DonationsPage() {
       }
     });
 
-    // Subtract approved expenses for "Building Purposes" to show net balance
     if (expenses) {
       const buildingExpenses = expenses
         .filter(e => e.category === 'Building Purposes')
         .reduce((sum, e) => sum + e.amount, 0);
       
       res['Building Purposes'] -= buildingExpenses;
-      // Adjust total to reflect net position
       res.total -= buildingExpenses;
     }
 
@@ -191,59 +189,59 @@ export default function DonationsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-headline font-bold text-primary uppercase tracking-tight">Income Control</h1>
-          <p className="text-muted-foreground font-medium text-sm">MUGHER FULL GOSPEL CHURCH verified categorization.</p>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="text-center sm:text-left">
+          <h1 className="text-2xl md:text-3xl font-headline font-bold text-primary uppercase tracking-tight">Income Control</h1>
+          <p className="text-muted-foreground font-medium text-xs md:text-sm">MUGHER FULL GOSPEL CHURCH verified categorization.</p>
         </div>
-        <div className="flex gap-2">
-          <Button variant="outline" className="gap-2 font-bold uppercase text-[10px] tracking-widest border-primary/20">
+        <div className="flex justify-center sm:justify-end gap-2">
+          <Button variant="outline" className="gap-2 font-bold uppercase text-[9px] md:text-[10px] tracking-widest border-primary/20 h-9">
             <Download className="h-4 w-4" /> Export CSV
           </Button>
         </div>
       </div>
 
-      <div className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
-        <Card className="border-none shadow-sm bg-primary text-white">
-          <CardHeader className="p-4 pb-2">
-            <CardTitle className="text-[9px] font-bold uppercase tracking-widest opacity-80">Net Balance</CardTitle>
+      <div className="grid gap-3 grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
+        <Card className="border-none shadow-sm bg-primary text-white col-span-2 md:col-span-1">
+          <CardHeader className="p-3 pb-1 md:p-4 md:pb-2">
+            <CardTitle className="text-[8px] md:text-[9px] font-bold uppercase tracking-widest opacity-80">Net Balance</CardTitle>
           </CardHeader>
-          <CardContent className="p-4 pt-0">
-            <div className="text-2xl font-bold">${stats.total.toLocaleString()}</div>
+          <CardContent className="p-3 pt-0 md:p-4 md:pt-0">
+            <div className="text-xl md:text-2xl font-bold">${stats.total.toLocaleString()}</div>
           </CardContent>
         </Card>
         {['Tithe', 'Offering', 'GoFund', 'Building Purposes'].map((category) => (
           <Card key={category} className={`border-none shadow-sm ${category === 'Building Purposes' ? 'ring-2 ring-primary/20 bg-primary/5' : ''}`}>
-            <CardHeader className="p-4 pb-2">
-              <CardTitle className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest flex items-center gap-2">
+            <CardHeader className="p-3 pb-1 md:p-4 md:pb-2">
+              <CardTitle className="text-[8px] md:text-[9px] font-bold text-muted-foreground uppercase tracking-widest flex items-center gap-1 md:gap-2">
                 {category}
                 {category === 'Building Purposes' && <TrendingDown className="h-3 w-3 text-rose-500" />}
               </CardTitle>
             </CardHeader>
-            <CardContent className="p-4 pt-0">
-              <div className={`text-xl font-bold ${category === 'Building Purposes' && stats['Building Purposes'] < 0 ? 'text-rose-600' : ''}`}>
+            <CardContent className="p-3 pt-0 md:p-4 md:pt-0">
+              <div className={`text-base md:text-xl font-bold truncate ${category === 'Building Purposes' && stats['Building Purposes'] < 0 ? 'text-rose-600' : ''}`}>
                 ${(stats as any)[category].toLocaleString()}
               </div>
               {category === 'Building Purposes' && (
-                <p className="text-[8px] text-muted-foreground uppercase font-bold mt-1">Expenses Subtracted</p>
+                <p className="text-[7px] md:text-[8px] text-muted-foreground uppercase font-bold mt-1">Expenses Net</p>
               )}
             </CardContent>
           </Card>
         ))}
         <Card className="border-none shadow-sm bg-amber-500/10">
-          <CardHeader className="p-4 pb-2">
-            <CardTitle className="text-[9px] font-bold text-amber-700 uppercase tracking-widest">Pending</CardTitle>
+          <CardHeader className="p-3 pb-1 md:p-4 md:pb-2">
+            <CardTitle className="text-[8px] md:text-[9px] font-bold text-amber-700 uppercase tracking-widest">Pending</CardTitle>
           </CardHeader>
-          <CardContent className="p-4 pt-0">
-            <div className="text-xl font-bold text-amber-700">{stats.pending}</div>
+          <CardContent className="p-3 pt-0 md:p-4 md:pt-0">
+            <div className="text-base md:text-xl font-bold text-amber-700">{stats.pending}</div>
           </CardContent>
         </Card>
       </div>
 
       <Card className="border-none shadow-sm">
-        <CardHeader className="bg-white/50 border-b">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div className="relative flex-1 max-w-sm">
+        <CardHeader className="bg-white/50 border-b p-4 md:p-6">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+            <div className="relative flex-1 lg:max-w-sm">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input 
                 placeholder="Search donor or reference..." 
@@ -252,9 +250,9 @@ export default function DonationsPage() {
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
               <Select value={typeFilter} onValueChange={setTypeFilter}>
-                <SelectTrigger className="w-[180px] bg-white h-10 text-[10px] font-bold uppercase tracking-wider">
+                <SelectTrigger className="w-full sm:w-[180px] bg-white h-10 text-[9px] md:text-[10px] font-bold uppercase tracking-wider">
                   <div className="flex items-center gap-2">
                     <Filter className="h-3 w-3 text-muted-foreground" />
                     <SelectValue placeholder="All Types" />
@@ -272,12 +270,12 @@ export default function DonationsPage() {
             </div>
           </div>
         </CardHeader>
-        <CardContent className="p-0">
-          <Table>
+        <CardContent className="p-0 overflow-x-auto">
+          <Table className="min-w-[800px] lg:min-w-full">
             <TableHeader className="bg-muted/30">
               <TableRow>
                 <TableHead className="text-[10px] font-bold uppercase tracking-wider">Date</TableHead>
-                <TableHead className="text-[10px] font-bold uppercase tracking-wider min-w-[150px]">Donor Name</TableHead>
+                <TableHead className="text-[10px] font-bold uppercase tracking-wider">Donor Name</TableHead>
                 <TableHead className="text-[10px] font-bold uppercase tracking-wider">Type</TableHead>
                 <TableHead className="text-[10px] font-bold uppercase tracking-wider">Ref #</TableHead>
                 <TableHead className="text-[10px] font-bold uppercase tracking-wider">Status</TableHead>
@@ -299,7 +297,7 @@ export default function DonationsPage() {
                   <TableCell className="text-[10px] font-medium whitespace-nowrap">
                     {donation.timestamp?.toDate ? format(donation.timestamp.toDate(), 'MMM d, yyyy') : 'Pending'}
                   </TableCell>
-                  <TableCell className="text-xs font-bold text-primary max-w-[200px] truncate">
+                  <TableCell className="text-xs font-bold text-primary max-w-[150px] md:max-w-[200px] truncate">
                     {donation.donorName || 'Unidentified Donor'}
                   </TableCell>
                   <TableCell>
@@ -328,15 +326,15 @@ export default function DonationsPage() {
                             <Eye className="h-4 w-4" />
                           </Button>
                         </DialogTrigger>
-                        <DialogContent className="max-w-md border-none shadow-2xl">
+                        <DialogContent className="max-w-[95vw] sm:max-w-md border-none shadow-2xl rounded-xl">
                           <DialogHeader>
                             <DialogTitle className="text-xl font-headline font-bold text-primary uppercase tracking-tight">Verification Details</DialogTitle>
                           </DialogHeader>
-                          <div className="space-y-6 pt-4">
+                          <div className="space-y-6 pt-4 max-h-[80vh] overflow-y-auto px-1">
                             <div className="grid grid-cols-2 gap-4 text-sm bg-muted/20 p-4 rounded-lg border border-primary/5">
                               <div className="space-y-1">
                                 <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-wider">Donor</p>
-                                <p className="font-bold text-primary text-xs">{donation.donorName || 'Unidentified'}</p>
+                                <p className="font-bold text-primary text-xs truncate">{donation.donorName || 'Unidentified'}</p>
                               </div>
                               <div className="space-y-1">
                                 <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-wider">Amount</p>
@@ -348,16 +346,16 @@ export default function DonationsPage() {
                               </div>
                               <div className="space-y-1">
                                 <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-wider">Reference</p>
-                                <p className="font-mono text-[10px] opacity-70">{donation.referenceNumber}</p>
+                                <p className="font-mono text-[10px] opacity-70 truncate">{donation.referenceNumber}</p>
                               </div>
                             </div>
 
                             {donation.isAiVerified && (
                               <Alert className="bg-emerald-50 border-emerald-200">
                                 <ShieldCheck className="h-4 w-4 text-emerald-600" />
-                                <AlertTitle className="text-emerald-800 text-[10px] font-bold uppercase tracking-widest">AI Verified Secure</AlertTitle>
-                                <AlertDescription className="text-emerald-700 text-[10px] leading-relaxed">
-                                  Verified for **MUGHER FULL GOSPEL CHURCH** (Account ends in **5978**).
+                                <AlertTitle className="text-emerald-800 text-[9px] md:text-[10px] font-bold uppercase tracking-widest">AI Verified Secure</AlertTitle>
+                                <AlertDescription className="text-emerald-700 text-[9px] md:text-[10px] leading-relaxed">
+                                  Verified for **MUGHER FULL GOSPEL CHURCH** (Ends in **5978**).
                                 </AlertDescription>
                               </Alert>
                             )}
@@ -397,16 +395,16 @@ export default function DonationsPage() {
                             
                             <div className="flex flex-col gap-2 pt-2">
                               {donation.status === 'pending' && (
-                                <div className="flex gap-2">
+                                <div className="flex flex-col sm:flex-row gap-2">
                                   <Button 
-                                    className="flex-1 bg-emerald-600 hover:bg-emerald-700 font-bold uppercase text-[10px]" 
+                                    className="flex-1 bg-emerald-600 hover:bg-emerald-700 font-bold uppercase text-[10px] h-11" 
                                     onClick={() => handleUpdateStatus(donation.id, 'approved')}
                                   >
                                     <Check className="h-4 w-4 mr-2" /> Approve
                                   </Button>
                                   <Button 
                                     variant="destructive" 
-                                    className="flex-1 font-bold uppercase text-[10px]"
+                                    className="flex-1 font-bold uppercase text-[10px] h-11"
                                     onClick={() => handleUpdateStatus(donation.id, 'rejected')}
                                   >
                                     <X className="h-4 w-4 mr-2" /> Reject
@@ -415,7 +413,7 @@ export default function DonationsPage() {
                               )}
                               <Button 
                                 variant="outline" 
-                                className="w-full font-bold uppercase text-[10px] text-rose-600 border-rose-200 hover:bg-rose-50"
+                                className="w-full font-bold uppercase text-[10px] text-rose-600 border-rose-200 hover:bg-rose-50 h-10"
                                 onClick={() => handleDeleteDonation(donation.id)}
                               >
                                 <Trash2 className="h-4 w-4 mr-2" /> Delete Record

@@ -1,11 +1,10 @@
 "use client";
 
 import * as React from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { 
   FileText, 
-  Printer, 
   Sparkles, 
   TrendingUp, 
   AlertCircle,
@@ -56,13 +55,11 @@ export default function ReportsPage() {
   const [analyzing, setAnalyzing] = React.useState(false);
   const [selectedMonthLabel, setSelectedMonthLabel] = React.useState(format(new Date(), 'MMMM yyyy'));
   
-  // Drill-down state
   const [detailDialogOpen, setDetailDialogOpen] = React.useState(false);
   const [detailTitle, setDetailTitle] = React.useState('');
   const [detailItems, setDetailItems] = React.useState<any[]>([]);
   const [detailType, setDetailType] = React.useState<'income' | 'expense'>('income');
 
-  // Fetch all approved data for reporting
   const donationsQuery = React.useMemo(() => {
     if (!firestore) return null;
     return query(collection(firestore, 'donations'), where('status', '==', 'approved'));
@@ -80,8 +77,6 @@ export default function ReportsPage() {
     if (!donations || !expenses) return null;
 
     const now = new Date();
-    // In a real app, this would parse selectedMonthLabel to get the specific month range
-    // For MVP, we'll keep the current/previous logic linked to today
     const currentMonthStart = startOfMonth(now);
     const currentMonthEnd = endOfMonth(now);
     const prevMonthStart = startOfMonth(subMonths(now, 1));
@@ -94,13 +89,11 @@ export default function ReportsPage() {
       const totalIncome = monthDonations.reduce((sum, d) => sum + d.amount, 0);
       const totalExpenses = monthExpenses.reduce((sum, e) => sum + e.amount, 0);
 
-      // Income Breakdown
       const incomeMap: Record<string, number> = {};
       monthDonations.forEach(d => {
         incomeMap[d.type] = (incomeMap[d.type] || 0) + d.amount;
       });
 
-      // Expense Breakdown
       const expenseMap: Record<string, number> = {};
       monthExpenses.forEach(e => {
         expenseMap[e.category] = (expenseMap[e.category] || 0) + e.amount;
@@ -263,7 +256,7 @@ export default function ReportsPage() {
       },
       styles: { fontSize: 9 },
       columnStyles: {
-        1: { cellWidth: isExpense ? 80 : 'auto' } // Give description column more space
+        1: { cellWidth: isExpense ? 80 : 'auto' }
       }
     });
 
@@ -305,13 +298,13 @@ export default function ReportsPage() {
   return (
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-headline font-bold text-primary uppercase tracking-tight">Financial Performance</h1>
-          <p className="text-muted-foreground font-medium">Real-time ledger analysis for MUGHER FULL GOSPEL CHURCH.</p>
+        <div className="text-center md:text-left">
+          <h1 className="text-2xl md:text-3xl font-headline font-bold text-primary uppercase tracking-tight">Financial Performance</h1>
+          <p className="text-muted-foreground font-medium text-xs md:text-sm">Real-time ledger analysis for MUGHER FULL GOSPEL CHURCH.</p>
         </div>
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-col sm:flex-row flex-wrap gap-2 justify-center">
           <Select value={selectedMonthLabel} onValueChange={setSelectedMonthLabel}>
-            <SelectTrigger className="w-[180px] bg-white font-bold uppercase text-xs tracking-widest border-primary/20">
+            <SelectTrigger className="w-full sm:w-[160px] md:w-[180px] bg-white font-bold uppercase text-[10px] tracking-widest border-primary/20 h-9">
               <Calendar className="h-4 w-4 mr-2 text-primary" />
               <SelectValue placeholder="Select Month" />
             </SelectTrigger>
@@ -320,24 +313,26 @@ export default function ReportsPage() {
               <SelectItem value={format(subMonths(new Date(), 1), 'MMMM yyyy')}>{format(subMonths(new Date(), 1), 'MMMM yyyy')}</SelectItem>
             </SelectContent>
           </Select>
-          <Button variant="outline" className="gap-2 font-bold uppercase text-[10px] tracking-widest border-primary/20" onClick={handleDownloadPDF}>
-            <Download className="h-4 w-4" /> Summary PDF
-          </Button>
-          <Button className="gap-2 bg-accent text-accent-foreground hover:bg-accent/90 font-bold uppercase text-[10px] tracking-widest shadow-sm" onClick={generateAISummary}>
-            <Sparkles className="h-4 w-4" /> Run AI Audit
-          </Button>
+          <div className="flex gap-2 w-full sm:w-auto">
+            <Button variant="outline" className="flex-1 sm:flex-none gap-2 font-bold uppercase text-[9px] md:text-[10px] tracking-widest border-primary/20 h-9" onClick={handleDownloadPDF}>
+              <Download className="h-4 w-4" /> PDF
+            </Button>
+            <Button className="flex-1 sm:flex-none gap-2 bg-accent text-accent-foreground hover:bg-accent/90 font-bold uppercase text-[9px] md:text-[10px] tracking-widest shadow-sm h-9" onClick={generateAISummary}>
+              <Sparkles className="h-4 w-4" /> AI Audit
+            </Button>
+          </div>
         </div>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="lg:col-span-2 space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             <Card className="border-none shadow-sm bg-primary text-white">
               <CardHeader className="p-4 pb-0">
                 <CardTitle className="text-[10px] font-bold uppercase tracking-widest opacity-80">Total Income</CardTitle>
               </CardHeader>
               <CardContent className="p-4 pt-2">
-                <div className="text-2xl font-bold">${reportData?.monthly.totalIncome.toLocaleString()}</div>
+                <div className="text-xl md:text-2xl font-bold">${reportData?.monthly.totalIncome.toLocaleString()}</div>
                 <div className="flex items-center gap-1 mt-1 text-[10px] font-bold">
                   {Number(incomeGrowth) >= 0 ? <ArrowUpRight className="h-3 w-3" /> : <ArrowDownRight className="h-3 w-3" />}
                   {Math.abs(Number(incomeGrowth))}% vs Previous
@@ -349,16 +344,16 @@ export default function ReportsPage() {
                 <CardTitle className="text-[10px] font-bold uppercase tracking-widest opacity-80">Total Expenses</CardTitle>
               </CardHeader>
               <CardContent className="p-4 pt-2">
-                <div className="text-2xl font-bold">${reportData?.monthly.totalExpenses.toLocaleString()}</div>
-                <div className="text-[10px] font-bold mt-1 opacity-80 uppercase tracking-tight">Active Burn Rate</div>
+                <div className="text-xl md:text-2xl font-bold">${reportData?.monthly.totalExpenses.toLocaleString()}</div>
+                <div className="text-[10px] font-bold mt-1 opacity-80 uppercase tracking-tight">Active Outflow</div>
               </CardContent>
             </Card>
-            <Card className="border-none shadow-sm bg-emerald-600 text-white">
+            <Card className="border-none shadow-sm bg-emerald-600 text-white sm:col-span-2 md:col-span-1">
               <CardHeader className="p-4 pb-0">
                 <CardTitle className="text-[10px] font-bold uppercase tracking-widest opacity-80">Net Building Fund</CardTitle>
               </CardHeader>
               <CardContent className="p-4 pt-2">
-                <div className={`text-2xl font-bold ${reportData?.monthly.buildingNet && reportData.monthly.buildingNet < 0 ? 'text-rose-200' : ''}`}>
+                <div className={`text-xl md:text-2xl font-bold ${reportData?.monthly.buildingNet && reportData.monthly.buildingNet < 0 ? 'text-rose-200' : ''}`}>
                   ${reportData?.monthly.buildingNet.toLocaleString()}
                 </div>
                 <div className="text-[10px] font-bold mt-1 opacity-80 uppercase tracking-tight">Allocated Balance</div>
@@ -380,11 +375,11 @@ export default function ReportsPage() {
                     className="w-full flex flex-col gap-1 group text-left transition-all hover:translate-x-1"
                     onClick={() => handleShowDetails(item.source, 'income')}
                   >
-                    <div className="flex items-center justify-between text-xs font-bold uppercase">
-                      <span className="text-muted-foreground group-hover:text-primary flex items-center gap-1">
+                    <div className="flex items-center justify-between text-[10px] md:text-xs font-bold uppercase">
+                      <span className="text-muted-foreground group-hover:text-primary flex items-center gap-1 truncate max-w-[120px]">
                         {item.source} <ExternalLink className="h-3 w-3 opacity-0 group-hover:opacity-100" />
                       </span>
-                      <span className="text-primary">${item.amount.toLocaleString()}</span>
+                      <span className="text-primary tabular-nums">${item.amount.toLocaleString()}</span>
                     </div>
                     <div className="w-full bg-muted rounded-full h-1.5 overflow-hidden">
                       <div 
@@ -410,11 +405,11 @@ export default function ReportsPage() {
                     className="w-full flex flex-col gap-1 group text-left transition-all hover:translate-x-1"
                     onClick={() => handleShowDetails(item.category, 'expense')}
                   >
-                    <div className="flex items-center justify-between text-xs font-bold uppercase">
-                      <span className="text-muted-foreground group-hover:text-rose-600 flex items-center gap-1">
+                    <div className="flex items-center justify-between text-[10px] md:text-xs font-bold uppercase">
+                      <span className="text-muted-foreground group-hover:text-rose-600 flex items-center gap-1 truncate max-w-[120px]">
                         {item.category} <ExternalLink className="h-3 w-3 opacity-0 group-hover:opacity-100" />
                       </span>
-                      <span className="text-rose-600">${item.amount.toLocaleString()}</span>
+                      <span className="text-rose-600 tabular-nums">${item.amount.toLocaleString()}</span>
                     </div>
                     <div className="w-full bg-muted rounded-full h-1.5 overflow-hidden">
                       <div 
@@ -434,22 +429,22 @@ export default function ReportsPage() {
             <CardHeader className="bg-primary/5 border-b border-primary/10">
               <div className="flex items-center gap-2">
                 <Sparkles className="h-5 w-5 text-accent" />
-                <CardTitle className="text-lg font-headline font-bold text-primary uppercase tracking-tight">AI Financial Summary</CardTitle>
+                <CardTitle className="text-base md:text-lg font-headline font-bold text-primary uppercase tracking-tight">AI Financial Summary</CardTitle>
               </div>
             </CardHeader>
-            <CardContent className="p-6">
+            <CardContent className="p-4 md:p-6">
               {!summary && !analyzing ? (
-                <div className="flex flex-col items-center justify-center py-12 text-center space-y-6">
-                  <div className="bg-muted p-6 rounded-full">
-                    <Lightbulb className="h-10 w-10 text-muted-foreground/50" />
+                <div className="flex flex-col items-center justify-center py-8 text-center space-y-6">
+                  <div className="bg-muted p-5 rounded-full">
+                    <Lightbulb className="h-8 w-8 text-muted-foreground/50" />
                   </div>
                   <div className="space-y-2">
-                    <h4 className="font-bold text-primary">Analysis Required</h4>
-                    <p className="text-xs text-muted-foreground leading-relaxed">
-                      AI can analyze the correlation between specific donation categories and expenditures.
+                    <h4 className="font-bold text-primary text-sm">Analysis Required</h4>
+                    <p className="text-[11px] text-muted-foreground leading-relaxed px-4">
+                      AI can analyze the correlation between donation categories and expenditures.
                     </p>
                   </div>
-                  <Button variant="outline" className="w-full border-primary text-primary font-bold uppercase text-[10px] tracking-widest hover:bg-primary/5" onClick={generateAISummary}>
+                  <Button variant="outline" className="w-full border-primary text-primary font-bold uppercase text-[9px] tracking-widest hover:bg-primary/5 h-10" onClick={generateAISummary}>
                     Start Analysis
                   </Button>
                 </div>
@@ -465,43 +460,43 @@ export default function ReportsPage() {
                   </div>
                 </div>
               ) : (
-                <div className="space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-700">
+                <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-700">
                   <div className="space-y-3">
-                    <h4 className="font-bold text-[10px] uppercase tracking-widest text-muted-foreground flex items-center gap-2">
-                      <FileText className="h-4 w-4 text-primary" /> Auditor Notes
+                    <h4 className="font-bold text-[9px] uppercase tracking-widest text-muted-foreground flex items-center gap-2">
+                      <FileText className="h-3 w-3 text-primary" /> Auditor Notes
                     </h4>
-                    <div className="text-sm leading-relaxed text-slate-700 bg-muted/30 p-4 rounded-xl border border-primary/5 font-medium italic">
+                    <div className="text-xs leading-relaxed text-slate-700 bg-muted/30 p-3 rounded-xl border border-primary/5 font-medium italic">
                       "{summary?.summary}"
                     </div>
                   </div>
                   
-                  <div className="space-y-4">
-                    <h4 className="font-bold text-[10px] uppercase tracking-widest text-muted-foreground flex items-center gap-2">
-                      <TrendingUp className="h-4 w-4 text-emerald-600" /> Fund Health
+                  <div className="space-y-3">
+                    <h4 className="font-bold text-[9px] uppercase tracking-widest text-muted-foreground flex items-center gap-2">
+                      <TrendingUp className="h-3 w-3 text-emerald-600" /> Fund Health
                     </h4>
                     <div className="space-y-2">
                       {summary?.keyTrends.map((trend, i) => (
-                        <div key={i} className="text-[11px] bg-emerald-50 p-3 rounded-lg border-l-4 border-emerald-500 text-emerald-900 font-bold">
+                        <div key={i} className="text-[10px] bg-emerald-50 p-2.5 rounded-lg border-l-4 border-emerald-500 text-emerald-900 font-bold">
                           {trend}
                         </div>
                       ))}
                     </div>
                   </div>
 
-                  <div className="space-y-4">
-                    <h4 className="font-bold text-[10px] uppercase tracking-widest text-muted-foreground flex items-center gap-2">
-                      <AlertCircle className="h-4 w-4 text-accent" /> Leadership Insights
+                  <div className="space-y-3">
+                    <h4 className="font-bold text-[9px] uppercase tracking-widest text-muted-foreground flex items-center gap-2">
+                      <AlertCircle className="h-3 w-3 text-accent" /> Insights
                     </h4>
                     <div className="space-y-2">
                       {summary?.insights.map((insight, i) => (
-                        <div key={i} className="text-[11px] bg-amber-50 p-3 rounded-lg border-l-4 border-amber-500 text-amber-900 font-bold">
+                        <div key={i} className="text-[10px] bg-amber-50 p-2.5 rounded-lg border-l-4 border-amber-500 text-amber-900 font-bold">
                           {insight}
                         </div>
                       ))}
                     </div>
                   </div>
 
-                  <Button variant="ghost" className="w-full text-[10px] font-bold uppercase tracking-widest text-primary/60 hover:text-primary transition-colors" onClick={() => setSummary(null)}>
+                  <Button variant="ghost" className="w-full text-[9px] font-bold uppercase tracking-widest text-primary/60 hover:text-primary h-8" onClick={() => setSummary(null)}>
                     Clear Report
                   </Button>
                 </div>
@@ -512,37 +507,37 @@ export default function ReportsPage() {
       </div>
 
       <Dialog open={detailDialogOpen} onOpenChange={setDetailDialogOpen}>
-        <DialogContent className="max-w-4xl max-h-[80vh] overflow-hidden flex flex-col p-0 border-none shadow-2xl">
-          <DialogHeader className="p-6 bg-primary/5 border-b flex flex-row items-center justify-between">
+        <DialogContent className="max-w-[95vw] sm:max-w-4xl max-h-[90vh] overflow-hidden flex flex-col p-0 border-none shadow-2xl rounded-xl">
+          <DialogHeader className="p-4 md:p-6 bg-primary/5 border-b flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div className="space-y-1">
               <div className="flex items-center gap-2">
                 <ListFilter className={`h-5 w-5 ${detailType === 'income' ? 'text-primary' : 'text-rose-600'}`} />
-                <DialogTitle className="text-xl font-headline font-bold uppercase tracking-tight">
+                <DialogTitle className="text-lg md:text-xl font-headline font-bold uppercase tracking-tight">
                   {detailTitle} Ledger
                 </DialogTitle>
               </div>
-              <DialogDescription className="text-[10px] font-bold uppercase tracking-widest">
-                Approved transactions for {selectedMonthLabel}
+              <DialogDescription className="text-[9px] font-bold uppercase tracking-widest">
+                Approved records for {selectedMonthLabel}
               </DialogDescription>
             </div>
             <Button 
               size="sm" 
-              className={`font-bold uppercase text-[10px] tracking-widest gap-2 mr-6 ${detailType === 'income' ? 'bg-primary' : 'bg-rose-600'}`}
+              className={`w-full sm:w-auto font-bold uppercase text-[9px] tracking-widest gap-2 ${detailType === 'income' ? 'bg-primary' : 'bg-rose-600'}`}
               onClick={handleDownloadCategoryPDF}
             >
-              <FileDown className="h-4 w-4" /> Download PDF
+              <FileDown className="h-4 w-4" /> Download
             </Button>
           </DialogHeader>
-          <div className="flex-1 overflow-y-auto p-0">
-            <Table>
+          <div className="flex-1 overflow-x-auto overflow-y-auto">
+            <Table className="min-w-[600px] sm:min-w-full">
               <TableHeader className="bg-muted/50 sticky top-0 z-10">
                 <TableRow>
                   <TableHead className="text-[10px] font-bold uppercase tracking-wider">Date</TableHead>
                   <TableHead className="text-[10px] font-bold uppercase tracking-wider">
-                    {detailType === 'income' ? 'Donor Name' : 'Description (Reason)'}
+                    {detailType === 'income' ? 'Donor Name' : 'Description'}
                   </TableHead>
                   {detailType === 'expense' && <TableHead className="text-[10px] font-bold uppercase tracking-wider">Auditor</TableHead>}
-                  <TableHead className="text-[10px] font-bold uppercase tracking-wider text-right">Amount (ETB)</TableHead>
+                  <TableHead className="text-[10px] font-bold uppercase tracking-wider text-right">Amount</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -554,15 +549,15 @@ export default function ReportsPage() {
                   </TableRow>
                 ) : detailItems.map((item) => (
                   <TableRow key={item.id} className="hover:bg-muted/10 transition-colors">
-                    <TableCell className="text-[10px] font-medium">
+                    <TableCell className="text-[10px] font-medium whitespace-nowrap">
                       {item.timestamp?.toDate ? format(item.timestamp.toDate(), 'MMM d, yyyy') : 
                        item.date?.toDate ? format(item.date.toDate(), 'MMM d, yyyy') : '---'}
                     </TableCell>
-                    <TableCell className="text-xs font-bold text-slate-800">
+                    <TableCell className="text-xs font-bold text-slate-800 truncate max-w-[200px]">
                       {detailType === 'income' ? (item.donorName || 'Unidentified') : item.description}
                     </TableCell>
                     {detailType === 'expense' && (
-                      <TableCell className="text-[10px] text-muted-foreground">
+                      <TableCell className="text-[10px] text-muted-foreground truncate max-w-[100px]">
                         {item.approvedBy || '---'}
                       </TableCell>
                     )}
@@ -576,8 +571,8 @@ export default function ReportsPage() {
           </div>
           <div className="p-4 bg-muted/20 border-t flex justify-end">
             <div className="flex flex-col items-end">
-              <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest mb-1">Subtotal {detailTitle}</p>
-              <p className={`text-xl font-bold ${detailType === 'income' ? 'text-primary' : 'text-rose-600'}`}>
+              <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest mb-1">Subtotal</p>
+              <p className={`text-lg md:text-xl font-bold ${detailType === 'income' ? 'text-primary' : 'text-rose-600'}`}>
                 ${detailItems.reduce((sum, item) => sum + item.amount, 0).toLocaleString()}
               </p>
             </div>

@@ -210,13 +210,13 @@ export default function ExpensesPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-headline font-bold text-primary uppercase tracking-tight">Financial Outflow</h1>
-          <p className="text-muted-foreground font-medium text-sm">MUGHER FULL GOSPEL CHURCH expenditure monitoring.</p>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="text-center sm:text-left">
+          <h1 className="text-2xl md:text-3xl font-headline font-bold text-primary uppercase tracking-tight">Financial Outflow</h1>
+          <p className="text-muted-foreground font-medium text-xs md:text-sm">MUGHER FULL GOSPEL CHURCH expenditure monitoring.</p>
         </div>
-        <div className="flex gap-2">
-          <Button variant="outline" className="gap-2 font-bold uppercase text-[10px] tracking-widest border-primary/20">
+        <div className="flex justify-center sm:justify-end gap-2">
+          <Button variant="outline" className="hidden sm:flex gap-2 font-bold uppercase text-[10px] tracking-widest border-primary/20 h-9">
             <Download className="h-4 w-4" /> Export CSV
           </Button>
           <Dialog open={isDialogOpen} onOpenChange={(open) => {
@@ -224,30 +224,30 @@ export default function ExpensesPage() {
             if (!open) setEditingExpense(null);
           }}>
             <DialogTrigger asChild>
-              <Button className="gap-2 bg-primary font-bold uppercase text-[10px] tracking-widest">
-                <Plus className="h-4 w-4" /> Record Expense
+              <Button className="gap-2 bg-primary font-bold uppercase text-[10px] tracking-widest h-9">
+                <Plus className="h-4 w-4" /> Record
               </Button>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className="max-w-[95vw] sm:max-w-md rounded-xl">
               <DialogHeader>
                 <DialogTitle className="text-xl font-headline font-bold text-primary uppercase tracking-tight">
-                  {editingExpense ? 'Edit Expense Record' : 'Log New Expenditure'}
+                  {editingExpense ? 'Edit Expense' : 'Log Expenditure'}
                 </DialogTitle>
               </DialogHeader>
               <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 pt-4 max-h-[70vh] overflow-y-auto px-1">
                   <FormField
                     control={form.control}
                     name="description"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-[10px] font-bold uppercase tracking-wider">Description</FormLabel>
-                        <FormControl><Input placeholder="e.g. Electricity Bill - May" {...field} /></FormControl>
+                        <FormControl><Input placeholder="e.g. Electricity Bill" {...field} /></FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <FormField
                       control={form.control}
                       name="category"
@@ -271,7 +271,7 @@ export default function ExpensesPage() {
                       )}
                     />
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <FormField
                       control={form.control}
                       name="approvedBy"
@@ -307,7 +307,7 @@ export default function ExpensesPage() {
                     />
                   </div>
                   <DialogFooter className="pt-4">
-                    <Button type="submit" className="w-full bg-primary font-bold uppercase text-[10px] tracking-widest">
+                    <Button type="submit" className="w-full bg-primary font-bold uppercase text-[10px] tracking-widest h-11">
                       {editingExpense ? 'Update Record' : 'Save Expenditure'}
                     </Button>
                   </DialogFooter>
@@ -318,60 +318,60 @@ export default function ExpensesPage() {
         </div>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="grid gap-3 grid-cols-1 md:grid-cols-3">
         <Card className="border-none shadow-sm bg-primary text-white">
-          <CardHeader className="p-4 pb-2">
-            <CardTitle className="text-[10px] font-bold uppercase tracking-widest opacity-80">Total Approved (MTD)</CardTitle>
+          <CardHeader className="p-4 pb-1 md:pb-2">
+            <CardTitle className="text-[9px] md:text-[10px] font-bold uppercase tracking-widest opacity-80">Total Approved (MTD)</CardTitle>
           </CardHeader>
           <CardContent className="p-4 pt-0">
-            <div className="text-2xl font-bold">ETB {stats.total.toLocaleString()}</div>
+            <div className="text-xl md:text-2xl font-bold">ETB {stats.total.toLocaleString()}</div>
           </CardContent>
         </Card>
         <Card className="border-none shadow-sm">
-          <CardHeader className="p-4 pb-2">
-            <CardTitle className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Top Spending Category</CardTitle>
+          <CardHeader className="p-4 pb-1 md:pb-2">
+            <CardTitle className="text-[9px] md:text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Top Spending</CardTitle>
           </CardHeader>
           <CardContent className="p-4 pt-0">
-            <div className="text-xl font-bold text-primary">{stats.topCategory}</div>
+            <div className="text-lg md:text-xl font-bold text-primary truncate">{stats.topCategory}</div>
           </CardContent>
         </Card>
         <Card className="border-none shadow-sm bg-accent/10">
-          <CardHeader className="p-4 pb-2">
-            <CardTitle className="text-[10px] font-bold text-accent-foreground uppercase tracking-widest">Awaiting Approval</CardTitle>
+          <CardHeader className="p-4 pb-1 md:pb-2">
+            <CardTitle className="text-[9px] md:text-[10px] font-bold text-accent-foreground uppercase tracking-widest">Awaiting Approval</CardTitle>
           </CardHeader>
           <CardContent className="p-4 pt-0">
-            <div className="text-xl font-bold text-accent-foreground">{stats.pending}</div>
+            <div className="text-lg md:text-xl font-bold text-accent-foreground">{stats.pending}</div>
           </CardContent>
         </Card>
       </div>
 
       <Card className="border-none shadow-sm">
-        <CardHeader className="bg-white/50 border-b">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div className="relative flex-1 max-w-sm">
+        <CardHeader className="bg-white/50 border-b p-4 md:p-6">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+            <div className="relative flex-1 lg:max-w-sm">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input 
-                placeholder="Search description or category..." 
+                placeholder="Search description..." 
                 className="pl-9 bg-white border-primary/10 h-10 text-xs"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
             <div className="flex items-center gap-2">
-              <Button variant="outline" size="sm" className="gap-2 font-bold uppercase text-[10px] tracking-widest border-primary/20">
-                <Filter className="h-4 w-4" /> Filter Date
+              <Button variant="outline" size="sm" className="w-full sm:w-auto gap-2 font-bold uppercase text-[9px] md:text-[10px] tracking-widest border-primary/20 h-9">
+                <Filter className="h-4 w-4" /> Filter
               </Button>
             </div>
           </div>
         </CardHeader>
-        <CardContent className="p-0">
-          <Table>
+        <CardContent className="p-0 overflow-x-auto">
+          <Table className="min-w-[800px] lg:min-w-full">
             <TableHeader className="bg-muted/30">
               <TableRow>
                 <TableHead className="text-[10px] font-bold uppercase tracking-wider">Date</TableHead>
                 <TableHead className="text-[10px] font-bold uppercase tracking-wider">Description</TableHead>
                 <TableHead className="text-[10px] font-bold uppercase tracking-wider">Category</TableHead>
-                <TableHead className="text-[10px] font-bold uppercase tracking-wider">Audited By</TableHead>
+                <TableHead className="text-[10px] font-bold uppercase tracking-wider">Auditor</TableHead>
                 <TableHead className="text-[10px] font-bold uppercase tracking-wider">Status</TableHead>
                 <TableHead className="text-[10px] font-bold uppercase tracking-wider text-right">Amount</TableHead>
                 <TableHead className="text-[10px] font-bold uppercase tracking-wider text-right">Actions</TableHead>
@@ -391,13 +391,13 @@ export default function ExpensesPage() {
                   <TableCell className="text-[10px] font-medium whitespace-nowrap">
                     {expense.date?.toDate ? format(expense.date.toDate(), 'MMM d, yyyy') : 'Pending'}
                   </TableCell>
-                  <TableCell className="text-xs font-bold text-primary">{expense.description}</TableCell>
+                  <TableCell className="text-xs font-bold text-primary max-w-[200px] truncate">{expense.description}</TableCell>
                   <TableCell>
                     <Badge variant="outline" className="font-bold text-[9px] uppercase tracking-tighter border-primary/20 text-primary bg-primary/5">
                       {expense.category}
                     </Badge>
                   </TableCell>
-                  <TableCell className="text-[10px] text-muted-foreground">{expense.approvedBy || '---'}</TableCell>
+                  <TableCell className="text-[10px] text-muted-foreground truncate max-w-[100px]">{expense.approvedBy || '---'}</TableCell>
                   <TableCell>
                     <Badge className={`text-[9px] font-bold uppercase tracking-widest ${
                       expense.status === 'Approved' ? 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20' : 
