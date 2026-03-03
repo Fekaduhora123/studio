@@ -24,17 +24,25 @@ import {
   Eye,
   Check,
   X,
-  FileText,
   Filter,
   Loader2,
   ShieldCheck,
   AlertCircle,
-  Trash2
+  Trash2,
+  MoreVertical
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { useCollection, useFirestore } from '@/firebase';
 import { collection, query, orderBy, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { 
+  DropdownMenu, 
+  DropdownMenuContent, 
+  DropdownMenuItem, 
+  DropdownMenuLabel, 
+  DropdownMenuSeparator, 
+  DropdownMenuTrigger 
+} from '@/components/ui/dropdown-menu';
 import { format } from 'date-fns';
 import { 
   Select, 
@@ -79,6 +87,8 @@ export default function DonationsPage() {
 
   const handleDeleteDonation = (id: string) => {
     if (!firestore) return;
+    if (!confirm('Are you sure you want to permanently delete this record?')) return;
+    
     const donationRef = doc(firestore, 'donations', id);
     deleteDoc(donationRef).catch(async (err) => {
       const permissionError = new FirestorePermissionError({
@@ -220,12 +230,12 @@ export default function DonationsPage() {
             <TableHeader className="bg-muted/30">
               <TableRow>
                 <TableHead className="text-[10px] font-bold uppercase tracking-wider">Date</TableHead>
-                <TableHead className="text-[10px] font-bold uppercase tracking-wider">Donor Name</TableHead>
+                <TableHead className="text-[10px] font-bold uppercase tracking-wider min-w-[150px]">Donor Name</TableHead>
                 <TableHead className="text-[10px] font-bold uppercase tracking-wider">Type</TableHead>
                 <TableHead className="text-[10px] font-bold uppercase tracking-wider">Ref #</TableHead>
                 <TableHead className="text-[10px] font-bold uppercase tracking-wider">Status</TableHead>
                 <TableHead className="text-[10px] font-bold uppercase tracking-wider text-right">Amount</TableHead>
-                <TableHead className="text-[10px] font-bold uppercase tracking-wider text-center">Verify</TableHead>
+                <TableHead className="text-[10px] font-bold uppercase tracking-wider text-center">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -242,7 +252,9 @@ export default function DonationsPage() {
                   <TableCell className="text-xs font-medium">
                     {donation.timestamp?.toDate ? format(donation.timestamp.toDate(), 'MMM d, yyyy') : 'Pending'}
                   </TableCell>
-                  <TableCell className="text-xs font-bold text-primary">{donation.donorName}</TableCell>
+                  <TableCell className="text-xs font-bold text-primary">
+                    {donation.donorName || 'Unidentified Donor'}
+                  </TableCell>
                   <TableCell>
                     <Badge variant="outline" className="font-bold text-[10px] uppercase tracking-tighter border-primary/20 text-primary bg-primary/5">
                       {donation.type}
@@ -262,107 +274,139 @@ export default function DonationsPage() {
                     ${donation.amount.toLocaleString()}
                   </TableCell>
                   <TableCell className="text-center">
-                    <Dialog>
-                      <DialogTrigger asChild>
-                        <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-primary hover:bg-primary/5 transition-all">
-                          <Eye className="h-4 w-4" />
-                        </Button>
-                      </DialogTrigger>
-                      <DialogContent className="max-w-md border-none shadow-2xl">
-                        <DialogHeader>
-                          <DialogTitle className="text-xl font-headline font-bold text-primary uppercase tracking-tight">Contribution Verification</DialogTitle>
-                        </DialogHeader>
-                        <div className="space-y-6 pt-4">
-                          <div className="grid grid-cols-2 gap-4 text-sm bg-muted/20 p-4 rounded-lg border border-primary/5">
-                            <div className="space-y-1">
-                              <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Donor</p>
-                              <p className="font-bold text-primary">{donation.donorName}</p>
+                    <div className="flex items-center justify-center gap-1">
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-primary hover:bg-primary/5 transition-all">
+                            <Eye className="h-4 w-4" />
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent className="max-w-md border-none shadow-2xl">
+                          <DialogHeader>
+                            <DialogTitle className="text-xl font-headline font-bold text-primary uppercase tracking-tight">Contribution Verification</DialogTitle>
+                          </DialogHeader>
+                          <div className="space-y-6 pt-4">
+                            <div className="grid grid-cols-2 gap-4 text-sm bg-muted/20 p-4 rounded-lg border border-primary/5">
+                              <div className="space-y-1">
+                                <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Donor</p>
+                                <p className="font-bold text-primary">{donation.donorName || 'Unidentified'}</p>
+                              </div>
+                              <div className="space-y-1">
+                                <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Amount</p>
+                                <p className="font-bold text-emerald-600">${donation.amount.toLocaleString()}</p>
+                              </div>
+                              <div className="space-y-1">
+                                <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Category</p>
+                                <p className="font-bold">{donation.type}</p>
+                              </div>
+                              <div className="space-y-1">
+                                <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Reference</p>
+                                <p className="font-mono text-xs opacity-70">{donation.referenceNumber}</p>
+                              </div>
                             </div>
-                            <div className="space-y-1">
-                              <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Amount</p>
-                              <p className="font-bold text-emerald-600">${donation.amount.toLocaleString()}</p>
-                            </div>
-                            <div className="space-y-1">
-                              <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Category</p>
-                              <p className="font-bold">{donation.type}</p>
-                            </div>
-                            <div className="space-y-1">
-                              <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Reference</p>
-                              <p className="font-mono text-xs opacity-70">{donation.referenceNumber}</p>
-                            </div>
-                          </div>
 
-                          {donation.isAiVerified && (
-                            <Alert className="bg-emerald-50 border-emerald-200">
-                              <ShieldCheck className="h-4 w-4 text-emerald-600" />
-                              <AlertTitle className="text-emerald-800 text-xs font-bold uppercase tracking-widest">AI Verified Secure</AlertTitle>
-                              <AlertDescription className="text-emerald-700 text-[10px] leading-relaxed">
-                                AI successfully verified this deposit was made to **MUGHER FULL GOSPEL CHURCH** (Account ends in **5978**).
-                              </AlertDescription>
-                            </Alert>
-                          )}
+                            {donation.isAiVerified && (
+                              <Alert className="bg-emerald-50 border-emerald-200">
+                                <ShieldCheck className="h-4 w-4 text-emerald-600" />
+                                <AlertTitle className="text-emerald-800 text-xs font-bold uppercase tracking-widest">AI Verified Secure</AlertTitle>
+                                <AlertDescription className="text-emerald-700 text-[10px] leading-relaxed">
+                                  AI successfully verified this deposit was made to **MUGHER FULL GOSPEL CHURCH** (Account ends in **5978**).
+                                </AlertDescription>
+                              </Alert>
+                            )}
 
-                          <div className="space-y-2">
-                            <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Verification Asset</p>
-                            <div className="border rounded-xl p-4 bg-muted/5 min-h-[200px] flex flex-col items-center justify-center text-center">
-                              {donation.receiptData ? (
-                                <img 
-                                  src={donation.receiptData} 
-                                  alt="Receipt" 
-                                  className="w-full h-auto rounded-lg border shadow-sm"
-                                />
-                              ) : donation.isAiVerified ? (
-                                <div className="space-y-3 p-6">
-                                  <div className="bg-emerald-100 p-4 rounded-full w-fit mx-auto">
-                                    <ShieldCheck className="h-10 w-10 text-emerald-600" />
+                            <div className="space-y-2">
+                              <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Verification Asset</p>
+                              <div className="border rounded-xl p-4 bg-muted/5 min-h-[200px] flex flex-col items-center justify-center text-center">
+                                {donation.receiptData ? (
+                                  <img 
+                                    src={donation.receiptData} 
+                                    alt="Receipt" 
+                                    className="w-full h-auto rounded-lg border shadow-sm"
+                                  />
+                                ) : donation.isAiVerified ? (
+                                  <div className="space-y-3 p-6">
+                                    <div className="bg-emerald-100 p-4 rounded-full w-fit mx-auto">
+                                      <ShieldCheck className="h-10 w-10 text-emerald-600" />
+                                    </div>
+                                    <div className="space-y-1">
+                                      <p className="text-sm font-bold text-emerald-700">Image Purged for Privacy</p>
+                                      <p className="text-[10px] text-muted-foreground leading-relaxed">Verification was successful. Raw receipt data was deleted to optimize system storage as per the current privacy policy.</p>
+                                    </div>
                                   </div>
-                                  <div className="space-y-1">
-                                    <p className="text-sm font-bold text-emerald-700">Image Purged for Privacy</p>
-                                    <p className="text-[10px] text-muted-foreground leading-relaxed">Verification was successful. Raw receipt data was deleted to optimize system storage as per the current privacy policy.</p>
+                                ) : (
+                                  <div className="space-y-3 p-12">
+                                    <AlertCircle className="h-12 w-12 text-muted-foreground/30 mx-auto" />
+                                    <p className="text-sm text-muted-foreground font-medium italic">No receipt asset provided</p>
                                   </div>
-                                </div>
-                              ) : (
-                                <div className="space-y-3 p-12">
-                                  <AlertCircle className="h-12 w-12 text-muted-foreground/30 mx-auto" />
-                                  <p className="text-sm text-muted-foreground font-medium italic">No receipt asset provided</p>
+                                )}
+                              </div>
+                            </div>
+                            
+                            <div className="flex flex-col gap-2 pt-2">
+                              {donation.status === 'pending' && (
+                                <div className="flex gap-2">
+                                  <Button 
+                                    className="flex-1 bg-emerald-600 hover:bg-emerald-700 font-bold uppercase text-xs" 
+                                    onClick={() => handleUpdateStatus(donation.id, 'approved')}
+                                  >
+                                    <Check className="h-4 w-4 mr-2" /> Approve
+                                  </Button>
+                                  <Button 
+                                    variant="destructive" 
+                                    className="flex-1 font-bold uppercase text-xs"
+                                    onClick={() => handleUpdateStatus(donation.id, 'rejected')}
+                                  >
+                                    <X className="h-4 w-4 mr-2" /> Reject
+                                  </Button>
                                 </div>
                               )}
+                              <Button 
+                                variant="outline" 
+                                className="w-full font-bold uppercase text-xs text-rose-600 border-rose-200 hover:bg-rose-50 hover:text-rose-700"
+                                onClick={() => handleDeleteDonation(donation.id)}
+                              >
+                                <Trash2 className="h-4 w-4 mr-2" /> Delete Record
+                              </Button>
                             </div>
                           </div>
-                          
-                          <div className="flex flex-col gap-2 pt-2">
-                            {donation.status === 'pending' && (
-                              <div className="flex gap-2">
-                                <Button 
-                                  className="flex-1 bg-emerald-600 hover:bg-emerald-700 font-bold uppercase text-xs" 
-                                  onClick={() => handleUpdateStatus(donation.id, 'approved')}
-                                >
-                                  <Check className="h-4 w-4 mr-2" /> Approve
-                                </Button>
-                                <Button 
-                                  variant="destructive" 
-                                  className="flex-1 font-bold uppercase text-xs"
-                                  onClick={() => handleUpdateStatus(donation.id, 'rejected')}
-                                >
-                                  <X className="h-4 w-4 mr-2" /> Reject
-                                </Button>
-                              </div>
-                            )}
-                            <Button 
-                              variant="outline" 
-                              className="w-full font-bold uppercase text-xs text-rose-600 border-rose-200 hover:bg-rose-50 hover:text-rose-700"
-                              onClick={() => {
-                                if (confirm('Are you sure you want to permanently delete this record?')) {
-                                  handleDeleteDonation(donation.id);
-                                }
-                              }}
-                            >
-                              <Trash2 className="h-4 w-4 mr-2" /> Delete Record
-                            </Button>
-                          </div>
-                        </div>
-                      </DialogContent>
-                    </Dialog>
+                        </DialogContent>
+                      </Dialog>
+
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground">
+                            <MoreVertical className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" className="w-48">
+                          <DropdownMenuLabel className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Quick Actions</DropdownMenuLabel>
+                          {donation.status === 'pending' && (
+                            <>
+                              <DropdownMenuItem 
+                                className="text-xs font-bold text-emerald-600 focus:text-emerald-700 focus:bg-emerald-50"
+                                onClick={() => handleUpdateStatus(donation.id, 'approved')}
+                              >
+                                <Check className="h-4 w-4 mr-2" /> Approve
+                              </DropdownMenuItem>
+                              <DropdownMenuItem 
+                                className="text-xs font-bold text-rose-600 focus:text-rose-700 focus:bg-rose-50"
+                                onClick={() => handleUpdateStatus(donation.id, 'rejected')}
+                              >
+                                <X className="h-4 w-4 mr-2" /> Reject
+                              </DropdownMenuItem>
+                            </>
+                          )}
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem 
+                            className="text-xs font-bold text-rose-700 focus:bg-rose-100"
+                            onClick={() => handleDeleteDonation(donation.id)}
+                          >
+                            <Trash2 className="h-4 w-4 mr-2" /> Delete Record
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </div>
                   </TableCell>
                 </TableRow>
               ))}
