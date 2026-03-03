@@ -69,7 +69,9 @@
         "phone": { "type": "string" },
         "group": { "type": "string", "description": "Ministry or group the member belongs to." },
         "joinedDate": { "type": "string", "format": "date-time" },
-        "status": { "type": "string", "enum": ["Active", "Inactive"] }
+        "status": { "type": "string", "enum": ["Active", "Inactive"] },
+        "gender": { "type": "string", "enum": ["Male", "Female"] },
+        "maritalStatus": { "type": "string", "enum": ["Married", "Unmarried"] }
       },
       "required": ["name", "status"]
     },
