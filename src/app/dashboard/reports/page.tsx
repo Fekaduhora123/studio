@@ -16,7 +16,8 @@ import {
   Loader2,
   ListFilter,
   ExternalLink,
-  Download
+  Download,
+  FileDown
 } from 'lucide-react';
 import { financialReportSummary, type FinancialReportSummaryOutput } from '@/ai/flows/financial-report-summary-flow';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -79,7 +80,8 @@ export default function ReportsPage() {
     if (!donations || !expenses) return null;
 
     const now = new Date();
-    // Use the selected month for the "Current" period calculation
+    // In a real app, this would parse selectedMonthLabel to get the specific month range
+    // For MVP, we'll keep the current/previous logic linked to today
     const currentMonthStart = startOfMonth(now);
     const currentMonthEnd = endOfMonth(now);
     const prevMonthStart = startOfMonth(subMonths(now, 1));
@@ -145,7 +147,6 @@ export default function ReportsPage() {
     if (!reportData) return;
     setAnalyzing(true);
     try {
-      // Helper to strip non-plain objects (like Firestore Timestamps) before sending to Server Function
       const sanitizeForAI = (report: any) => ({
         period: report.period,
         totalIncome: report.totalIncome,
@@ -174,24 +175,22 @@ export default function ReportsPage() {
 
     const doc = new jsPDF();
     const churchName = "MUGHER FULL GOSPEL CHURCH";
-    const reportTitle = `Financial Report: ${selectedMonthLabel}`;
+    const reportTitle = `Financial Summary Report: ${selectedMonthLabel}`;
 
-    // Header
     doc.setFontSize(18);
-    doc.setTextColor(45, 78, 178); // Primary Color
+    doc.setTextColor(45, 78, 178); 
     doc.text(churchName, 14, 20);
     
     doc.setFontSize(14);
-    doc.setTextColor(100, 116, 139); // Muted Foreground
+    doc.setTextColor(100, 116, 139); 
     doc.text(reportTitle, 14, 30);
     
     doc.setDrawColor(226, 232, 240);
     doc.line(14, 35, 196, 35);
 
-    // Summary Section
     doc.setFontSize(12);
     doc.setTextColor(0, 0, 0);
-    doc.text("Financial Summary (Approved Only)", 14, 45);
+    doc.text("High-Level Performance", 14, 45);
     
     autoTable(doc, {
       startY: 50,
@@ -200,52 +199,80 @@ export default function ReportsPage() {
         ['Total Inflow', reportData.monthly.totalIncome.toLocaleString()],
         ['Total Outflow', reportData.monthly.totalExpenses.toLocaleString()],
         ['Net Balance', reportData.monthly.balance.toLocaleString()],
-        ['Building Fund (Net)', reportData.monthly.buildingNet.toLocaleString()],
+        ['Building Fund (Net Position)', reportData.monthly.buildingNet.toLocaleString()],
       ],
       theme: 'striped',
       headStyles: { fillStyle: 'fill', fillColor: [45, 78, 178] },
     });
 
-    // Inflow Breakdown
-    doc.text("Inflow Breakdown", 14, (doc as any).lastAutoTable.finalY + 15);
-    autoTable(doc, {
-      startY: (doc as any).lastAutoTable.finalY + 20,
-      head: [['Category', 'Amount (ETB)']],
-      body: reportData.monthly.incomeBreakdown.map(i => [i.source, i.amount.toLocaleString()]),
-      theme: 'grid',
-      headStyles: { fillStyle: 'fill', fillColor: [45, 78, 178] },
-    });
+    doc.save(`MUGHER_SUMMARY_${selectedMonthLabel.replace(' ', '_')}.pdf`);
+  };
 
-    // Outflow Breakdown
-    doc.text("Outflow Breakdown", 14, (doc as any).lastAutoTable.finalY + 15);
-    autoTable(doc, {
-      startY: (doc as any).lastAutoTable.finalY + 20,
-      head: [['Category', 'Amount (ETB)']],
-      body: reportData.monthly.expenseBreakdown.map(e => [e.category, e.amount.toLocaleString()]),
-      theme: 'grid',
-      headStyles: { fillStyle: 'fill', fillColor: [225, 29, 72] }, // Rose-600
-    });
+  const handleDownloadCategoryPDF = () => {
+    if (!detailItems || detailItems.length === 0) return;
 
-    // AI Audit Notes if available
-    if (summary) {
-      doc.addPage();
-      doc.setFontSize(14);
-      doc.setTextColor(45, 78, 178);
-      doc.text("AI Audit & Strategic Insights", 14, 20);
+    const doc = new jsPDF();
+    const churchName = "MUGHER FULL GOSPEL CHURCH";
+    const reportTitle = `Detailed ${detailTitle} Report`;
+    const period = selectedMonthLabel;
+
+    doc.setFontSize(16);
+    doc.setTextColor(45, 78, 178);
+    doc.text(churchName, 14, 20);
+
+    doc.setFontSize(12);
+    doc.setTextColor(100, 116, 139);
+    doc.text(`${reportTitle} - ${period}`, 14, 28);
+    doc.setDrawColor(226, 232, 240);
+    doc.line(14, 32, 196, 32);
+
+    const isExpense = detailType === 'expense';
+    const headers = isExpense 
+      ? [['Date', 'Description (Reason)', 'Audited By', 'Amount (ETB)']] 
+      : [['Date', 'Donor Name', 'Reference', 'Amount (ETB)']];
+
+    const body = detailItems.map(item => {
+      const dateStr = item.timestamp?.toDate ? format(item.timestamp.toDate(), 'MMM d, yyyy') : 
+                     item.date?.toDate ? format(item.date.toDate(), 'MMM d, yyyy') : '---';
       
-      doc.setFontSize(10);
-      doc.setTextColor(0, 0, 0);
-      const splitSummary = doc.splitTextToSize(`Audit Notes: ${summary.summary}`, 180);
-      doc.text(splitSummary, 14, 35);
+      if (isExpense) {
+        return [
+          dateStr,
+          item.description || 'N/A',
+          item.approvedBy || '---',
+          item.amount.toLocaleString()
+        ];
+      } else {
+        return [
+          dateStr,
+          item.donorName || 'Unidentified',
+          item.referenceNumber || '---',
+          item.amount.toLocaleString()
+        ];
+      }
+    });
 
-      doc.setFontSize(12);
-      doc.text("Key Trends Observed:", 14, doc.getTextDimensions(splitSummary).height + 45);
-      summary.keyTrends.forEach((trend, i) => {
-        doc.text(`- ${trend}`, 14, doc.getTextDimensions(splitSummary).height + 55 + (i * 10));
-      });
-    }
+    autoTable(doc, {
+      startY: 40,
+      head: headers,
+      body: body,
+      theme: 'grid',
+      headStyles: { 
+        fillStyle: 'fill', 
+        fillColor: isExpense ? [225, 29, 72] : [45, 78, 178] 
+      },
+      styles: { fontSize: 9 },
+      columnStyles: {
+        1: { cellWidth: isExpense ? 80 : 'auto' } // Give description column more space
+      }
+    });
 
-    doc.save(`MUGHER_CHURCH_REPORT_${selectedMonthLabel.replace(' ', '_')}.pdf`);
+    const finalY = (doc as any).lastAutoTable.finalY;
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'bold');
+    doc.text(`Total ${detailTitle}: ETB ${detailItems.reduce((sum, i) => sum + i.amount, 0).toLocaleString()}`, 14, finalY + 10);
+
+    doc.save(`MUGHER_${detailTitle.replace(' ', '_')}_DETAILED_${period.replace(' ', '_')}.pdf`);
   };
 
   const handleShowDetails = (category: string, type: 'income' | 'expense') => {
@@ -294,7 +321,7 @@ export default function ReportsPage() {
             </SelectContent>
           </Select>
           <Button variant="outline" className="gap-2 font-bold uppercase text-[10px] tracking-widest border-primary/20" onClick={handleDownloadPDF}>
-            <Download className="h-4 w-4" /> Download PDF
+            <Download className="h-4 w-4" /> Summary PDF
           </Button>
           <Button className="gap-2 bg-accent text-accent-foreground hover:bg-accent/90 font-bold uppercase text-[10px] tracking-widest shadow-sm" onClick={generateAISummary}>
             <Sparkles className="h-4 w-4" /> Run AI Audit
@@ -486,16 +513,25 @@ export default function ReportsPage() {
 
       <Dialog open={detailDialogOpen} onOpenChange={setDetailDialogOpen}>
         <DialogContent className="max-w-4xl max-h-[80vh] overflow-hidden flex flex-col p-0 border-none shadow-2xl">
-          <DialogHeader className="p-6 bg-primary/5 border-b">
-            <div className="flex items-center gap-2 mb-1">
-              <ListFilter className={`h-5 w-5 ${detailType === 'income' ? 'text-primary' : 'text-rose-600'}`} />
-              <DialogTitle className="text-xl font-headline font-bold uppercase tracking-tight">
-                {detailTitle} Details
-              </DialogTitle>
+          <DialogHeader className="p-6 bg-primary/5 border-b flex flex-row items-center justify-between">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <ListFilter className={`h-5 w-5 ${detailType === 'income' ? 'text-primary' : 'text-rose-600'}`} />
+                <DialogTitle className="text-xl font-headline font-bold uppercase tracking-tight">
+                  {detailTitle} Ledger
+                </DialogTitle>
+              </div>
+              <DialogDescription className="text-[10px] font-bold uppercase tracking-widest">
+                Approved transactions for {selectedMonthLabel}
+              </DialogDescription>
             </div>
-            <DialogDescription className="text-xs font-medium">
-              Detailed breakdown of all approved items for {selectedMonthLabel}.
-            </DialogDescription>
+            <Button 
+              size="sm" 
+              className={`font-bold uppercase text-[10px] tracking-widest gap-2 mr-6 ${detailType === 'income' ? 'bg-primary' : 'bg-rose-600'}`}
+              onClick={handleDownloadCategoryPDF}
+            >
+              <FileDown className="h-4 w-4" /> Download PDF
+            </Button>
           </DialogHeader>
           <div className="flex-1 overflow-y-auto p-0">
             <Table>
@@ -503,9 +539,9 @@ export default function ReportsPage() {
                 <TableRow>
                   <TableHead className="text-[10px] font-bold uppercase tracking-wider">Date</TableHead>
                   <TableHead className="text-[10px] font-bold uppercase tracking-wider">
-                    {detailType === 'income' ? 'Donor Name' : 'Description'}
+                    {detailType === 'income' ? 'Donor Name' : 'Description (Reason)'}
                   </TableHead>
-                  {detailType === 'expense' && <TableHead className="text-[10px] font-bold uppercase tracking-wider">Audited By</TableHead>}
+                  {detailType === 'expense' && <TableHead className="text-[10px] font-bold uppercase tracking-wider">Auditor</TableHead>}
                   <TableHead className="text-[10px] font-bold uppercase tracking-wider text-right">Amount (ETB)</TableHead>
                 </TableRow>
               </TableHeader>
@@ -517,7 +553,7 @@ export default function ReportsPage() {
                     </TableCell>
                   </TableRow>
                 ) : detailItems.map((item) => (
-                  <TableRow key={item.id} className="hover:bg-muted/10">
+                  <TableRow key={item.id} className="hover:bg-muted/10 transition-colors">
                     <TableCell className="text-[10px] font-medium">
                       {item.timestamp?.toDate ? format(item.timestamp.toDate(), 'MMM d, yyyy') : 
                        item.date?.toDate ? format(item.date.toDate(), 'MMM d, yyyy') : '---'}
@@ -540,7 +576,7 @@ export default function ReportsPage() {
           </div>
           <div className="p-4 bg-muted/20 border-t flex justify-end">
             <div className="flex flex-col items-end">
-              <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest mb-1">Total for {detailTitle}</p>
+              <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest mb-1">Subtotal {detailTitle}</p>
               <p className={`text-xl font-bold ${detailType === 'income' ? 'text-primary' : 'text-rose-600'}`}>
                 ${detailItems.reduce((sum, item) => sum + item.amount, 0).toLocaleString()}
               </p>
