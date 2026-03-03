@@ -15,7 +15,8 @@ import {
   ArrowDownRight,
   Loader2,
   ListFilter,
-  ExternalLink
+  ExternalLink,
+  Download
 } from 'lucide-react';
 import { financialReportSummary, type FinancialReportSummaryOutput } from '@/ai/flows/financial-report-summary-flow';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -45,6 +46,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from '@/components/ui/badge';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 export default function ReportsPage() {
   const firestore = useFirestore();
@@ -166,6 +169,85 @@ export default function ReportsPage() {
     }
   };
 
+  const handleDownloadPDF = () => {
+    if (!reportData) return;
+
+    const doc = new jsPDF();
+    const churchName = "MUGHER FULL GOSPEL CHURCH";
+    const reportTitle = `Financial Report: ${selectedMonthLabel}`;
+
+    // Header
+    doc.setFontSize(18);
+    doc.setTextColor(45, 78, 178); // Primary Color
+    doc.text(churchName, 14, 20);
+    
+    doc.setFontSize(14);
+    doc.setTextColor(100, 116, 139); // Muted Foreground
+    doc.text(reportTitle, 14, 30);
+    
+    doc.setDrawColor(226, 232, 240);
+    doc.line(14, 35, 196, 35);
+
+    // Summary Section
+    doc.setFontSize(12);
+    doc.setTextColor(0, 0, 0);
+    doc.text("Financial Summary (Approved Only)", 14, 45);
+    
+    autoTable(doc, {
+      startY: 50,
+      head: [['Metric', 'Value (ETB)']],
+      body: [
+        ['Total Inflow', reportData.monthly.totalIncome.toLocaleString()],
+        ['Total Outflow', reportData.monthly.totalExpenses.toLocaleString()],
+        ['Net Balance', reportData.monthly.balance.toLocaleString()],
+        ['Building Fund (Net)', reportData.monthly.buildingNet.toLocaleString()],
+      ],
+      theme: 'striped',
+      headStyles: { fillStyle: 'fill', fillColor: [45, 78, 178] },
+    });
+
+    // Inflow Breakdown
+    doc.text("Inflow Breakdown", 14, (doc as any).lastAutoTable.finalY + 15);
+    autoTable(doc, {
+      startY: (doc as any).lastAutoTable.finalY + 20,
+      head: [['Category', 'Amount (ETB)']],
+      body: reportData.monthly.incomeBreakdown.map(i => [i.source, i.amount.toLocaleString()]),
+      theme: 'grid',
+      headStyles: { fillStyle: 'fill', fillColor: [45, 78, 178] },
+    });
+
+    // Outflow Breakdown
+    doc.text("Outflow Breakdown", 14, (doc as any).lastAutoTable.finalY + 15);
+    autoTable(doc, {
+      startY: (doc as any).lastAutoTable.finalY + 20,
+      head: [['Category', 'Amount (ETB)']],
+      body: reportData.monthly.expenseBreakdown.map(e => [e.category, e.amount.toLocaleString()]),
+      theme: 'grid',
+      headStyles: { fillStyle: 'fill', fillColor: [225, 29, 72] }, // Rose-600
+    });
+
+    // AI Audit Notes if available
+    if (summary) {
+      doc.addPage();
+      doc.setFontSize(14);
+      doc.setTextColor(45, 78, 178);
+      doc.text("AI Audit & Strategic Insights", 14, 20);
+      
+      doc.setFontSize(10);
+      doc.setTextColor(0, 0, 0);
+      const splitSummary = doc.splitTextToSize(`Audit Notes: ${summary.summary}`, 180);
+      doc.text(splitSummary, 14, 35);
+
+      doc.setFontSize(12);
+      doc.text("Key Trends Observed:", 14, doc.getTextDimensions(splitSummary).height + 45);
+      summary.keyTrends.forEach((trend, i) => {
+        doc.text(`- ${trend}`, 14, doc.getTextDimensions(splitSummary).height + 55 + (i * 10));
+      });
+    }
+
+    doc.save(`MUGHER_CHURCH_REPORT_${selectedMonthLabel.replace(' ', '_')}.pdf`);
+  };
+
   const handleShowDetails = (category: string, type: 'income' | 'expense') => {
     if (!reportData) return;
     setDetailType(type);
@@ -211,6 +293,9 @@ export default function ReportsPage() {
               <SelectItem value={format(subMonths(new Date(), 1), 'MMMM yyyy')}>{format(subMonths(new Date(), 1), 'MMMM yyyy')}</SelectItem>
             </SelectContent>
           </Select>
+          <Button variant="outline" className="gap-2 font-bold uppercase text-[10px] tracking-widest border-primary/20" onClick={handleDownloadPDF}>
+            <Download className="h-4 w-4" /> Download PDF
+          </Button>
           <Button className="gap-2 bg-accent text-accent-foreground hover:bg-accent/90 font-bold uppercase text-[10px] tracking-widest shadow-sm" onClick={generateAISummary}>
             <Sparkles className="h-4 w-4" /> Run AI Audit
           </Button>
