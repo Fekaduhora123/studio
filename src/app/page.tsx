@@ -1,4 +1,3 @@
-
 'use client';
 
 import * as React from 'react';
@@ -23,8 +22,8 @@ import {
 export default function Home() {
   const firestore = useFirestore();
   const { user } = useUser();
-  const heroImage = PlaceHolderImages.find(img => img.id === 'hero-church');
-  const sanctuaryImage = PlaceHolderImages.find(img => img.id === 'church-sanctuary');
+  const exteriorImage = PlaceHolderImages.find(img => img.id === 'church-sanctuary');
+  const sanctuaryImage = PlaceHolderImages.find(img => img.id === 'hero-church');
   const [mounted, setMounted] = React.useState(false);
 
   React.useEffect(() => {
@@ -67,42 +66,39 @@ export default function Home() {
         </nav>
       </header>
       <main className="flex-1">
-        <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48 bg-background overflow-hidden border-b">
-          <div className="container px-4 md:px-6 mx-auto">
-            <div className="grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px] items-center">
-              <div className="flex flex-col justify-center space-y-4 animate-in fade-in slide-in-from-left duration-1000 fill-mode-forwards">
-                <div className="space-y-4">
-                  <Badge className="w-fit bg-accent text-accent-foreground font-bold tracking-widest uppercase text-[10px]">
-                    Welcome to our community
-                  </Badge>
-                  <h1 className="text-4xl font-headline font-bold tracking-tighter sm:text-6xl xl:text-7xl/none text-primary uppercase">
-                    MUGHER FULL GOSPEL CHURCH
-                  </h1>
-                  <p className="max-w-[600px] text-muted-foreground md:text-xl leading-relaxed">
-                    Faith-driven management for our growing congregation. SanctuaryLink ensures transparency and secure contribution tracking for every member.
-                  </p>
-                </div>
-                <div className="flex flex-col gap-3 min-[400px]:flex-row pt-4">
-                  <Button asChild size="lg" className="px-8 bg-primary font-bold uppercase tracking-widest shadow-lg hover:scale-105 transition-transform">
-                    <Link href="/donate">Contribute Now</Link>
-                  </Button>
-                  <Button asChild variant="outline" size="lg" className="px-8 border-primary text-primary hover:bg-primary/10 font-bold uppercase tracking-widest hover:scale-105 transition-transform">
-                    <Link href="#events">Upcoming Fellowship</Link>
-                  </Button>
-                </div>
-              </div>
-              <div className="relative aspect-video lg:aspect-square rounded-2xl overflow-hidden shadow-2xl border-8 border-white animate-in fade-in slide-in-from-top slide-in-from-left duration-1000 fill-mode-forwards">
-                {heroImage && (
-                  <Image
-                    src={heroImage.imageUrl}
-                    alt={heroImage.description}
-                    fill
-                    className="object-cover"
-                    priority
-                    data-ai-hint={heroImage.imageHint}
-                  />
-                )}
-                <div className="absolute inset-0 bg-gradient-to-t from-primary/20 to-transparent pointer-events-none" />
+        {/* Full Viewport Hero Section */}
+        <section className="relative w-full h-screen overflow-hidden flex items-center justify-center">
+          {exteriorImage && (
+            <Image
+              src={exteriorImage.imageUrl}
+              alt="Mugher Full Gospel Church Exterior"
+              fill
+              className="object-cover z-0"
+              priority
+              data-ai-hint="church exterior"
+            />
+          )}
+          {/* Dark Overlay */}
+          <div className="absolute inset-0 bg-black/50 z-10" />
+          
+          <div className="container relative z-20 px-4 md:px-6 flex flex-col items-center justify-center">
+            <div className="animate-fadeInOverlay bg-black/30 backdrop-blur-sm p-8 md:p-12 text-center rounded-2xl border border-white/10 shadow-2xl max-w-3xl w-full">
+              <Badge className="mb-4 bg-accent text-accent-foreground font-bold tracking-widest uppercase text-[10px] animate-fadeInText-title">
+                Welcome to our community
+              </Badge>
+              <h1 className="text-4xl md:text-6xl lg:text-7xl font-headline font-bold tracking-tighter text-white uppercase animate-fadeInText-title">
+                MUGHER FULL GOSPEL CHURCH
+              </h1>
+              <p className="mt-4 text-slate-200 md:text-xl leading-relaxed max-w-[600px] mx-auto animate-fadeInText-subtitle">
+                Faith-driven management for our growing congregation. SanctuaryLink ensures transparency and secure contribution tracking for every member.
+              </p>
+              <div className="flex flex-col gap-3 min-[400px]:flex-row pt-8 justify-center animate-fadeInText-subtitle">
+                <Button asChild size="lg" className="px-8 bg-primary font-bold uppercase tracking-widest shadow-lg hover:scale-105 transition-transform h-14">
+                  <Link href="/donate">Contribute Now</Link>
+                </Button>
+                <Button asChild variant="outline" size="lg" className="px-8 border-white text-white hover:bg-white/10 font-bold uppercase tracking-widest hover:scale-105 transition-transform h-14">
+                  <Link href="#events">Upcoming Fellowship</Link>
+                </Button>
               </div>
             </div>
           </div>

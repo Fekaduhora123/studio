@@ -78,3 +78,27 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  @keyframes fadeInOverlay {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeInText {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .animate-fadeInOverlay {
+    animation: fadeInOverlay 1.8s ease-in-out forwards;
+  }
+
+  .animate-fadeInText-title {
+    animation: fadeInText 2.2s ease-in-out forwards;
+  }
+
+  .animate-fadeInText-subtitle {
+    animation: fadeInText 2.6s ease-in-out forwards;
+  }
+}
