@@ -1,4 +1,3 @@
-
 "use client";
 
 import * as React from 'react';
@@ -27,7 +26,8 @@ import {
   Church,
   Settings,
   Bell,
-  Loader2
+  Loader2,
+  UserCircle
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -103,6 +103,23 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  asChild
+                  isActive={pathname === '/dashboard/profile'}
+                  tooltip="Profile"
+                  className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
+                    pathname === '/dashboard/profile'
+                      ? 'bg-sidebar-accent text-sidebar-accent-foreground font-semibold shadow-sm'
+                      : 'hover:bg-sidebar-accent/50 hover:text-sidebar-foreground'
+                  }`}
+                >
+                  <Link href="/dashboard/profile">
+                    <UserCircle className="h-5 w-5" />
+                    <span>Admin Profile</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarContent>
           <SidebarFooter className="p-4 mt-auto">
@@ -125,7 +142,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <div className="flex items-center gap-4">
               <SidebarTrigger className="md:hidden" />
               <h2 className="text-lg font-headline font-semibold text-primary">
-                {navItems.find(item => item.href === pathname)?.label || 'Dashboard'}
+                {navItems.find(item => item.href === pathname)?.label || (pathname === '/dashboard/profile' ? 'Profile' : 'Dashboard')}
               </h2>
             </div>
             <div className="flex items-center gap-4">
@@ -133,8 +150,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 <Bell className="h-5 w-5" />
                 <span className="absolute top-2 right-2 h-2 w-2 bg-accent rounded-full border-2 border-white" />
               </Button>
-              <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-primary">
-                <Settings className="h-5 w-5" />
+              <Button asChild variant="ghost" size="icon" className="text-muted-foreground hover:text-primary">
+                <Link href="/dashboard/profile">
+                  <Settings className="h-5 w-5" />
+                </Link>
               </Button>
               <div className="flex items-center gap-3 pl-4 border-l">
                 <div className="flex flex-col items-end hidden sm:flex">
