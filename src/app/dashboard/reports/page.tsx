@@ -77,7 +77,6 @@ export default function ReportsPage() {
 
     const now = new Date();
     // Use the selected month for the "Current" period calculation
-    // This is a simplification; in a real app, you'd parse selectedMonthLabel
     const currentMonthStart = startOfMonth(now);
     const currentMonthEnd = endOfMonth(now);
     const prevMonthStart = startOfMonth(subMonths(now, 1));
@@ -143,13 +142,25 @@ export default function ReportsPage() {
     if (!reportData) return;
     setAnalyzing(true);
     try {
+      // Helper to strip non-plain objects (like Firestore Timestamps) before sending to Server Function
+      const sanitizeForAI = (report: any) => ({
+        period: report.period,
+        totalIncome: report.totalIncome,
+        totalExpenses: report.totalExpenses,
+        balance: report.balance,
+        incomeBreakdown: report.incomeBreakdown,
+        expenseBreakdown: report.expenseBreakdown,
+        previousPeriodIncome: report.previousPeriodIncome || 0,
+        previousPeriodExpenses: report.previousPeriodExpenses || 0,
+      });
+
       const result = await financialReportSummary({
-        monthlyReport: reportData.monthly,
-        yearlyReport: reportData.yearly
+        monthlyReport: sanitizeForAI(reportData.monthly),
+        yearlyReport: sanitizeForAI(reportData.yearly)
       });
       setSummary(result);
     } catch (err) {
-      console.error(err);
+      console.error('AI Summary Error:', err);
     } finally {
       setAnalyzing(false);
     }
