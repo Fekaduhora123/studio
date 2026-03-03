@@ -70,7 +70,7 @@ export default function Home() {
             <div className="grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px] items-center">
               <div className="flex flex-col justify-center space-y-4 animate-in fade-in slide-in-from-left duration-1000">
                 <div className="space-y-4">
-                  <Badge className="w-fit bg-accent text-accent-foreground font-bold tracking-widest uppercase text-[10px] animate-bounce">
+                  <Badge className="w-fit bg-accent text-accent-foreground font-bold tracking-widest uppercase text-[10px]">
                     Welcome to our community
                   </Badge>
                   <h1 className="text-4xl font-headline font-bold tracking-tighter sm:text-6xl xl:text-7xl/none text-primary uppercase">
@@ -89,7 +89,7 @@ export default function Home() {
                   </Button>
                 </div>
               </div>
-              <div className="relative aspect-video lg:aspect-square rounded-2xl overflow-hidden shadow-2xl border-8 border-white animate-float animate-in fade-in zoom-in duration-1000">
+              <div className="relative aspect-video lg:aspect-square rounded-2xl overflow-hidden shadow-2xl border-8 border-white animate-in fade-in zoom-in duration-1000">
                 {heroImage && (
                   <Image
                     src={heroImage.imageUrl}
@@ -263,8 +263,8 @@ export default function Home() {
         </section>
 
         <section className="w-full py-24 md:py-32 bg-primary text-white overflow-hidden relative">
-          <div className="container px-4 md:px-6 mx-auto flex flex-col items-center space-y-6 text-center relative z-10">
-            <div className="bg-white/10 p-6 rounded-full backdrop-blur-sm mb-4 animate-pulse">
+          <div className="container px-4 md:px-6 mx-auto flex flex-col items-center space-y-6 text-center relative z-10 animate-in fade-in slide-in-from-bottom duration-1000">
+            <div className="bg-white/10 p-6 rounded-full backdrop-blur-sm mb-4">
               <ShieldCheck className="h-16 w-16 text-accent" />
             </div>
             <h2 className="text-4xl font-headline font-bold tracking-tighter sm:text-6xl uppercase">Trust and Integrity</h2>
