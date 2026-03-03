@@ -68,9 +68,9 @@ export default function Home() {
         <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48 bg-background overflow-hidden border-b">
           <div className="container px-4 md:px-6 mx-auto">
             <div className="grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px] items-center">
-              <div className="flex flex-col justify-center space-y-4">
+              <div className="flex flex-col justify-center space-y-4 animate-in fade-in slide-in-from-left duration-1000">
                 <div className="space-y-4">
-                  <Badge className="w-fit bg-accent text-accent-foreground font-bold tracking-widest uppercase text-[10px]">
+                  <Badge className="w-fit bg-accent text-accent-foreground font-bold tracking-widest uppercase text-[10px] animate-bounce">
                     Welcome to our community
                   </Badge>
                   <h1 className="text-4xl font-headline font-bold tracking-tighter sm:text-6xl xl:text-7xl/none text-primary uppercase">
@@ -81,25 +81,26 @@ export default function Home() {
                   </p>
                 </div>
                 <div className="flex flex-col gap-3 min-[400px]:flex-row pt-4">
-                  <Button asChild size="lg" className="px-8 bg-primary font-bold uppercase tracking-widest shadow-lg">
+                  <Button asChild size="lg" className="px-8 bg-primary font-bold uppercase tracking-widest shadow-lg hover:scale-105 transition-transform">
                     <Link href="/donate">Contribute Now</Link>
                   </Button>
-                  <Button asChild variant="outline" size="lg" className="px-8 border-primary text-primary hover:bg-primary/10 font-bold uppercase tracking-widest">
+                  <Button asChild variant="outline" size="lg" className="px-8 border-primary text-primary hover:bg-primary/10 font-bold uppercase tracking-widest hover:scale-105 transition-transform">
                     <Link href="#events">Upcoming Fellowship</Link>
                   </Button>
                 </div>
               </div>
-              <div className="relative aspect-video lg:aspect-square rounded-2xl overflow-hidden shadow-2xl border-8 border-white">
+              <div className="relative aspect-video lg:aspect-square rounded-2xl overflow-hidden shadow-2xl border-8 border-white animate-float animate-in fade-in zoom-in duration-1000">
                 {heroImage && (
                   <Image
                     src={heroImage.imageUrl}
                     alt={heroImage.description}
                     fill
-                    className="object-cover"
+                    className="object-cover hover:scale-110 transition-transform duration-700"
                     priority
                     data-ai-hint={heroImage.imageHint}
                   />
                 )}
+                <div className="absolute inset-0 bg-gradient-to-t from-primary/20 to-transparent pointer-events-none" />
               </div>
             </div>
           </div>
@@ -124,7 +125,7 @@ export default function Home() {
                 </div>
               ) : events && events.length > 0 ? (
                 events.map((event) => (
-                  <Card key={event.id} className="border-none shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col group bg-white">
+                  <Card key={event.id} className="border-none shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col group bg-white hover:-translate-y-2">
                     <CardHeader className="pb-2">
                       <div className="flex items-center justify-between mb-2">
                         <Badge variant="outline" className="text-[10px] font-bold uppercase tracking-tighter border-primary/20 text-primary bg-primary/5">
@@ -263,7 +264,7 @@ export default function Home() {
 
         <section className="w-full py-24 md:py-32 bg-primary text-white overflow-hidden relative">
           <div className="container px-4 md:px-6 mx-auto flex flex-col items-center space-y-6 text-center relative z-10">
-            <div className="bg-white/10 p-6 rounded-full backdrop-blur-sm mb-4">
+            <div className="bg-white/10 p-6 rounded-full backdrop-blur-sm mb-4 animate-pulse">
               <ShieldCheck className="h-16 w-16 text-accent" />
             </div>
             <h2 className="text-4xl font-headline font-bold tracking-tighter sm:text-6xl uppercase">Trust and Integrity</h2>
@@ -271,7 +272,7 @@ export default function Home() {
               We leverage cutting-edge AI to ensure every financial contribution to **MUGHER FULL GOSPEL CHURCH** is verified and handled with the highest level of security.
             </p>
             <div className="pt-4">
-              <Button asChild size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 px-12 h-14 font-bold uppercase tracking-widest text-lg shadow-xl">
+              <Button asChild size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 px-12 h-14 font-bold uppercase tracking-widest text-lg shadow-xl hover:scale-105 transition-transform">
                 <Link href="/donate">Support Our Ministry</Link>
               </Button>
             </div>
