@@ -29,7 +29,8 @@ import {
   ShieldCheck,
   AlertCircle,
   Trash2,
-  MoreVertical
+  MoreVertical,
+  Eraser
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { useCollection, useFirestore } from '@/firebase';
@@ -54,9 +55,11 @@ import {
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { errorEmitter } from '@/firebase/error-emitter';
 import { FirestorePermissionError, type SecurityRuleContext } from '@/firebase/errors';
+import { useToast } from '@/hooks/use-toast';
 
 export default function DonationsPage() {
   const firestore = useFirestore();
+  const { toast } = useToast();
   const [mounted, setMounted] = React.useState(false);
   const [searchTerm, setSearchTerm] = React.useState('');
   const [typeFilter, setTypeFilter] = React.useState<string>('all');
@@ -80,6 +83,24 @@ export default function DonationsPage() {
         path: donationRef.path,
         operation: 'update',
         requestResourceData: { status },
+      } satisfies SecurityRuleContext);
+      errorEmitter.emit('permission-error', permissionError);
+    });
+  };
+
+  const handlePurgeImage = (id: string) => {
+    if (!firestore) return;
+    const donationRef = doc(firestore, 'donations', id);
+    updateDoc(donationRef, { receiptData: null }).then(() => {
+      toast({
+        title: "Image Purged",
+        description: "The receipt image has been removed to save storage.",
+      });
+    }).catch(async (err) => {
+      const permissionError = new FirestorePermissionError({
+        path: donationRef.path,
+        operation: 'update',
+        requestResourceData: { receiptData: null },
       } satisfies SecurityRuleContext);
       errorEmitter.emit('permission-error', permissionError);
     });
@@ -289,7 +310,7 @@ export default function DonationsPage() {
                             <div className="grid grid-cols-2 gap-4 text-sm bg-muted/20 p-4 rounded-lg border border-primary/5">
                               <div className="space-y-1">
                                 <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Donor</p>
-                                <p className="font-bold text-primary">{donation.donorName || 'Unidentified'}</p>
+                                <p className="font-bold text-primary text-xs">{donation.donorName || 'Unidentified'}</p>
                               </div>
                               <div className="space-y-1">
                                 <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Amount</p>
@@ -319,11 +340,21 @@ export default function DonationsPage() {
                               <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Verification Asset</p>
                               <div className="border rounded-xl p-4 bg-muted/5 min-h-[200px] flex flex-col items-center justify-center text-center">
                                 {donation.receiptData ? (
-                                  <img 
-                                    src={donation.receiptData} 
-                                    alt="Receipt" 
-                                    className="w-full h-auto rounded-lg border shadow-sm"
-                                  />
+                                  <div className="space-y-4 w-full">
+                                    <img 
+                                      src={donation.receiptData} 
+                                      alt="Receipt" 
+                                      className="w-full h-auto rounded-lg border shadow-sm"
+                                    />
+                                    <Button 
+                                      variant="outline" 
+                                      size="sm" 
+                                      className="w-full text-rose-600 border-rose-200 hover:bg-rose-50"
+                                      onClick={() => handlePurgeImage(donation.id)}
+                                    >
+                                      <Eraser className="h-4 w-4 mr-2" /> Purge Image to Save Storage
+                                    </Button>
+                                  </div>
                                 ) : donation.isAiVerified ? (
                                   <div className="space-y-3 p-6">
                                     <div className="bg-emerald-100 p-4 rounded-full w-fit mx-auto">
@@ -396,6 +427,14 @@ export default function DonationsPage() {
                                 <X className="h-4 w-4 mr-2" /> Reject
                               </DropdownMenuItem>
                             </>
+                          )}
+                          {donation.receiptData && (
+                            <DropdownMenuItem 
+                              className="text-xs font-bold text-blue-600 focus:bg-blue-50"
+                              onClick={() => handlePurgeImage(donation.id)}
+                            >
+                              <Eraser className="h-4 w-4 mr-2" /> Purge Image
+                            </DropdownMenuItem>
                           )}
                           <DropdownMenuSeparator />
                           <DropdownMenuItem 
