@@ -91,7 +91,7 @@ export default function Home() {
                   </Button>
                 </div>
               </div>
-              <div className="relative aspect-video lg:aspect-square rounded-2xl overflow-hidden shadow-2xl border-8 border-white animate-in fade-in zoom-in duration-1000 fill-mode-forwards">
+              <div className="relative aspect-video lg:aspect-square rounded-2xl overflow-hidden shadow-2xl border-8 border-white animate-in fade-in slide-in-from-top slide-in-from-left duration-1000 fill-mode-forwards">
                 {heroImage && (
                   <Image
                     src={heroImage.imageUrl}
