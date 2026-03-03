@@ -177,7 +177,7 @@ export default function DashboardOverview() {
               ].map((donation, i) => (
                 <div key={i} className="flex items-center justify-between border-b pb-3 last:border-0 last:pb-0">
                   <div className="space-y-1">
-                    <p className="text-sm font-medium leading-none">{donation.name}</p>
+                    <p className="text-xs font-medium leading-none">{donation.name}</p>
                     <p className="text-xs text-muted-foreground">{donation.type} • {donation.date}</p>
                   </div>
                   <div className="text-sm font-bold text-emerald-600">{donation.amount}</div>

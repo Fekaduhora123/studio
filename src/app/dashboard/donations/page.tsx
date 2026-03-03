@@ -242,7 +242,7 @@ export default function DonationsPage() {
                   <TableCell className="text-xs font-medium">
                     {donation.timestamp?.toDate ? format(donation.timestamp.toDate(), 'MMM d, yyyy') : 'Pending'}
                   </TableCell>
-                  <TableCell className="font-bold text-primary">{donation.donorName}</TableCell>
+                  <TableCell className="text-xs font-bold text-primary">{donation.donorName}</TableCell>
                   <TableCell>
                     <Badge variant="outline" className="font-bold text-[10px] uppercase tracking-tighter border-primary/20 text-primary bg-primary/5">
                       {donation.type}
