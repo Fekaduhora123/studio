@@ -1,4 +1,3 @@
-
 "use client";
 
 import * as React from 'react';
@@ -7,7 +6,6 @@ import {
   CardContent, 
   CardHeader, 
   CardTitle,
-  CardDescription
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -20,18 +18,17 @@ import {
   TableRow 
 } from '@/components/ui/table';
 import { 
-  ReceiptText, 
   Plus, 
   Search, 
-  Filter, 
   Download,
   Calendar,
-  Eye,
   Trash2,
-  CheckCircle2,
   Loader2,
   Edit,
-  MoreVertical
+  MoreVertical,
+  CheckCircle2,
+  XCircle,
+  Filter
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { useCollection, useFirestore } from '@/firebase';
@@ -46,6 +43,7 @@ import { errorEmitter } from '@/firebase/error-emitter';
 import { FirestorePermissionError, type SecurityRuleContext } from '@/firebase/errors';
 import { format } from 'date-fns';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { useToast } from '@/hooks/use-toast';
 
 const expenseSchema = z.object({
   description: z.string().min(2, "Description is required"),
@@ -59,6 +57,7 @@ type ExpenseFormValues = z.infer<typeof expenseSchema>;
 
 export default function ExpensesPage() {
   const firestore = useFirestore();
+  const { toast } = useToast();
   const [mounted, setMounted] = React.useState(false);
   const [searchTerm, setSearchTerm] = React.useState('');
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
@@ -106,6 +105,24 @@ export default function ExpensesPage() {
     }
   }, [editingExpense, form]);
 
+  const handleUpdateStatus = (id: string, status: 'Approved' | 'Rejected') => {
+    if (!firestore) return;
+    const expenseRef = doc(firestore, 'expenses', id);
+    updateDoc(expenseRef, { status }).then(() => {
+      toast({
+        title: `Expense ${status}`,
+        description: `The expenditure has been marked as ${status.toLowerCase()}.`,
+      });
+    }).catch(async (err) => {
+      const permissionError = new FirestorePermissionError({
+        path: expenseRef.path,
+        operation: 'update',
+        requestResourceData: { status },
+      } satisfies SecurityRuleContext);
+      errorEmitter.emit('permission-error', permissionError);
+    });
+  };
+
   const onSubmit = async (values: ExpenseFormValues) => {
     if (!firestore) return;
 
@@ -117,7 +134,9 @@ export default function ExpensesPage() {
 
     if (editingExpense) {
       const expenseRef = doc(firestore, 'expenses', editingExpense.id);
-      updateDoc(expenseRef, expenseData).catch(async (err) => {
+      updateDoc(expenseRef, expenseData).then(() => {
+        toast({ title: "Expense Updated", description: "The record has been successfully updated." });
+      }).catch(async (err) => {
         const permissionError = new FirestorePermissionError({
           path: expenseRef.path,
           operation: 'update',
@@ -126,7 +145,9 @@ export default function ExpensesPage() {
         errorEmitter.emit('permission-error', permissionError);
       });
     } else {
-      addDoc(collection(firestore, 'expenses'), expenseData).catch(async (err) => {
+      addDoc(collection(firestore, 'expenses'), expenseData).then(() => {
+        toast({ title: "Expense Recorded", description: "The expenditure has been logged." });
+      }).catch(async (err) => {
         const permissionError = new FirestorePermissionError({
           path: 'expenses',
           operation: 'create',
@@ -143,7 +164,9 @@ export default function ExpensesPage() {
   const handleDelete = async (id: string) => {
     if (!firestore || !confirm('Are you sure you want to delete this expense record?')) return;
     const expenseRef = doc(firestore, 'expenses', id);
-    deleteDoc(expenseRef).catch(async (err) => {
+    deleteDoc(expenseRef).then(() => {
+      toast({ title: "Expense Deleted", description: "The record was removed permanently." });
+    }).catch(async (err) => {
       const permissionError = new FirestorePermissionError({
         path: expenseRef.path,
         operation: 'delete',
@@ -158,7 +181,7 @@ export default function ExpensesPage() {
   );
 
   const stats = React.useMemo(() => {
-    const initial = { total: 0, pending: 0, topCategory: '' };
+    const initial = { total: 0, pending: 0, topCategory: 'None' };
     if (!expenses) return initial;
 
     const categories: Record<string, number> = {};
@@ -189,11 +212,11 @@ export default function ExpensesPage() {
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-headline font-bold text-primary">Expense Management</h1>
-          <p className="text-muted-foreground">Track and categorize all church expenditures.</p>
+          <h1 className="text-3xl font-headline font-bold text-primary uppercase tracking-tight">Financial Outflow</h1>
+          <p className="text-muted-foreground font-medium text-sm">MUGHER FULL GOSPEL CHURCH expenditure monitoring.</p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" className="gap-2">
+          <Button variant="outline" className="gap-2 font-bold uppercase text-[10px] tracking-widest border-primary/20">
             <Download className="h-4 w-4" /> Export CSV
           </Button>
           <Dialog open={isDialogOpen} onOpenChange={(open) => {
@@ -201,13 +224,15 @@ export default function ExpensesPage() {
             if (!open) setEditingExpense(null);
           }}>
             <DialogTrigger asChild>
-              <Button className="gap-2 bg-primary">
+              <Button className="gap-2 bg-primary font-bold uppercase text-[10px] tracking-widest">
                 <Plus className="h-4 w-4" /> Record Expense
               </Button>
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
-                <DialogTitle>{editingExpense ? 'Edit Expense' : 'Record New Expense'}</DialogTitle>
+                <DialogTitle className="text-xl font-headline font-bold text-primary uppercase tracking-tight">
+                  {editingExpense ? 'Edit Expense Record' : 'Log New Expenditure'}
+                </DialogTitle>
               </DialogHeader>
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -216,8 +241,8 @@ export default function ExpensesPage() {
                     name="description"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Description</FormLabel>
-                        <FormControl><Input placeholder="Electric Bill - May" {...field} /></FormControl>
+                        <FormLabel className="text-[10px] font-bold uppercase tracking-wider">Description</FormLabel>
+                        <FormControl><Input placeholder="e.g. Electricity Bill - May" {...field} /></FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
@@ -228,8 +253,8 @@ export default function ExpensesPage() {
                       name="category"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Category</FormLabel>
-                          <FormControl><Input placeholder="Utility" {...field} /></FormControl>
+                          <FormLabel className="text-[10px] font-bold uppercase tracking-wider">Category</FormLabel>
+                          <FormControl><Input placeholder="Utility, Salary, etc." {...field} /></FormControl>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -239,7 +264,7 @@ export default function ExpensesPage() {
                       name="amount"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Amount (ETB)</FormLabel>
+                          <FormLabel className="text-[10px] font-bold uppercase tracking-wider">Amount (ETB)</FormLabel>
                           <FormControl><Input placeholder="0.00" {...field} /></FormControl>
                           <FormMessage />
                         </FormItem>
@@ -252,8 +277,8 @@ export default function ExpensesPage() {
                       name="approvedBy"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Approved By</FormLabel>
-                          <FormControl><Input placeholder="Pastor James" {...field} /></FormControl>
+                          <FormLabel className="text-[10px] font-bold uppercase tracking-wider">Approved By</FormLabel>
+                          <FormControl><Input placeholder="e.g. Pastor James" {...field} /></FormControl>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -263,7 +288,7 @@ export default function ExpensesPage() {
                       name="status"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Status</FormLabel>
+                          <FormLabel className="text-[10px] font-bold uppercase tracking-wider">Current Status</FormLabel>
                           <Select onValueChange={field.onChange} defaultValue={field.value}>
                             <FormControl>
                               <SelectTrigger>
@@ -281,9 +306,9 @@ export default function ExpensesPage() {
                       )}
                     />
                   </div>
-                  <DialogFooter>
-                    <Button type="submit" className="bg-primary">
-                      {editingExpense ? 'Update Expense' : 'Record Expense'}
+                  <DialogFooter className="pt-4">
+                    <Button type="submit" className="w-full bg-primary font-bold uppercase text-[10px] tracking-widest">
+                      {editingExpense ? 'Update Record' : 'Save Expenditure'}
                     </Button>
                   </DialogFooter>
                 </form>
@@ -294,31 +319,28 @@ export default function ExpensesPage() {
       </div>
 
       <div className="grid gap-4 md:grid-cols-3">
-        <Card className="border-none shadow-sm">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Total Approved (MTD)</CardTitle>
+        <Card className="border-none shadow-sm bg-primary text-white">
+          <CardHeader className="p-4 pb-2">
+            <CardTitle className="text-[10px] font-bold uppercase tracking-widest opacity-80">Total Approved (MTD)</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-4 pt-0">
             <div className="text-2xl font-bold">ETB {stats.total.toLocaleString()}</div>
-            <p className="text-xs text-muted-foreground mt-1">Currently within budget limits</p>
           </CardContent>
         </Card>
         <Card className="border-none shadow-sm">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Highest Category</CardTitle>
+          <CardHeader className="p-4 pb-2">
+            <CardTitle className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Top Spending Category</CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats.topCategory}</div>
-            <p className="text-xs text-muted-foreground mt-1">Significant expenditure here</p>
+          <CardContent className="p-4 pt-0">
+            <div className="text-xl font-bold text-primary">{stats.topCategory}</div>
           </CardContent>
         </Card>
-        <Card className="border-none shadow-sm">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Pending Approvals</CardTitle>
+        <Card className="border-none shadow-sm bg-accent/10">
+          <CardHeader className="p-4 pb-2">
+            <CardTitle className="text-[10px] font-bold text-accent-foreground uppercase tracking-widest">Awaiting Approval</CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-accent">{stats.pending}</div>
-            <p className="text-xs text-muted-foreground mt-1">Needs board review</p>
+          <CardContent className="p-4 pt-0">
+            <div className="text-xl font-bold text-accent-foreground">{stats.pending}</div>
           </CardContent>
         </Card>
       </div>
@@ -330,14 +352,14 @@ export default function ExpensesPage() {
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input 
                 placeholder="Search description or category..." 
-                className="pl-9 bg-white"
+                className="pl-9 bg-white border-primary/10 h-10 text-xs"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
             <div className="flex items-center gap-2">
-              <Button variant="outline" size="sm" className="gap-2">
-                <Calendar className="h-4 w-4" /> Filter Date
+              <Button variant="outline" size="sm" className="gap-2 font-bold uppercase text-[10px] tracking-widest border-primary/20">
+                <Filter className="h-4 w-4" /> Filter Date
               </Button>
             </div>
           </div>
@@ -346,65 +368,88 @@ export default function ExpensesPage() {
           <Table>
             <TableHeader className="bg-muted/30">
               <TableRow>
-                <TableHead className="font-bold">Date</TableHead>
-                <TableHead className="font-bold">Description</TableHead>
-                <TableHead className="font-bold">Category</TableHead>
-                <TableHead className="font-bold">Approved By</TableHead>
-                <TableHead className="font-bold">Status</TableHead>
-                <TableHead className="font-bold text-right">Amount</TableHead>
-                <TableHead className="font-bold text-right">Actions</TableHead>
+                <TableHead className="text-[10px] font-bold uppercase tracking-wider">Date</TableHead>
+                <TableHead className="text-[10px] font-bold uppercase tracking-wider">Description</TableHead>
+                <TableHead className="text-[10px] font-bold uppercase tracking-wider">Category</TableHead>
+                <TableHead className="text-[10px] font-bold uppercase tracking-wider">Audited By</TableHead>
+                <TableHead className="text-[10px] font-bold uppercase tracking-wider">Status</TableHead>
+                <TableHead className="text-[10px] font-bold uppercase tracking-wider text-right">Amount</TableHead>
+                <TableHead className="text-[10px] font-bold uppercase tracking-wider text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {loading ? (
                 <TableRow>
-                  <TableCell colSpan={7} className="text-center py-12"><Loader2 className="h-8 w-8 animate-spin mx-auto text-primary" /></TableCell>
+                  <TableCell colSpan={7} className="text-center py-12 text-muted-foreground text-xs italic">Loading ledger...</TableCell>
                 </TableRow>
               ) : filteredExpenses?.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={7} className="text-center py-12 text-muted-foreground">No expenses recorded.</TableCell>
+                  <TableCell colSpan={7} className="text-center py-12 text-muted-foreground text-xs italic">No expenditures found.</TableCell>
                 </TableRow>
               ) : filteredExpenses?.map((expense) => (
-                <TableRow key={expense.id} className="hover:bg-muted/10">
-                  <TableCell className="text-sm">
+                <TableRow key={expense.id} className="hover:bg-muted/10 group transition-colors">
+                  <TableCell className="text-[10px] font-medium whitespace-nowrap">
                     {expense.date?.toDate ? format(expense.date.toDate(), 'MMM d, yyyy') : 'Pending'}
                   </TableCell>
-                  <TableCell className="font-medium">{expense.description}</TableCell>
+                  <TableCell className="text-xs font-bold text-primary">{expense.description}</TableCell>
                   <TableCell>
-                    <Badge variant="secondary" className="font-normal bg-muted text-foreground">
+                    <Badge variant="outline" className="font-bold text-[9px] uppercase tracking-tighter border-primary/20 text-primary bg-primary/5">
                       {expense.category}
                     </Badge>
                   </TableCell>
-                  <TableCell className="text-sm text-muted-foreground">{expense.approvedBy || 'N/A'}</TableCell>
+                  <TableCell className="text-[10px] text-muted-foreground">{expense.approvedBy || '---'}</TableCell>
                   <TableCell>
-                    <Badge className={
-                      expense.status === 'Approved' ? 'bg-emerald-500/10 text-emerald-600' : 
-                      expense.status === 'Rejected' ? 'bg-rose-500/10 text-rose-600' :
-                      'bg-amber-500/10 text-amber-600'
-                    }>
+                    <Badge className={`text-[9px] font-bold uppercase tracking-widest ${
+                      expense.status === 'Approved' ? 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20' : 
+                      expense.status === 'Rejected' ? 'bg-rose-500/10 text-rose-600 border-rose-500/20' :
+                      'bg-amber-500/10 text-amber-600 border-amber-500/20'
+                    }`}>
                       {expense.status}
                     </Badge>
                   </TableCell>
-                  <TableCell className="text-right font-bold text-rose-600">
+                  <TableCell className="text-right font-bold text-rose-600 tabular-nums text-xs">
                     -ETB {expense.amount.toLocaleString()}
                   </TableCell>
                   <TableCell className="text-right">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon">
+                        <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-primary">
                           <MoreVertical className="h-4 w-4" />
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem onClick={() => {
-                          setEditingExpense(expense);
-                          setIsDialogOpen(true);
-                        }}>
-                          <Edit className="h-4 w-4 mr-2" /> Edit Expense
+                      <DropdownMenuContent align="end" className="w-48">
+                        <DropdownMenuLabel className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground">Expense Action</DropdownMenuLabel>
+                        {expense.status === 'Pending' && (
+                          <>
+                            <DropdownMenuItem 
+                              className="text-xs font-bold text-emerald-600"
+                              onClick={() => handleUpdateStatus(expense.id, 'Approved')}
+                            >
+                              <CheckCircle2 className="h-4 w-4 mr-2" /> Approve
+                            </DropdownMenuItem>
+                            <DropdownMenuItem 
+                              className="text-xs font-bold text-rose-600"
+                              onClick={() => handleUpdateStatus(expense.id, 'Rejected')}
+                            >
+                              <XCircle className="h-4 w-4 mr-2" /> Reject
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                          </>
+                        )}
+                        <DropdownMenuItem 
+                          className="text-xs font-bold text-blue-600"
+                          onClick={() => {
+                            setEditingExpense(expense);
+                            setIsDialogOpen(true);
+                          }}
+                        >
+                          <Edit className="h-4 w-4 mr-2" /> Edit Details
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem className="text-destructive" onClick={() => handleDelete(expense.id)}>
+                        <DropdownMenuItem 
+                          className="text-xs font-bold text-rose-700 focus:bg-rose-50" 
+                          onClick={() => handleDelete(expense.id)}
+                        >
                           <Trash2 className="h-4 w-4 mr-2" /> Delete Record
                         </DropdownMenuItem>
                       </DropdownMenuContent>
