@@ -117,6 +117,12 @@ export default function Home() {
                     data-ai-hint={sanctuaryImage.imageHint}
                   />
                 )}
+                {/* Oromo Scripture Drop Down Animation */}
+                <div className="absolute inset-0 bg-black/40 flex items-center justify-center p-6 text-center">
+                  <p className="text-white font-headline font-bold text-sm md:text-base lg:text-lg italic leading-relaxed animate-dropDown drop-shadow-lg">
+                    "isaan dhugaa waa'ee waaqayyoo diddiiraniiru waqayyoon isa hundumaa uume dhisanii uumamaaf sagadanii ,hojjetaniif .waaqayyoo garuu bara baraan galateeffamaa dha '' <span className="text-accent uppercase not-italic">AMEEN</span>
+                  </p>
+                </div>
               </div>
               <div className="flex flex-col justify-center space-y-4">
                 <h2 className="text-3xl font-headline font-bold tracking-tighter text-primary uppercase">Our Sanctuary</h2>
