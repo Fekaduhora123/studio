@@ -58,6 +58,34 @@
         "createdAt": { "type": "string", "format": "date-time" }
       },
       "required": ["title", "date", "description"]
+    },
+    "Member": {
+      "title": "Member",
+      "description": "A member of the church congregation.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "phone": { "type": "string" },
+        "group": { "type": "string", "description": "Ministry or group the member belongs to." },
+        "joinedDate": { "type": "string", "format": "date-time" },
+        "status": { "type": "string", "enum": ["Active", "Inactive"] }
+      },
+      "required": ["name", "status"]
+    },
+    "Expense": {
+      "title": "Expense",
+      "description": "A recorded church expenditure.",
+      "type": "object",
+      "properties": {
+        "description": { "type": "string" },
+        "category": { "type": "string" },
+        "amount": { "type": "number" },
+        "date": { "type": "string", "format": "date-time" },
+        "approvedBy": { "type": "string" },
+        "status": { "type": "string", "enum": ["Approved", "Pending", "Rejected"] }
+      },
+      "required": ["description", "amount", "date", "status"]
     }
   },
   "auth": {
@@ -71,6 +99,14 @@
     "/events/{eventId}": {
       "schema": "Event",
       "description": "Collection of church events and announcements."
+    },
+    "/members/{memberId}": {
+      "schema": "Member",
+      "description": "Collection of church members."
+    },
+    "/expenses/{expenseId}": {
+      "schema": "Expense",
+      "description": "Collection of church expenses."
     }
   }
 }

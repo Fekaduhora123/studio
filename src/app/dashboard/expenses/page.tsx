@@ -1,3 +1,4 @@
+
 "use client";
 
 import * as React from 'react';
@@ -27,20 +28,162 @@ import {
   Calendar,
   Eye,
   Trash2,
-  CheckCircle2
+  CheckCircle2,
+  Loader2,
+  Edit,
+  MoreVertical
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { useCollection, useFirestore } from '@/firebase';
+import { collection, query, orderBy, doc, deleteDoc, addDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/components/ui/dialog';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { errorEmitter } from '@/firebase/error-emitter';
+import { FirestorePermissionError, type SecurityRuleContext } from '@/firebase/errors';
+import { format } from 'date-fns';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 
-const mockExpenses = [
-  { id: 1, category: 'Utility', description: 'Electric Bill - May', amount: 450, date: '2024-05-15', approvedBy: 'Pastor James', status: 'Approved' },
-  { id: 2, category: 'Rent', description: 'Building Lease', amount: 2500, date: '2024-05-01', approvedBy: 'Finance Board', status: 'Approved' },
-  { id: 3, category: 'Charity', description: 'Community Food Bank', amount: 1200, date: '2024-05-12', approvedBy: 'Pastor James', status: 'Approved' },
-  { id: 4, category: 'Salary', description: 'Staff Payroll - May', amount: 4500, date: '2024-05-15', approvedBy: 'Finance Board', status: 'Approved' },
-  { id: 5, category: 'Construction', description: 'Roof Repair Materials', amount: 850, date: '2024-05-18', approvedBy: 'Maintenance Head', status: 'Pending' },
-];
+const expenseSchema = z.object({
+  description: z.string().min(2, "Description is required"),
+  category: z.string().min(2, "Category is required"),
+  amount: z.string().refine((val) => !isNaN(Number(val)) && Number(val) > 0, "Enter a valid amount"),
+  status: z.enum(["Approved", "Pending", "Rejected"]).default("Pending"),
+  approvedBy: z.string().optional().or(z.literal('')),
+});
+
+type ExpenseFormValues = z.infer<typeof expenseSchema>;
 
 export default function ExpensesPage() {
+  const firestore = useFirestore();
+  const [mounted, setMounted] = React.useState(false);
   const [searchTerm, setSearchTerm] = React.useState('');
+  const [isDialogOpen, setIsDialogOpen] = React.useState(false);
+  const [editingExpense, setEditingExpense] = React.useState<any>(null);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const expensesQuery = React.useMemo(() => {
+    if (!firestore) return null;
+    return query(collection(firestore, 'expenses'), orderBy('date', 'desc'));
+  }, [firestore]);
+
+  const { data: expenses, loading } = useCollection(expensesQuery);
+
+  const form = useForm<ExpenseFormValues>({
+    resolver: zodResolver(expenseSchema),
+    defaultValues: {
+      description: "",
+      category: "",
+      amount: "",
+      status: "Pending",
+      approvedBy: "",
+    },
+  });
+
+  React.useEffect(() => {
+    if (editingExpense) {
+      form.reset({
+        description: editingExpense.description,
+        category: editingExpense.category,
+        amount: editingExpense.amount.toString(),
+        status: editingExpense.status || "Pending",
+        approvedBy: editingExpense.approvedBy || "",
+      });
+    } else {
+      form.reset({
+        description: "",
+        category: "",
+        amount: "",
+        status: "Pending",
+        approvedBy: "",
+      });
+    }
+  }, [editingExpense, form]);
+
+  const onSubmit = async (values: ExpenseFormValues) => {
+    if (!firestore) return;
+
+    const expenseData = {
+      ...values,
+      amount: Number(values.amount),
+      date: editingExpense ? editingExpense.date : serverTimestamp(),
+    };
+
+    if (editingExpense) {
+      const expenseRef = doc(firestore, 'expenses', editingExpense.id);
+      updateDoc(expenseRef, expenseData).catch(async (err) => {
+        const permissionError = new FirestorePermissionError({
+          path: expenseRef.path,
+          operation: 'update',
+          requestResourceData: expenseData,
+        } satisfies SecurityRuleContext);
+        errorEmitter.emit('permission-error', permissionError);
+      });
+    } else {
+      addDoc(collection(firestore, 'expenses'), expenseData).catch(async (err) => {
+        const permissionError = new FirestorePermissionError({
+          path: 'expenses',
+          operation: 'create',
+          requestResourceData: expenseData,
+        } satisfies SecurityRuleContext);
+        errorEmitter.emit('permission-error', permissionError);
+      });
+    }
+
+    setIsDialogOpen(false);
+    setEditingExpense(null);
+  };
+
+  const handleDelete = async (id: string) => {
+    if (!firestore || !confirm('Are you sure you want to delete this expense record?')) return;
+    const expenseRef = doc(firestore, 'expenses', id);
+    deleteDoc(expenseRef).catch(async (err) => {
+      const permissionError = new FirestorePermissionError({
+        path: expenseRef.path,
+        operation: 'delete',
+      } satisfies SecurityRuleContext);
+      errorEmitter.emit('permission-error', permissionError);
+    });
+  };
+
+  const filteredExpenses = expenses?.filter(expense => 
+    expense.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    expense.category.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const stats = React.useMemo(() => {
+    const initial = { total: 0, pending: 0, topCategory: '' };
+    if (!expenses) return initial;
+
+    const categories: Record<string, number> = {};
+    
+    const result = expenses.reduce((acc, curr) => {
+      if (curr.status === 'Approved') acc.total += curr.amount;
+      if (curr.status === 'Pending') acc.pending++;
+      
+      categories[curr.category] = (categories[curr.category] || 0) + curr.amount;
+      return acc;
+    }, initial);
+
+    const sortedCategories = Object.entries(categories).sort((a, b) => b[1] - a[1]);
+    result.topCategory = sortedCategories[0]?.[0] || 'None';
+
+    return result;
+  }, [expenses]);
+
+  if (!mounted) {
+    return (
+      <div className="flex justify-center items-center py-24">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -53,22 +196,111 @@ export default function ExpensesPage() {
           <Button variant="outline" className="gap-2">
             <Download className="h-4 w-4" /> Export CSV
           </Button>
-          <Button className="gap-2 bg-primary">
-            <Plus className="h-4 w-4" /> Record Expense
-          </Button>
+          <Dialog open={isDialogOpen} onOpenChange={(open) => {
+            setIsDialogOpen(open);
+            if (!open) setEditingExpense(null);
+          }}>
+            <DialogTrigger asChild>
+              <Button className="gap-2 bg-primary">
+                <Plus className="h-4 w-4" /> Record Expense
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>{editingExpense ? 'Edit Expense' : 'Record New Expense'}</DialogTitle>
+              </DialogHeader>
+              <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                  <FormField
+                    control={form.control}
+                    name="description"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Description</FormLabel>
+                        <FormControl><Input placeholder="Electric Bill - May" {...field} /></FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <div className="grid grid-cols-2 gap-4">
+                    <FormField
+                      control={form.control}
+                      name="category"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Category</FormLabel>
+                          <FormControl><Input placeholder="Utility" {...field} /></FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="amount"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Amount (ETB)</FormLabel>
+                          <FormControl><Input placeholder="0.00" {...field} /></FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <FormField
+                      control={form.control}
+                      name="approvedBy"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Approved By</FormLabel>
+                          <FormControl><Input placeholder="Pastor James" {...field} /></FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="status"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Status</FormLabel>
+                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select status" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="Pending">Pending</SelectItem>
+                              <SelectItem value="Approved">Approved</SelectItem>
+                              <SelectItem value="Rejected">Rejected</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <DialogFooter>
+                    <Button type="submit" className="bg-primary">
+                      {editingExpense ? 'Update Expense' : 'Record Expense'}
+                    </Button>
+                  </DialogFooter>
+                </form>
+              </Form>
+            </DialogContent>
+          </Dialog>
         </div>
       </div>
 
       <div className="grid gap-4 md:grid-cols-3">
         <Card className="border-none shadow-sm">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Total Expenses (Month)</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground">Total Approved (MTD)</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">$9,500</div>
-            <p className="text-xs text-muted-foreground mt-1">
-              Currently within budget limits
-            </p>
+            <div className="text-2xl font-bold">ETB {stats.total.toLocaleString()}</div>
+            <p className="text-xs text-muted-foreground mt-1">Currently within budget limits</p>
           </CardContent>
         </Card>
         <Card className="border-none shadow-sm">
@@ -76,10 +308,8 @@ export default function ExpensesPage() {
             <CardTitle className="text-sm font-medium text-muted-foreground">Highest Category</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">Salary</div>
-            <p className="text-xs text-muted-foreground mt-1">
-              $4,500 total this month
-            </p>
+            <div className="text-2xl font-bold">{stats.topCategory}</div>
+            <p className="text-xs text-muted-foreground mt-1">Significant expenditure here</p>
           </CardContent>
         </Card>
         <Card className="border-none shadow-sm">
@@ -87,10 +317,8 @@ export default function ExpensesPage() {
             <CardTitle className="text-sm font-medium text-muted-foreground">Pending Approvals</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-accent">1</div>
-            <p className="text-xs text-muted-foreground mt-1">
-              Needs board review
-            </p>
+            <div className="text-2xl font-bold text-accent">{stats.pending}</div>
+            <p className="text-xs text-muted-foreground mt-1">Needs board review</p>
           </CardContent>
         </Card>
       </div>
@@ -128,33 +356,59 @@ export default function ExpensesPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {mockExpenses.map((expense) => (
+              {loading ? (
+                <TableRow>
+                  <TableCell colSpan={7} className="text-center py-12"><Loader2 className="h-8 w-8 animate-spin mx-auto text-primary" /></TableCell>
+                </TableRow>
+              ) : filteredExpenses?.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={7} className="text-center py-12 text-muted-foreground">No expenses recorded.</TableCell>
+                </TableRow>
+              ) : filteredExpenses?.map((expense) => (
                 <TableRow key={expense.id} className="hover:bg-muted/10">
-                  <TableCell className="text-sm">{expense.date}</TableCell>
+                  <TableCell className="text-sm">
+                    {expense.date?.toDate ? format(expense.date.toDate(), 'MMM d, yyyy') : 'Pending'}
+                  </TableCell>
                   <TableCell className="font-medium">{expense.description}</TableCell>
                   <TableCell>
                     <Badge variant="secondary" className="font-normal bg-muted text-foreground">
                       {expense.category}
                     </Badge>
                   </TableCell>
-                  <TableCell className="text-sm text-muted-foreground">{expense.approvedBy}</TableCell>
+                  <TableCell className="text-sm text-muted-foreground">{expense.approvedBy || 'N/A'}</TableCell>
                   <TableCell>
-                    <Badge className={expense.status === 'Approved' ? 'bg-emerald-500/10 text-emerald-600' : 'bg-amber-500/10 text-amber-600'}>
+                    <Badge className={
+                      expense.status === 'Approved' ? 'bg-emerald-500/10 text-emerald-600' : 
+                      expense.status === 'Rejected' ? 'bg-rose-500/10 text-rose-600' :
+                      'bg-amber-500/10 text-amber-600'
+                    }>
                       {expense.status}
                     </Badge>
                   </TableCell>
                   <TableCell className="text-right font-bold text-rose-600">
-                    -${expense.amount.toLocaleString()}
+                    -ETB {expense.amount.toLocaleString()}
                   </TableCell>
                   <TableCell className="text-right">
-                    <div className="flex items-center justify-end gap-1">
-                      <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground">
-                        <Eye className="h-4 w-4" />
-                      </Button>
-                      <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive/60 hover:text-destructive">
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon">
+                          <MoreVertical className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                        <DropdownMenuItem onClick={() => {
+                          setEditingExpense(expense);
+                          setIsDialogOpen(true);
+                        }}>
+                          <Edit className="h-4 w-4 mr-2" /> Edit Expense
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem className="text-destructive" onClick={() => handleDelete(expense.id)}>
+                          <Trash2 className="h-4 w-4 mr-2" /> Delete Record
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </TableCell>
                 </TableRow>
               ))}
