@@ -13,7 +13,9 @@ import {
   Calendar,
   ArrowUpRight,
   ArrowDownRight,
-  Loader2
+  Loader2,
+  ListFilter,
+  ExternalLink
 } from 'lucide-react';
 import { financialReportSummary, type FinancialReportSummaryOutput } from '@/ai/flows/financial-report-summary-flow';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -27,12 +29,34 @@ import {
 import { useCollection, useFirestore } from '@/firebase';
 import { collection, query, orderBy, where } from 'firebase/firestore';
 import { startOfMonth, endOfMonth, subMonths, format, isWithinInterval } from 'date-fns';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Badge } from '@/components/ui/badge';
 
 export default function ReportsPage() {
   const firestore = useFirestore();
   const [summary, setSummary] = React.useState<FinancialReportSummaryOutput | null>(null);
   const [analyzing, setAnalyzing] = React.useState(false);
   const [selectedMonthLabel, setSelectedMonthLabel] = React.useState(format(new Date(), 'MMMM yyyy'));
+  
+  // Drill-down state
+  const [detailDialogOpen, setDetailDialogOpen] = React.useState(false);
+  const [detailTitle, setDetailTitle] = React.useState('');
+  const [detailItems, setDetailItems] = React.useState<any[]>([]);
+  const [detailType, setDetailType] = React.useState<'income' | 'expense'>('income');
 
   // Fetch all approved data for reporting
   const donationsQuery = React.useMemo(() => {
@@ -52,6 +76,8 @@ export default function ReportsPage() {
     if (!donations || !expenses) return null;
 
     const now = new Date();
+    // Use the selected month for the "Current" period calculation
+    // This is a simplification; in a real app, you'd parse selectedMonthLabel
     const currentMonthStart = startOfMonth(now);
     const currentMonthEnd = endOfMonth(now);
     const prevMonthStart = startOfMonth(subMonths(now, 1));
@@ -81,14 +107,15 @@ export default function ReportsPage() {
         totalExpenses,
         balance: totalIncome - totalExpenses,
         incomeBreakdown: Object.entries(incomeMap).map(([source, amount]) => ({ source, amount })),
-        expenseBreakdown: Object.entries(expenseMap).map(([category, amount]) => ({ category, amount }))
+        expenseBreakdown: Object.entries(expenseMap).map(([category, amount]) => ({ category, amount })),
+        rawDonations: monthDonations,
+        rawExpenses: monthExpenses
       };
     };
 
     const current = calculateMetrics(currentMonthStart, currentMonthEnd);
     const previous = calculateMetrics(prevMonthStart, prevMonthEnd);
 
-    // Special logic for "Building Purposes" net balance
     const buildingDonations = current.incomeBreakdown.find(i => i.source === 'Building Purposes')?.amount || 0;
     const buildingExpenses = current.expenseBreakdown.find(e => e.category === 'Building Purposes')?.amount || 0;
     const buildingNet = buildingDonations - buildingExpenses;
@@ -103,11 +130,10 @@ export default function ReportsPage() {
       },
       yearly: {
         period: `${format(now, 'yyyy')} YTD`,
-        // Simply use all approved for YTD in MVP
         totalIncome: donations.reduce((sum, d) => sum + d.amount, 0),
         totalExpenses: expenses.reduce((sum, e) => sum + e.amount, 0),
         balance: donations.reduce((sum, d) => sum + d.amount, 0) - expenses.reduce((sum, e) => sum + e.amount, 0),
-        incomeBreakdown: current.incomeBreakdown, // Simplified for brevity
+        incomeBreakdown: current.incomeBreakdown,
         expenseBreakdown: current.expenseBreakdown
       }
     };
@@ -127,6 +153,21 @@ export default function ReportsPage() {
     } finally {
       setAnalyzing(false);
     }
+  };
+
+  const handleShowDetails = (category: string, type: 'income' | 'expense') => {
+    if (!reportData) return;
+    setDetailType(type);
+    setDetailTitle(category);
+    
+    if (type === 'income') {
+      const items = reportData.monthly.rawDonations.filter(d => d.type === category);
+      setDetailItems(items);
+    } else {
+      const items = reportData.monthly.rawExpenses.filter(e => e.category === category);
+      setDetailItems(items);
+    }
+    setDetailDialogOpen(true);
   };
 
   if (donationsLoading || expensesLoading) {
@@ -208,10 +249,18 @@ export default function ReportsPage() {
                 <CardTitle className="text-sm font-bold uppercase tracking-widest text-primary">Inflow Sources</CardTitle>
               </CardHeader>
               <CardContent className="p-6 space-y-4">
-                {reportData?.monthly.incomeBreakdown.map((item, i) => (
-                  <div key={i} className="flex flex-col gap-1">
+                {reportData?.monthly.incomeBreakdown.length === 0 ? (
+                  <p className="text-xs text-muted-foreground text-center py-4">No income recorded for this period.</p>
+                ) : reportData?.monthly.incomeBreakdown.map((item, i) => (
+                  <button 
+                    key={i} 
+                    className="w-full flex flex-col gap-1 group text-left transition-all hover:translate-x-1"
+                    onClick={() => handleShowDetails(item.source, 'income')}
+                  >
                     <div className="flex items-center justify-between text-xs font-bold uppercase">
-                      <span className="text-muted-foreground">{item.source}</span>
+                      <span className="text-muted-foreground group-hover:text-primary flex items-center gap-1">
+                        {item.source} <ExternalLink className="h-3 w-3 opacity-0 group-hover:opacity-100" />
+                      </span>
                       <span className="text-primary">${item.amount.toLocaleString()}</span>
                     </div>
                     <div className="w-full bg-muted rounded-full h-1.5 overflow-hidden">
@@ -220,7 +269,7 @@ export default function ReportsPage() {
                         style={{ width: `${(item.amount / (reportData?.monthly.totalIncome || 1)) * 100}%` }}
                       />
                     </div>
-                  </div>
+                  </button>
                 ))}
               </CardContent>
             </Card>
@@ -230,10 +279,18 @@ export default function ReportsPage() {
                 <CardTitle className="text-sm font-bold uppercase tracking-widest text-rose-600">Outflow Categories</CardTitle>
               </CardHeader>
               <CardContent className="p-6 space-y-4">
-                {reportData?.monthly.expenseBreakdown.map((item, i) => (
-                  <div key={i} className="flex flex-col gap-1">
+                {reportData?.monthly.expenseBreakdown.length === 0 ? (
+                  <p className="text-xs text-muted-foreground text-center py-4">No expenses recorded for this period.</p>
+                ) : reportData?.monthly.expenseBreakdown.map((item, i) => (
+                  <button 
+                    key={i} 
+                    className="w-full flex flex-col gap-1 group text-left transition-all hover:translate-x-1"
+                    onClick={() => handleShowDetails(item.category, 'expense')}
+                  >
                     <div className="flex items-center justify-between text-xs font-bold uppercase">
-                      <span className="text-muted-foreground">{item.category}</span>
+                      <span className="text-muted-foreground group-hover:text-rose-600 flex items-center gap-1">
+                        {item.category} <ExternalLink className="h-3 w-3 opacity-0 group-hover:opacity-100" />
+                      </span>
                       <span className="text-rose-600">${item.amount.toLocaleString()}</span>
                     </div>
                     <div className="w-full bg-muted rounded-full h-1.5 overflow-hidden">
@@ -242,7 +299,7 @@ export default function ReportsPage() {
                         style={{ width: `${(item.amount / (reportData?.monthly.totalExpenses || 1)) * 100}%` }}
                       />
                     </div>
-                  </div>
+                  </button>
                 ))}
               </CardContent>
             </Card>
@@ -330,6 +387,71 @@ export default function ReportsPage() {
           </Card>
         </div>
       </div>
+
+      <Dialog open={detailDialogOpen} onOpenChange={setDetailDialogOpen}>
+        <DialogContent className="max-w-4xl max-h-[80vh] overflow-hidden flex flex-col p-0 border-none shadow-2xl">
+          <DialogHeader className="p-6 bg-primary/5 border-b">
+            <div className="flex items-center gap-2 mb-1">
+              <ListFilter className={`h-5 w-5 ${detailType === 'income' ? 'text-primary' : 'text-rose-600'}`} />
+              <DialogTitle className="text-xl font-headline font-bold uppercase tracking-tight">
+                {detailTitle} Details
+              </DialogTitle>
+            </div>
+            <DialogDescription className="text-xs font-medium">
+              Detailed breakdown of all approved items for {selectedMonthLabel}.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex-1 overflow-y-auto p-0">
+            <Table>
+              <TableHeader className="bg-muted/50 sticky top-0 z-10">
+                <TableRow>
+                  <TableHead className="text-[10px] font-bold uppercase tracking-wider">Date</TableHead>
+                  <TableHead className="text-[10px] font-bold uppercase tracking-wider">
+                    {detailType === 'income' ? 'Donor Name' : 'Description'}
+                  </TableHead>
+                  {detailType === 'expense' && <TableHead className="text-[10px] font-bold uppercase tracking-wider">Audited By</TableHead>}
+                  <TableHead className="text-[10px] font-bold uppercase tracking-wider text-right">Amount (ETB)</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {detailItems.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={detailType === 'income' ? 3 : 4} className="text-center py-12 text-muted-foreground italic text-xs">
+                      No matching records found.
+                    </TableCell>
+                  </TableRow>
+                ) : detailItems.map((item) => (
+                  <TableRow key={item.id} className="hover:bg-muted/10">
+                    <TableCell className="text-[10px] font-medium">
+                      {item.timestamp?.toDate ? format(item.timestamp.toDate(), 'MMM d, yyyy') : 
+                       item.date?.toDate ? format(item.date.toDate(), 'MMM d, yyyy') : '---'}
+                    </TableCell>
+                    <TableCell className="text-xs font-bold text-slate-800">
+                      {detailType === 'income' ? (item.donorName || 'Unidentified') : item.description}
+                    </TableCell>
+                    {detailType === 'expense' && (
+                      <TableCell className="text-[10px] text-muted-foreground">
+                        {item.approvedBy || '---'}
+                      </TableCell>
+                    )}
+                    <TableCell className={`text-right font-bold tabular-nums text-xs ${detailType === 'income' ? 'text-emerald-600' : 'text-rose-600'}`}>
+                      {detailType === 'expense' ? '-' : ''}${item.amount.toLocaleString()}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+          <div className="p-4 bg-muted/20 border-t flex justify-end">
+            <div className="flex flex-col items-end">
+              <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest mb-1">Total for {detailTitle}</p>
+              <p className={`text-xl font-bold ${detailType === 'income' ? 'text-primary' : 'text-rose-600'}`}>
+                ${detailItems.reduce((sum, item) => sum + item.amount, 0).toLocaleString()}
+              </p>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
