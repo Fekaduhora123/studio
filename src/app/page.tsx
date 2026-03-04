@@ -1,3 +1,4 @@
+
 'use client';
 
 import * as React from 'react';
@@ -136,7 +137,7 @@ export default function Home() {
                     "For where two or three are gathered together in my name, there am I in the midst of them." - Matthew 18:20
                   </p>
                   <p className="text-muted-foreground leading-relaxed text-[11px] md:text-sm font-medium">
-                    Located in the heart of Mugher, our sanctuary serves as a beacon of hope and a center for vibrant worship. We provide a welcoming atmosphere for all to seek spiritual growth and fellowship.
+                    Located in Muger Mokada at residential houses, our sanctuary serves as a beacon of hope and a center for vibrant worship. We provide a welcoming atmosphere for all to seek spiritual growth and fellowship.
                   </p>
                 </div>
                 <div className="pt-4">
