@@ -88,7 +88,7 @@ export default function Home() {
               <Badge className="mb-6 bg-accent text-accent-foreground font-bold tracking-[0.2em] uppercase text-[10px] md:text-xs px-4 py-1 animate-fadeInText-title">
                 Growing Together in Faith
               </Badge>
-              <h1 className="text-3xl md:text-5xl lg:text-6xl font-headline font-bold tracking-tighter text-white uppercase animate-fadeInText-title leading-[1] md:leading-[1.1]">
+              <h1 className="text-2xl md:text-4xl lg:text-5xl font-headline font-bold tracking-tighter text-white uppercase animate-fadeInText-title leading-[1] md:leading-[1.1]">
                 MUGHER <br className="hidden md:block" /> <span className="text-accent">FULL GOSPEL</span> CHURCH
               </h1>
               <p className="mt-8 text-slate-200 text-sm md:text-lg leading-relaxed max-w-[700px] mx-auto animate-fadeInText-subtitle px-4 font-medium opacity-90">
@@ -292,17 +292,17 @@ export default function Home() {
         </section>
 
         {/* High-Impact Final CTA */}
-        <section className="w-full py-24 md:py-48 bg-primary text-white overflow-hidden relative">
-          <div className="container px-4 md:px-6 mx-auto flex flex-col items-center space-y-10 text-center relative z-10">
-            <div className="bg-white/15 p-6 md:p-10 rounded-full backdrop-blur-xl border border-white/20 animate-pulse-slow shadow-2xl">
-              <ShieldCheck className="h-16 w-16 md:h-24 md:w-24 text-accent" />
+        <section className="w-full py-16 md:py-32 bg-primary text-white overflow-hidden relative">
+          <div className="container px-4 md:px-6 mx-auto flex flex-col items-center space-y-8 text-center relative z-10">
+            <div className="bg-white/15 p-4 md:p-8 rounded-full backdrop-blur-xl border border-white/20 animate-pulse-slow shadow-2xl">
+              <ShieldCheck className="h-12 w-12 md:h-16 md:w-16 text-accent" />
             </div>
-            <h2 className="text-5xl md:text-8xl font-headline font-bold tracking-tighter uppercase leading-[0.85] md:leading-[1]">Trust Through <br /> <span className="text-accent">Transparency</span></h2>
-            <p className="max-w-[800px] text-primary-foreground/90 text-sm md:text-2xl leading-relaxed px-4 font-medium italic">
+            <h2 className="text-4xl md:text-6xl font-headline font-bold tracking-tighter uppercase leading-[0.85] md:leading-[1]">Trust Through <br /> <span className="text-accent">Transparency</span></h2>
+            <p className="max-w-[700px] text-primary-foreground/90 text-xs md:text-lg leading-relaxed px-4 font-medium italic">
               "Every contribution at MUGHER FULL GOSPEL CHURCH is verified and handled with the highest integrity."
             </p>
-            <div className="pt-8 w-full sm:w-auto">
-              <Button asChild size="lg" className="w-full sm:w-auto bg-accent text-accent-foreground hover:bg-white px-12 md:px-20 h-16 md:h-20 font-bold uppercase tracking-[0.3em] text-base md:text-xl shadow-[0_20px_50px_rgba(0,0,0,0.4)] hover:scale-105 transition-all rounded-full">
+            <div className="pt-4 w-full sm:w-auto">
+              <Button asChild size="lg" className="w-full sm:w-auto bg-accent text-accent-foreground hover:bg-white px-8 md:px-12 h-12 md:h-14 font-bold uppercase tracking-[0.2em] text-xs md:text-sm shadow-[0_20px_50px_rgba(0,0,0,0.4)] hover:scale-105 transition-all rounded-full">
                 <Link href="/donate">Support Our Mission</Link>
               </Button>
             </div>
