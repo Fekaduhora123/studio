@@ -126,7 +126,7 @@ export default function Home() {
                     <p className="text-primary font-headline font-bold text-xs md:text-lg lg:text-xl italic leading-relaxed drop-shadow-sm">
                       "isaan dhugaa waa'ee waaqayyoo diddiiraniiru waqayyoon isa hundumaa uume dhisanii uumamaaf sagadanii ,hojjetaniif .waaqayyoo garuu bara baraan galateeffamaa dha"
                     </p>
-                    <p className="text-accent text-base md:text-xl font-black uppercase tracking-widest mt-4 drop-shadow-sm">AMEEN</p>
+                    <p className="text-accent text-base md:text-xl font-black uppercase tracking-widest mt-4 drop-shadow-sm animate-pulse-slow">AMEEN</p>
                   </div>
                 </div>
               </div>
