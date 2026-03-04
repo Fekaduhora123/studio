@@ -74,7 +74,7 @@ export default function Home() {
                 src={exteriorImage.imageUrl}
                 alt="Mugher Full Gospel Church Exterior"
                 fill
-                className="object-cover"
+                className="object-cover animate-dropDownLeft"
                 priority
                 data-ai-hint="church exterior"
               />
@@ -88,10 +88,10 @@ export default function Home() {
               <Badge className="mb-6 bg-accent text-accent-foreground font-bold tracking-[0.2em] uppercase text-[10px] md:text-xs px-4 py-1 animate-fadeInText-title">
                 Growing Together in Faith
               </Badge>
-              <h1 className="text-4xl md:text-7xl lg:text-8xl font-headline font-bold tracking-tighter text-white uppercase animate-fadeInText-title leading-[0.9] md:leading-[1.1]">
+              <h1 className="text-3xl md:text-5xl lg:text-6xl font-headline font-bold tracking-tighter text-white uppercase animate-fadeInText-title leading-[1] md:leading-[1.1]">
                 MUGHER <br className="hidden md:block" /> <span className="text-accent">FULL GOSPEL</span> CHURCH
               </h1>
-              <p className="mt-8 text-slate-200 text-sm md:text-xl leading-relaxed max-w-[700px] mx-auto animate-fadeInText-subtitle px-4 font-medium opacity-90">
+              <p className="mt-8 text-slate-200 text-sm md:text-lg leading-relaxed max-w-[700px] mx-auto animate-fadeInText-subtitle px-4 font-medium opacity-90">
                 A community where faith meets action. SanctuaryLink ensures transparency and secure contribution tracking for every member of our church family.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 pt-10 justify-center animate-fadeInText-subtitle">
