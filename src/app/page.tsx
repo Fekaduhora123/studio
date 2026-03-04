@@ -66,7 +66,7 @@ export default function Home() {
         </nav>
       </header>
       <main className="flex-1">
-        {/* Premium Full Viewport Hero Section with Diagonal Drop-Down */}
+        {/* Premium Full Viewport Hero Section with Light Airy Content */}
         <section className="relative w-full h-[100svh] overflow-hidden flex items-center justify-center">
           {exteriorImage && (
             <div className="absolute inset-0 z-0">
@@ -80,25 +80,25 @@ export default function Home() {
               />
             </div>
           )}
-          {/* Dark Overlay for depth */}
-          <div className="absolute inset-0 bg-black/65 z-10" />
+          {/* Light Overlay for airy feel */}
+          <div className="absolute inset-0 bg-white/30 z-10" />
           
           <div className="container relative z-20 px-4 md:px-6 flex flex-col items-center justify-center">
-            <div className="animate-dropDownLeft bg-black/40 backdrop-blur-md p-8 md:p-12 text-center rounded-3xl border border-white/10 shadow-[0_35px_60px_-15px_rgba(0,0,0,0.6)] max-w-4xl w-full">
-              <Badge className="mb-4 bg-accent text-accent-foreground font-bold tracking-[0.2em] uppercase text-[9px] md:text-xs px-4 py-1 animate-fadeInText-title">
+            <div className="animate-dropDownLeft bg-white/95 backdrop-blur-xl p-8 md:p-12 text-center rounded-[3rem] border border-primary/10 shadow-[0_35px_80px_-15px_rgba(0,0,0,0.15)] max-w-4xl w-full">
+              <Badge className="mb-4 bg-accent text-accent-foreground font-bold tracking-[0.2em] uppercase text-[9px] md:text-xs px-4 py-1 animate-fadeInText-title shadow-sm">
                 Growing Together in Faith
               </Badge>
-              <h1 className="text-xl md:text-3xl lg:text-4xl font-headline font-bold tracking-tighter text-white uppercase animate-fadeInText-title leading-[1.1] md:leading-[1.2]">
+              <h1 className="text-xl md:text-3xl lg:text-4xl font-headline font-bold tracking-tighter text-primary uppercase animate-fadeInText-title leading-[1.1] md:leading-[1.2]">
                 MUGHER <br className="hidden md:block" /> <span className="text-accent">FULL GOSPEL</span> CHURCH
               </h1>
-              <p className="mt-6 text-slate-200 text-xs md:text-base leading-relaxed max-w-[650px] mx-auto animate-fadeInText-subtitle px-4 font-medium opacity-90">
+              <p className="mt-6 text-slate-600 text-xs md:text-base leading-relaxed max-w-[650px] mx-auto animate-fadeInText-subtitle px-4 font-medium opacity-90">
                 A community where faith meets action. SanctuaryLink ensures transparency and secure contribution tracking for every member of our church family.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 pt-8 justify-center animate-fadeInText-subtitle">
-                <Button asChild size="lg" className="w-full sm:w-auto px-8 bg-primary font-bold uppercase tracking-widest shadow-2xl hover:scale-105 transition-all h-12 md:h-14 text-[10px] md:text-xs">
+                <Button asChild size="lg" className="w-full sm:w-auto px-8 bg-primary font-bold uppercase tracking-widest shadow-lg hover:scale-105 transition-all h-12 md:h-14 text-[10px] md:text-xs text-white">
                   <Link href="/donate">Secure Donation</Link>
                 </Button>
-                <Button asChild variant="outline" size="lg" className="w-full sm:w-auto px-8 border-white text-white hover:bg-white/10 font-bold uppercase tracking-widest hover:scale-105 transition-all h-12 md:h-14 text-[10px] md:text-xs">
+                <Button asChild variant="outline" size="lg" className="w-full sm:w-auto px-8 border-primary text-primary hover:bg-primary/5 font-bold uppercase tracking-widest hover:scale-105 transition-all h-12 md:h-14 text-[10px] md:text-xs">
                   <Link href="#events">Upcoming Fellowship</Link>
                 </Button>
               </div>
@@ -106,7 +106,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Designed Sanctuary Section with dropping scripture overlay */}
+        {/* Designed Sanctuary Section with dropping scripture overlay (Light Theme) */}
         <section id="sanctuary" className="w-full py-16 md:py-24 bg-white border-b overflow-hidden">
           <div className="container px-4 md:px-6 mx-auto">
             <div className="grid gap-12 lg:grid-cols-2 items-center">
@@ -120,13 +120,13 @@ export default function Home() {
                     data-ai-hint={sanctuaryImage.imageHint}
                   />
                 )}
-                {/* Oromo Scripture Drop Down Animation Overlay */}
-                <div className="absolute inset-0 bg-black/60 flex items-center justify-center p-6 md:p-12 text-center backdrop-blur-[2px]">
+                {/* Oromo Scripture Drop Down Animation Overlay (Light/Glass) */}
+                <div className="absolute inset-0 bg-white/70 flex items-center justify-center p-6 md:p-12 text-center backdrop-blur-[4px]">
                   <div className="animate-dropDown space-y-4">
-                    <p className="text-white font-headline font-bold text-xs md:text-lg lg:text-xl italic leading-relaxed drop-shadow-2xl">
+                    <p className="text-primary font-headline font-bold text-xs md:text-lg lg:text-xl italic leading-relaxed drop-shadow-sm">
                       "isaan dhugaa waa'ee waaqayyoo diddiiraniiru waqayyoon isa hundumaa uume dhisanii uumamaaf sagadanii ,hojjetaniif .waaqayyoo garuu bara baraan galateeffamaa dha"
                     </p>
-                    <p className="text-accent text-base md:text-xl font-black uppercase tracking-widest mt-4">AMEEN</p>
+                    <p className="text-accent text-base md:text-xl font-black uppercase tracking-widest mt-4 drop-shadow-sm">AMEEN</p>
                   </div>
                 </div>
               </div>
@@ -291,7 +291,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* High-Impact Final CTA */}
+        {/* High-Impact Final CTA (Bright Accent) */}
         <section className="w-full py-16 md:py-24 bg-primary text-white overflow-hidden relative">
           <div className="container px-4 md:px-6 mx-auto flex flex-col items-center space-y-8 text-center relative z-10">
             <div className="bg-white/15 p-4 md:p-6 rounded-full backdrop-blur-xl border border-white/20 animate-pulse-slow shadow-2xl">
