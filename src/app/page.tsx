@@ -74,7 +74,7 @@ export default function Home() {
                 src={exteriorImage.imageUrl}
                 alt="Mugher Full Gospel Church Exterior"
                 fill
-                className="object-cover animate-dropDownLeft"
+                className="object-cover object-left animate-dropDownLeft"
                 priority
                 data-ai-hint="church exterior"
               />
