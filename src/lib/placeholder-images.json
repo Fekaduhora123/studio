@@ -2,9 +2,9 @@
   "placeholderImages": [
     {
       "id": "hero-church",
-      "description": "The main sanctuary of Mugher Full Gospel Church.",
-      "imageUrl": "https://i.ibb.co/s9m16vxQ/photo-2026-03-03-15-35-35.jpg",
-      "imageHint": "church sanctuary"
+      "description": "An opened Holy Bible resting on a wooden surface, symbolizing faith and wisdom.",
+      "imageUrl": "https://images.unsplash.com/photo-1504052434569-70ad581654b9?q=80&w=1080&auto=format&fit=crop",
+      "imageHint": "open bible"
     },
     {
       "id": "church-sanctuary",
