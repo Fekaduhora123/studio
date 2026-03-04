@@ -42,7 +42,7 @@ export default function Home() {
   const { data: events, loading } = useCollection(eventsQuery);
 
   return (
-    <div className="flex flex-col min-h-screen font-body text-slate-900 overflow-x-hidden">
+    <div className="flex flex-col min-h-screen font-body text-slate-900 overflow-x-hidden bg-background">
       <header className="px-4 lg:px-6 h-16 md:h-20 flex items-center border-b bg-white/95 backdrop-blur-md sticky top-0 z-50">
         <Link className="flex items-center justify-center space-x-2" href="/">
           <Church className="h-5 w-5 md:h-6 md:w-6 text-primary" />
@@ -80,7 +80,7 @@ export default function Home() {
               />
             </div>
           )}
-          {/* Light Overlay for airy feel */}
+          {/* Light Airy Overlay */}
           <div className="absolute inset-0 bg-white/30 z-10" />
           
           <div className="container relative z-20 px-4 md:px-6 flex flex-col items-center">
@@ -91,7 +91,7 @@ export default function Home() {
               <h1 className="text-xl md:text-3xl lg:text-4xl font-headline font-bold tracking-tighter text-primary uppercase animate-fadeInText-title leading-[1.1] md:leading-[1.2]">
                 MUGHER <br className="hidden md:block" /> <span className="text-accent">FULL GOSPEL</span> CHURCH
               </h1>
-              <p className="mt-6 text-slate-600 text-xs md:text-base leading-relaxed max-w-[650px] mx-auto animate-fadeInText-subtitle px-4 font-medium opacity-90">
+              <p className="mt-6 text-slate-600 text-[10px] md:text-base leading-relaxed max-w-[650px] mx-auto animate-fadeInText-subtitle px-4 font-medium opacity-90">
                 A community where faith meets action. SanctuaryLink ensures transparency and secure contribution tracking for every member of our church family.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 pt-8 justify-center animate-fadeInText-subtitle">
@@ -121,9 +121,9 @@ export default function Home() {
                   />
                 )}
                 {/* Oromo Scripture Drop Down Animation Overlay (Light/Glass) */}
-                <div className="absolute inset-0 bg-white/70 flex items-center justify-center p-6 md:p-12 text-center backdrop-blur-[4px]">
+                <div className="absolute inset-0 bg-white/75 flex items-center justify-center p-6 md:p-12 text-center backdrop-blur-[4px]">
                   <div className="animate-dropDown space-y-4">
-                    <p className="text-primary font-headline font-bold text-xs md:text-lg lg:text-xl italic leading-relaxed drop-shadow-sm">
+                    <p className="text-primary font-headline font-bold text-[10px] md:text-lg lg:text-xl italic leading-relaxed drop-shadow-sm">
                       "isaan dhugaa waa'ee waaqayyoo diddiiraniiru waqayyoon isa hundumaa uume dhisanii uumamaaf sagadanii ,hojjetaniif .waaqayyoo garuu bara baraan galateeffamaa dha"
                     </p>
                     <p className="text-accent text-base md:text-xl font-black uppercase tracking-widest mt-4 drop-shadow-sm animate-pulse-slow">AMEEN</p>
@@ -297,7 +297,7 @@ export default function Home() {
             <div className="bg-white/15 p-4 md:p-6 rounded-full backdrop-blur-xl border border-white/20 animate-pulse-slow shadow-2xl">
               <ShieldCheck className="h-10 w-10 md:h-14 md:w-14 text-accent" />
             </div>
-            <h2 className="text-3xl md:text-5xl font-headline font-bold tracking-tighter uppercase leading-[0.9] md:leading-[1]">Trust Through <br /> <span className="text-accent">Transparency</span></h2>
+            <h2 className="text-2xl md:text-4xl lg:text-5xl font-headline font-bold tracking-tighter uppercase leading-[0.9] md:leading-[1]">Trust Through <br /> <span className="text-accent">Transparency</span></h2>
             <p className="max-w-[650px] text-primary-foreground/90 text-[10px] md:text-base leading-relaxed px-4 font-medium italic">
               "Every contribution at MUGHER FULL GOSPEL CHURCH is verified and handled with the highest integrity."
             </p>
