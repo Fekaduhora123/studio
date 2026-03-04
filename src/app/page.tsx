@@ -67,7 +67,7 @@ export default function Home() {
         </nav>
       </header>
       <main className="flex-1">
-        {/* Premium Full Viewport Hero Section with Content at the Bottom */}
+        {/* Cinema-Style Hero Section with Content at the Bottom */}
         <section className="relative w-full h-[100svh] overflow-hidden flex items-end justify-center pb-12 md:pb-20">
           {exteriorImage && (
             <div className="absolute inset-0 z-0">
@@ -82,7 +82,7 @@ export default function Home() {
             </div>
           )}
           {/* Light Airy Overlay */}
-          <div className="absolute inset-0 bg-white/30 z-10" />
+          <div className="absolute inset-0 bg-white/20 z-10" />
           
           <div className="container relative z-20 px-4 md:px-6 flex flex-col items-center">
             <div className="animate-dropDownLeft bg-white/95 backdrop-blur-xl p-8 md:p-12 text-center rounded-[3rem] border border-primary/10 shadow-[0_35px_80px_-15px_rgba(0,0,0,0.15)] max-w-4xl w-full">
@@ -148,7 +148,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Dynamic Events Grid with responsive scaling */}
+        {/* Dynamic Events Grid */}
         <section id="events" className="w-full py-16 md:py-24 bg-muted/40">
           <div className="container px-4 md:px-6 mx-auto">
             <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12 md:mb-16">
@@ -251,7 +251,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* High-Contrast Management Integrity Section */}
+        {/* Management Integrity Section */}
         <section id="features" className="w-full py-16 md:py-24 bg-white">
           <div className="container px-4 md:px-6 mx-auto">
             <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12 md:mb-16">
@@ -292,7 +292,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* High-Impact Final CTA (Bright Accent) */}
+        {/* Final CTA Section */}
         <section className="w-full py-16 md:py-24 bg-primary text-white overflow-hidden relative">
           <div className="container px-4 md:px-6 mx-auto flex flex-col items-center space-y-8 text-center relative z-10">
             <div className="bg-white/15 p-4 md:p-6 rounded-full backdrop-blur-xl border border-white/20 animate-pulse-slow shadow-2xl">
