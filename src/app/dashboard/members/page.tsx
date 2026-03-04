@@ -159,7 +159,7 @@ export default function MembersPage() {
     const memberRef = doc(firestore, 'members', id);
     deleteDoc(memberRef).catch(async (err) => {
       const permissionError = new FirestorePermissionError({
-        path: eventRef.path,
+        path: memberRef.path,
         operation: 'delete',
       } satisfies SecurityRuleContext);
       errorEmitter.emit('permission-error', permissionError);
@@ -209,52 +209,52 @@ export default function MembersPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div className="space-y-6 w-full max-w-full overflow-hidden">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 px-1">
         <div className="text-center sm:text-left">
-          <h1 className="text-2xl md:text-3xl font-headline font-bold text-primary uppercase tracking-tight">Congregation</h1>
-          <p className="text-muted-foreground font-medium text-xs md:text-sm">Manage church membership data and demographic insights.</p>
+          <h1 className="text-2xl md:text-4xl font-headline font-bold text-primary uppercase tracking-tight">Congregation</h1>
+          <p className="text-muted-foreground font-medium text-xs md:text-sm">Comprehensive membership ledger and demographic insights.</p>
         </div>
         <div className="flex justify-center sm:justify-end gap-2">
-          <Button variant="outline" className="hidden sm:flex gap-2 font-bold uppercase text-[10px] tracking-widest h-9">
-            <Download className="h-4 w-4" /> Export
+          <Button variant="outline" className="hidden sm:flex gap-2 font-bold uppercase text-[10px] tracking-widest h-10 border-primary/20">
+            <Download className="h-4 w-4" /> Export Ledger
           </Button>
           <Dialog open={isDialogOpen} onOpenChange={(open) => {
             setIsDialogOpen(open);
             if (!open) setEditingMember(null);
           }}>
             <DialogTrigger asChild>
-              <Button className="gap-2 bg-primary font-bold uppercase text-[10px] tracking-widest h-9">
-                <Plus className="h-4 w-4" /> Add Member
+              <Button className="gap-2 bg-primary font-bold uppercase text-[10px] tracking-widest h-10 shadow-lg">
+                <Plus className="h-4 w-4" /> Register Member
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-[95vw] sm:max-w-2xl rounded-xl">
+            <DialogContent className="max-w-[95vw] sm:max-w-4xl rounded-2xl border-none shadow-2xl">
               <DialogHeader>
-                <DialogTitle className="text-xl font-headline font-bold text-primary uppercase tracking-tight">
-                  {editingMember ? 'Edit Profile' : 'Register Member'}
+                <DialogTitle className="text-2xl font-headline font-bold text-primary uppercase tracking-tight">
+                  {editingMember ? 'Update Member Profile' : 'New Member Registration'}
                 </DialogTitle>
               </DialogHeader>
               <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 pt-4 max-h-[75vh] overflow-y-auto px-1">
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 pt-4 max-h-[80vh] overflow-y-auto px-2">
                   <FormField
                     control={form.control}
                     name="name"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-[10px] font-bold uppercase tracking-wider">Full Name</FormLabel>
-                        <FormControl><Input placeholder="Full name" {...field} /></FormControl>
+                        <FormLabel className="text-[10px] font-bold uppercase tracking-wider">Full Legal Name</FormLabel>
+                        <FormControl><Input placeholder="Enter full name" className="h-12 text-sm" {...field} /></FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <FormField
                       control={form.control}
                       name="email"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-[10px] font-bold uppercase tracking-wider">Email (Optional)</FormLabel>
-                          <FormControl><Input type="email" placeholder="email@address.com" {...field} /></FormControl>
+                          <FormLabel className="text-[10px] font-bold uppercase tracking-wider">Email Address (Optional)</FormLabel>
+                          <FormControl><Input type="email" placeholder="email@address.com" className="h-12 text-sm" {...field} /></FormControl>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -264,24 +264,24 @@ export default function MembersPage() {
                       name="phone"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-[10px] font-bold uppercase tracking-wider">Phone Number</FormLabel>
-                          <FormControl><Input placeholder="+251 ..." {...field} /></FormControl>
+                          <FormLabel className="text-[10px] font-bold uppercase tracking-wider">Primary Phone Number</FormLabel>
+                          <FormControl><Input placeholder="+251 ..." className="h-12 text-sm" {...field} /></FormControl>
                           <FormMessage />
                         </FormItem>
                       )}
                     />
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <FormField
                       control={form.control}
                       name="gender"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-[10px] font-bold uppercase tracking-wider">Gender</FormLabel>
+                          <FormLabel className="text-[10px] font-bold uppercase tracking-wider">Gender Orientation</FormLabel>
                           <Select onValueChange={field.onChange} defaultValue={field.value}>
                             <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Gender" />
+                              <SelectTrigger className="h-12">
+                                <SelectValue placeholder="Select Gender" />
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
@@ -301,8 +301,8 @@ export default function MembersPage() {
                           <FormLabel className="text-[10px] font-bold uppercase tracking-wider">Marital Status</FormLabel>
                           <Select onValueChange={field.onChange} defaultValue={field.value}>
                             <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Status" />
+                              <SelectTrigger className="h-12">
+                                <SelectValue placeholder="Select Status" />
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
@@ -315,14 +315,14 @@ export default function MembersPage() {
                       )}
                     />
                   </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <FormField
                       control={form.control}
                       name="group"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-[10px] font-bold uppercase tracking-wider">Ministry/Group</FormLabel>
-                          <FormControl><Input placeholder="e.g. Choir" {...field} /></FormControl>
+                          <FormLabel className="text-[10px] font-bold uppercase tracking-wider">Assigned Ministry / Group</FormLabel>
+                          <FormControl><Input placeholder="e.g. Choir, Outreach, Youth" className="h-12 text-sm" {...field} /></FormControl>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -335,8 +335,8 @@ export default function MembersPage() {
                           <FormLabel className="text-[10px] font-bold uppercase tracking-wider">Membership Status</FormLabel>
                           <Select onValueChange={field.onChange} defaultValue={field.value}>
                             <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Status" />
+                              <SelectTrigger className="h-12">
+                                <SelectValue placeholder="Current Status" />
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
@@ -349,9 +349,9 @@ export default function MembersPage() {
                       )}
                     />
                   </div>
-                  <DialogFooter className="pt-4">
-                    <Button type="submit" className="w-full bg-primary font-bold uppercase text-[10px] tracking-widest h-11">
-                      {editingMember ? 'Update Profile' : 'Register Member'}
+                  <DialogFooter className="pt-6">
+                    <Button type="submit" className="w-full bg-primary font-bold uppercase text-xs tracking-widest h-14 shadow-xl">
+                      {editingMember ? 'Save Profile Changes' : 'Confirm Registration'}
                     </Button>
                   </DialogFooter>
                 </form>
@@ -361,169 +361,179 @@ export default function MembersPage() {
         </div>
       </div>
 
-      <div className="grid gap-3 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7">
+      <div className="grid gap-3 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 px-1">
         <Card className="border-none shadow-sm bg-primary text-white col-span-2 sm:col-span-1">
-          <CardHeader className="p-3 pb-0 flex flex-row items-center justify-between space-y-0">
-            <CardTitle className="text-[9px] md:text-[10px] font-bold uppercase tracking-widest opacity-80">Total Members</CardTitle>
-            <Users className="h-3 w-3 opacity-60" />
+          <CardHeader className="p-4 pb-0 flex flex-row items-center justify-between space-y-0">
+            <CardTitle className="text-[9px] md:text-[10px] font-bold uppercase tracking-widest opacity-80">Total Population</CardTitle>
+            <Users className="h-4 w-4 opacity-60" />
           </CardHeader>
-          <CardContent className="p-3 pt-1">
-            <div className="text-xl md:text-2xl font-bold">{stats.total}</div>
+          <CardContent className="p-4 pt-1">
+            <div className="text-2xl md:text-3xl font-bold">{stats.total}</div>
           </CardContent>
         </Card>
         <Card className="border-none shadow-sm bg-blue-50/50 border-blue-100">
-          <CardHeader className="p-3 pb-0 flex flex-row items-center justify-between space-y-0">
+          <CardHeader className="p-4 pb-0 flex flex-row items-center justify-between space-y-0">
             <CardTitle className="text-[9px] md:text-[10px] font-bold text-blue-700 uppercase tracking-widest">Male</CardTitle>
-            <User className="h-3 w-3 text-blue-400" />
+            <User className="h-4 w-4 text-blue-400" />
           </CardHeader>
-          <CardContent className="p-3 pt-1">
-            <div className="text-lg md:text-xl font-bold text-blue-600">{stats.male}</div>
+          <CardContent className="p-4 pt-1">
+            <div className="text-xl md:text-2xl font-bold text-blue-600">{stats.male}</div>
           </CardContent>
         </Card>
         <Card className="border-none shadow-sm bg-rose-50/50 border-rose-100">
-          <CardHeader className="p-3 pb-0 flex flex-row items-center justify-between space-y-0">
+          <CardHeader className="p-4 pb-0 flex flex-row items-center justify-between space-y-0">
             <CardTitle className="text-[9px] md:text-[10px] font-bold text-rose-700 uppercase tracking-widest">Female</CardTitle>
-            <User className="h-3 w-3 text-rose-400" />
+            <User className="h-4 w-4 text-rose-400" />
           </CardHeader>
-          <CardContent className="p-3 pt-1">
-            <div className="text-lg md:text-xl font-bold text-rose-500">{stats.female}</div>
+          <CardContent className="p-4 pt-1">
+            <div className="text-xl md:text-2xl font-bold text-rose-500">{stats.female}</div>
           </CardContent>
         </Card>
         <Card className="border-none shadow-sm bg-emerald-50/50 border-emerald-100">
-          <CardHeader className="p-3 pb-0 flex flex-row items-center justify-between space-y-0">
+          <CardHeader className="p-4 pb-0 flex flex-row items-center justify-between space-y-0">
             <CardTitle className="text-[9px] md:text-[10px] font-bold text-emerald-700 uppercase tracking-widest">Married</CardTitle>
-            <Heart className="h-3 w-3 text-emerald-400" />
+            <Heart className="h-4 w-4 text-emerald-400" />
           </CardHeader>
-          <CardContent className="p-3 pt-1">
-            <div className="text-lg md:text-xl font-bold text-emerald-700">{stats.married}</div>
+          <CardContent className="p-4 pt-1">
+            <div className="text-xl md:text-2xl font-bold text-emerald-700">{stats.married}</div>
           </CardContent>
         </Card>
         <Card className="border-none shadow-sm bg-slate-50 border-slate-100">
-          <CardHeader className="p-3 pb-0 flex flex-row items-center justify-between space-y-0">
-            <CardTitle className="text-[9px] md:text-[10px] font-bold text-slate-700 uppercase tracking-widest">Single</CardTitle>
-            <Heart className="h-3 w-3 text-slate-300" />
+          <CardHeader className="p-4 pb-0 flex flex-row items-center justify-between space-y-0">
+            <CardTitle className="text-[9px] md:text-[10px] font-bold text-slate-700 uppercase tracking-widest">Unmarried</CardTitle>
+            <Heart className="h-4 w-4 text-slate-300" />
           </CardHeader>
-          <CardContent className="p-3 pt-1">
-            <div className="text-lg md:text-xl font-bold text-slate-700">{stats.unmarried}</div>
+          <CardContent className="p-4 pt-1">
+            <div className="text-xl md:text-2xl font-bold text-slate-700">{stats.unmarried}</div>
           </CardContent>
         </Card>
         <Card className="border-none shadow-sm bg-amber-50/50 border-amber-100">
-          <CardHeader className="p-3 pb-0 flex flex-row items-center justify-between space-y-0">
-            <CardTitle className="text-[9px] md:text-[10px] font-bold text-amber-700 uppercase tracking-widest">Ministries</CardTitle>
-            <Church className="h-3 w-3 text-amber-400" />
+          <CardHeader className="p-4 pb-0 flex flex-row items-center justify-between space-y-0">
+            <CardTitle className="text-[9px] md:text-[10px] font-bold text-amber-700 uppercase tracking-widest">Ministry Grp</CardTitle>
+            <Church className="h-4 w-4 text-amber-400" />
           </CardHeader>
-          <CardContent className="p-3 pt-1">
-            <div className="text-lg md:text-xl font-bold text-amber-700">{stats.ministries}</div>
+          <CardContent className="p-4 pt-1">
+            <div className="text-xl md:text-2xl font-bold text-amber-700">{stats.ministries}</div>
           </CardContent>
         </Card>
         <Card className="border-none shadow-sm bg-accent/10 border-accent/20">
-          <CardHeader className="p-3 pb-0 flex flex-row items-center justify-between space-y-0">
+          <CardHeader className="p-4 pb-0 flex flex-row items-center justify-between space-y-0">
             <CardTitle className="text-[9px] md:text-[10px] font-bold text-accent-foreground uppercase tracking-widest">Active</CardTitle>
-            <Activity className="h-3 w-3 text-accent" />
+            <Activity className="h-4 w-4 text-accent" />
           </CardHeader>
-          <CardContent className="p-3 pt-1">
-            <div className="text-lg md:text-xl font-bold text-accent-foreground">{stats.active}</div>
+          <CardContent className="p-4 pt-1">
+            <div className="text-xl md:text-2xl font-bold text-accent-foreground">{stats.active}</div>
           </CardContent>
         </Card>
       </div>
 
-      <Card className="border-none shadow-sm overflow-hidden">
+      <Card className="border-none shadow-2xl overflow-hidden w-full">
         <CardHeader className="bg-white/50 border-b p-4 md:p-6">
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-            <div className="relative flex-1 lg:max-w-sm">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <div className="relative flex-1 lg:max-w-md">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
               <Input 
-                placeholder="Search name or phone..." 
-                className="pl-9 bg-white border-primary/10 h-10 text-xs"
+                placeholder="Search by name, phone or ministry..." 
+                className="pl-10 bg-white border-primary/10 h-11 text-sm shadow-inner"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
             <div className="flex items-center gap-2">
-              <Button variant="outline" size="sm" className="w-full sm:w-auto gap-2 font-bold uppercase text-[10px] border-primary/20 h-9">
-                <Filter className="h-4 w-4" /> Filter
+              <Button variant="outline" size="sm" className="w-full sm:w-auto gap-2 font-bold uppercase text-[10px] border-primary/20 h-11 bg-white">
+                <Filter className="h-4 w-4" /> Comprehensive Filter
               </Button>
             </div>
           </div>
         </CardHeader>
-        <CardContent className="p-0 overflow-x-auto">
-          <Table className="min-w-[800px] lg:min-w-full">
-            <TableHeader className="bg-muted/30">
-              <TableRow>
-                <TableHead className="text-[10px] font-bold uppercase tracking-wider">Member Name</TableHead>
-                <TableHead className="text-[10px] font-bold uppercase tracking-wider">Phone Number</TableHead>
-                <TableHead className="text-[10px] font-bold uppercase tracking-wider">Gender</TableHead>
-                <TableHead className="text-[10px] font-bold uppercase tracking-wider">Marital</TableHead>
-                <TableHead className="text-[10px] font-bold uppercase tracking-wider">Ministry</TableHead>
-                <TableHead className="text-[10px] font-bold uppercase tracking-wider">Joined</TableHead>
-                <TableHead className="text-[10px] font-bold uppercase tracking-wider">Status</TableHead>
-                <TableHead className="text-right text-[10px] font-bold uppercase tracking-wider">Action</TableHead>
+        <CardContent className="p-0 overflow-x-auto w-full">
+          <Table className="min-w-full">
+            <TableHeader className="bg-muted/40">
+              <TableRow className="hover:bg-transparent">
+                <TableHead className="text-[11px] font-bold uppercase tracking-wider py-5 pl-6">Profile</TableHead>
+                <TableHead className="text-[11px] font-bold uppercase tracking-wider">Contact</TableHead>
+                <TableHead className="text-[11px] font-bold uppercase tracking-wider">Gender</TableHead>
+                <TableHead className="text-[11px] font-bold uppercase tracking-wider">Marital</TableHead>
+                <TableHead className="text-[11px] font-bold uppercase tracking-wider">Ministry</TableHead>
+                <TableHead className="text-[11px] font-bold uppercase tracking-wider">Member Since</TableHead>
+                <TableHead className="text-[11px] font-bold uppercase tracking-wider">Status</TableHead>
+                <TableHead className="text-right text-[11px] font-bold uppercase tracking-wider pr-6">Management</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {loading ? (
                 <TableRow>
-                  <TableCell colSpan={8} className="text-center py-12 italic text-muted-foreground text-xs">Loading database...</TableCell>
+                  <TableCell colSpan={8} className="text-center py-20 italic text-muted-foreground text-sm">
+                    <div className="flex flex-col items-center gap-4">
+                      <Loader2 className="h-10 w-10 animate-spin text-primary/30" />
+                      Initializing Ledger...
+                    </div>
+                  </TableCell>
                 </TableRow>
               ) : filteredMembers?.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={8} className="text-center py-12 text-muted-foreground italic text-xs">No members found.</TableCell>
+                  <TableCell colSpan={8} className="text-center py-20 text-muted-foreground italic text-sm">
+                    No matching records found in the database.
+                  </TableCell>
                 </TableRow>
               ) : filteredMembers?.map((member) => (
-                <TableRow key={member.id} className="hover:bg-muted/10 transition-colors group">
-                  <TableCell>
-                    <div className="flex items-center gap-3">
-                      <Avatar className="h-8 w-8 border-2 border-primary/5">
+                <TableRow key={member.id} className="hover:bg-primary/5 transition-all group border-b border-primary/5">
+                  <TableCell className="pl-6 py-4">
+                    <div className="flex items-center gap-4">
+                      <Avatar className="h-10 w-10 border-2 border-primary/10 shadow-sm transition-transform group-hover:scale-110">
                         <AvatarImage src={`https://picsum.photos/seed/${member.id}/100/100`} />
-                        <AvatarFallback>{member.name.split(' ').map((n: string) => n[0]).join('')}</AvatarFallback>
+                        <AvatarFallback className="bg-primary/5 text-primary font-bold">{member.name.split(' ').map((n: string) => n[0]).join('')}</AvatarFallback>
                       </Avatar>
-                      <span className="font-bold text-xs text-primary truncate max-w-[120px]">{member.name}</span>
+                      <div className="flex flex-col">
+                        <span className="font-bold text-sm text-primary tracking-tight">{member.name}</span>
+                        <span className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold opacity-60">ID: {member.id.substring(0, 8)}</span>
+                      </div>
                     </div>
                   </TableCell>
                   <TableCell>
-                    <span className="text-[10px] font-mono font-medium text-muted-foreground">{member.phone || 'N/A'}</span>
+                    <span className="text-xs font-mono font-bold text-slate-600 tracking-tight">{member.phone || 'N/A'}</span>
                   </TableCell>
                   <TableCell>
-                    <Badge variant="outline" className={`text-[9px] font-bold uppercase tracking-tighter ${member.gender === 'Male' ? 'border-blue-200 text-blue-600 bg-blue-50' : 'border-rose-200 text-rose-500 bg-rose-50'}`}>
+                    <Badge variant="outline" className={`text-[9px] font-bold uppercase tracking-tighter h-6 ${member.gender === 'Male' ? 'border-blue-200 text-blue-600 bg-blue-50/50' : 'border-rose-200 text-rose-500 bg-rose-50/50'}`}>
                       {member.gender || 'Male'}
                     </Badge>
                   </TableCell>
                   <TableCell>
-                    <Badge variant="outline" className="text-[9px] font-bold uppercase tracking-tighter border-muted text-muted-foreground">
+                    <Badge variant="outline" className="text-[9px] font-bold uppercase tracking-tighter border-slate-200 text-slate-500 bg-slate-50/50 h-6">
                       {member.maritalStatus || 'Unmarried'}
                     </Badge>
                   </TableCell>
                   <TableCell>
-                    <Badge variant="secondary" className="bg-primary/5 text-primary border-primary/10 text-[9px] font-bold uppercase tracking-tighter">
+                    <Badge variant="secondary" className="bg-primary/5 text-primary border-primary/10 text-[9px] font-bold uppercase tracking-tighter h-6">
                       {member.group || 'General'}
                     </Badge>
                   </TableCell>
-                  <TableCell className="text-[10px] text-muted-foreground font-medium whitespace-nowrap">
-                    {member.joinedDate?.toDate ? format(member.joinedDate.toDate(), 'MMM d, yyyy') : 'Recently'}
+                  <TableCell className="text-[11px] text-muted-foreground font-bold whitespace-nowrap opacity-80">
+                    {member.joinedDate?.toDate ? format(member.joinedDate.toDate(), 'MMM d, yyyy') : 'Recent Registry'}
                   </TableCell>
                   <TableCell>
-                    <Badge className={`text-[9px] font-bold uppercase tracking-widest ${member.status === 'Active' ? 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20' : 'bg-muted text-muted-foreground'}`}>
+                    <Badge className={`text-[9px] font-bold uppercase tracking-widest px-3 h-6 ${member.status === 'Active' ? 'bg-emerald-500 text-white shadow-emerald-200' : 'bg-slate-200 text-slate-500'}`}>
                       {member.status}
                     </Badge>
                   </TableCell>
-                  <TableCell className="text-right">
+                  <TableCell className="text-right pr-6">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-primary">
-                          <MoreVertical className="h-4 w-4" />
+                        <Button variant="ghost" size="icon" className="h-9 w-9 text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-full transition-colors">
+                          <MoreVertical className="h-5 w-5" />
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="w-48">
-                        <DropdownMenuLabel className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Member Profile</DropdownMenuLabel>
+                      <DropdownMenuContent align="end" className="w-56 rounded-xl shadow-2xl border-none">
+                        <DropdownMenuLabel className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground p-3 pb-2">Member Profile Management</DropdownMenuLabel>
                         <DropdownMenuItem onClick={() => {
                           setEditingMember(member);
                           setIsDialogOpen(true);
-                        }} className="text-xs font-bold">
-                          <Edit className="h-4 w-4 mr-2 text-blue-600" /> Edit Member
+                        }} className="text-sm font-bold p-3">
+                          <Edit className="h-4 w-4 mr-3 text-blue-600" /> Edit Full Profile
                         </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem className="text-xs font-bold text-rose-700 focus:bg-rose-50" onClick={() => handleDelete(member.id)}>
-                          <Trash2 className="h-4 w-4 mr-2" /> Delete Member
+                        <DropdownMenuSeparator className="bg-primary/5" />
+                        <DropdownMenuItem className="text-sm font-bold text-rose-700 focus:bg-rose-50 p-3" onClick={() => handleDelete(member.id)}>
+                          <Trash2 className="h-4 w-4 mr-3" /> Deactivate / Purge Member
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
