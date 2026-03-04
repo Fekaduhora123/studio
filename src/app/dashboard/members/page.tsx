@@ -57,7 +57,7 @@ import { format } from 'date-fns';
 const memberSchema = z.object({
   name: z.string().min(2, "Name is required"),
   email: z.string().email("Invalid email").optional().or(z.literal('')),
-  phone: z.string().optional().or(z.literal('')),
+  phone: z.string().min(5, "Phone is required"),
   group: z.string().optional().or(z.literal('')),
   status: z.enum(["Active", "Inactive"]).default("Active"),
   gender: z.enum(["Male", "Female"]).default("Male"),
@@ -159,7 +159,7 @@ export default function MembersPage() {
     const memberRef = doc(firestore, 'members', id);
     deleteDoc(memberRef).catch(async (err) => {
       const permissionError = new FirestorePermissionError({
-        path: memberRef.path,
+        path: eventRef.path,
         operation: 'delete',
       } satisfies SecurityRuleContext);
       errorEmitter.emit('permission-error', permissionError);
@@ -168,7 +168,7 @@ export default function MembersPage() {
 
   const filteredMembers = members?.filter(member => 
     member.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    member.email?.toLowerCase().includes(searchTerm.toLowerCase())
+    member.phone?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const stats = React.useMemo(() => {
@@ -253,7 +253,7 @@ export default function MembersPage() {
                       name="email"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-[10px] font-bold uppercase tracking-wider">Email</FormLabel>
+                          <FormLabel className="text-[10px] font-bold uppercase tracking-wider">Email (Optional)</FormLabel>
                           <FormControl><Input type="email" placeholder="email@address.com" {...field} /></FormControl>
                           <FormMessage />
                         </FormItem>
@@ -264,7 +264,7 @@ export default function MembersPage() {
                       name="phone"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-[10px] font-bold uppercase tracking-wider">Phone</FormLabel>
+                          <FormLabel className="text-[10px] font-bold uppercase tracking-wider">Phone Number</FormLabel>
                           <FormControl><Input placeholder="+251 ..." {...field} /></FormControl>
                           <FormMessage />
                         </FormItem>
@@ -298,7 +298,7 @@ export default function MembersPage() {
                       name="maritalStatus"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-[10px] font-bold uppercase tracking-wider">Marital</FormLabel>
+                          <FormLabel className="text-[10px] font-bold uppercase tracking-wider">Marital Status</FormLabel>
                           <Select onValueChange={field.onChange} defaultValue={field.value}>
                             <FormControl>
                               <SelectTrigger>
@@ -332,7 +332,7 @@ export default function MembersPage() {
                       name="status"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-[10px] font-bold uppercase tracking-wider">Status</FormLabel>
+                          <FormLabel className="text-[10px] font-bold uppercase tracking-wider">Membership Status</FormLabel>
                           <Select onValueChange={field.onChange} defaultValue={field.value}>
                             <FormControl>
                               <SelectTrigger>
@@ -364,7 +364,7 @@ export default function MembersPage() {
       <div className="grid gap-3 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7">
         <Card className="border-none shadow-sm bg-primary text-white col-span-2 sm:col-span-1">
           <CardHeader className="p-3 pb-0 flex flex-row items-center justify-between space-y-0">
-            <CardTitle className="text-[9px] md:text-[10px] font-bold uppercase tracking-widest opacity-80">Members</CardTitle>
+            <CardTitle className="text-[9px] md:text-[10px] font-bold uppercase tracking-widest opacity-80">Total Members</CardTitle>
             <Users className="h-3 w-3 opacity-60" />
           </CardHeader>
           <CardContent className="p-3 pt-1">
@@ -433,7 +433,7 @@ export default function MembersPage() {
             <div className="relative flex-1 lg:max-w-sm">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input 
-                placeholder="Search name or email..." 
+                placeholder="Search name or phone..." 
                 className="pl-9 bg-white border-primary/10 h-10 text-xs"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -450,7 +450,8 @@ export default function MembersPage() {
           <Table className="min-w-[800px] lg:min-w-full">
             <TableHeader className="bg-muted/30">
               <TableRow>
-                <TableHead className="text-[10px] font-bold uppercase tracking-wider">Member</TableHead>
+                <TableHead className="text-[10px] font-bold uppercase tracking-wider">Member Name</TableHead>
+                <TableHead className="text-[10px] font-bold uppercase tracking-wider">Phone Number</TableHead>
                 <TableHead className="text-[10px] font-bold uppercase tracking-wider">Gender</TableHead>
                 <TableHead className="text-[10px] font-bold uppercase tracking-wider">Marital</TableHead>
                 <TableHead className="text-[10px] font-bold uppercase tracking-wider">Ministry</TableHead>
@@ -462,11 +463,11 @@ export default function MembersPage() {
             <TableBody>
               {loading ? (
                 <TableRow>
-                  <TableCell colSpan={7} className="text-center py-12 italic text-muted-foreground text-xs">Loading database...</TableCell>
+                  <TableCell colSpan={8} className="text-center py-12 italic text-muted-foreground text-xs">Loading database...</TableCell>
                 </TableRow>
               ) : filteredMembers?.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={7} className="text-center py-12 text-muted-foreground italic text-xs">No members found.</TableCell>
+                  <TableCell colSpan={8} className="text-center py-12 text-muted-foreground italic text-xs">No members found.</TableCell>
                 </TableRow>
               ) : filteredMembers?.map((member) => (
                 <TableRow key={member.id} className="hover:bg-muted/10 transition-colors group">
@@ -476,11 +477,11 @@ export default function MembersPage() {
                         <AvatarImage src={`https://picsum.photos/seed/${member.id}/100/100`} />
                         <AvatarFallback>{member.name.split(' ').map((n: string) => n[0]).join('')}</AvatarFallback>
                       </Avatar>
-                      <div className="flex flex-col">
-                        <span className="font-bold text-xs text-primary truncate max-w-[120px]">{member.name}</span>
-                        <span className="text-[9px] text-muted-foreground font-medium truncate max-w-[120px]">{member.email || member.phone || 'No contact'}</span>
-                      </div>
+                      <span className="font-bold text-xs text-primary truncate max-w-[120px]">{member.name}</span>
                     </div>
+                  </TableCell>
+                  <TableCell>
+                    <span className="text-[10px] font-mono font-medium text-muted-foreground">{member.phone || 'N/A'}</span>
                   </TableCell>
                   <TableCell>
                     <Badge variant="outline" className={`text-[9px] font-bold uppercase tracking-tighter ${member.gender === 'Male' ? 'border-blue-200 text-blue-600 bg-blue-50' : 'border-rose-200 text-rose-500 bg-rose-50'}`}>
