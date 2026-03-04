@@ -37,7 +37,8 @@ import {
   Users,
   User,
   Heart,
-  Activity
+  Activity,
+  Church
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -171,18 +172,32 @@ export default function MembersPage() {
   );
 
   const stats = React.useMemo(() => {
-    const initial = { total: 0, active: 0, male: 0, female: 0, married: 0, unmarried: 0 };
-    if (!members) return initial;
+    const initial = { 
+      total: 0, 
+      active: 0, 
+      male: 0, 
+      female: 0, 
+      married: 0, 
+      unmarried: 0,
+      ministries: new Set<string>()
+    };
+    if (!members) return { ...initial, ministries: 0 };
 
-    return members.reduce((acc, curr) => {
+    const result = members.reduce((acc, curr) => {
       acc.total++;
       if (curr.status === 'Active') acc.active++;
       if (curr.gender === 'Male') acc.male++;
       if (curr.gender === 'Female') acc.female++;
       if (curr.maritalStatus === 'Married') acc.married++;
       if (curr.maritalStatus === 'Unmarried') acc.unmarried++;
+      if (curr.group) acc.ministries.add(curr.group);
       return acc;
     }, initial);
+
+    return {
+      ...result,
+      ministries: result.ministries.size
+    };
   }, [members]);
 
   if (!mounted) {
@@ -346,10 +361,10 @@ export default function MembersPage() {
         </div>
       </div>
 
-      <div className="grid gap-3 grid-cols-2 sm:grid-cols-3 md:grid-cols-6">
+      <div className="grid gap-3 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7">
         <Card className="border-none shadow-sm bg-primary text-white col-span-2 sm:col-span-1">
           <CardHeader className="p-3 pb-0 flex flex-row items-center justify-between space-y-0">
-            <CardTitle className="text-[9px] md:text-[10px] font-bold uppercase tracking-widest opacity-80">Total</CardTitle>
+            <CardTitle className="text-[9px] md:text-[10px] font-bold uppercase tracking-widest opacity-80">Members</CardTitle>
             <Users className="h-3 w-3 opacity-60" />
           </CardHeader>
           <CardContent className="p-3 pt-1">
@@ -385,11 +400,20 @@ export default function MembersPage() {
         </Card>
         <Card className="border-none shadow-sm bg-slate-50 border-slate-100">
           <CardHeader className="p-3 pb-0 flex flex-row items-center justify-between space-y-0">
-            <CardTitle className="text-[9px] md:text-[10px] font-bold text-slate-700 uppercase tracking-widest">Unmarried</CardTitle>
+            <CardTitle className="text-[9px] md:text-[10px] font-bold text-slate-700 uppercase tracking-widest">Single</CardTitle>
             <Heart className="h-3 w-3 text-slate-300" />
           </CardHeader>
           <CardContent className="p-3 pt-1">
             <div className="text-lg md:text-xl font-bold text-slate-700">{stats.unmarried}</div>
+          </CardContent>
+        </Card>
+        <Card className="border-none shadow-sm bg-amber-50/50 border-amber-100">
+          <CardHeader className="p-3 pb-0 flex flex-row items-center justify-between space-y-0">
+            <CardTitle className="text-[9px] md:text-[10px] font-bold text-amber-700 uppercase tracking-widest">Ministries</CardTitle>
+            <Church className="h-3 w-3 text-amber-400" />
+          </CardHeader>
+          <CardContent className="p-3 pt-1">
+            <div className="text-lg md:text-xl font-bold text-amber-700">{stats.ministries}</div>
           </CardContent>
         </Card>
         <Card className="border-none shadow-sm bg-accent/10 border-accent/20">
