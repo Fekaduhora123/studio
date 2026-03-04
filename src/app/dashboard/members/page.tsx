@@ -33,7 +33,11 @@ import {
   Download,
   Loader2,
   Trash2,
-  Edit
+  Edit,
+  Users,
+  User,
+  Heart,
+  Activity
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -167,7 +171,7 @@ export default function MembersPage() {
   );
 
   const stats = React.useMemo(() => {
-    const initial = { total: 0, active: 0, male: 0, female: 0, married: 0 };
+    const initial = { total: 0, active: 0, male: 0, female: 0, married: 0, unmarried: 0 };
     if (!members) return initial;
 
     return members.reduce((acc, curr) => {
@@ -176,6 +180,7 @@ export default function MembersPage() {
       if (curr.gender === 'Male') acc.male++;
       if (curr.gender === 'Female') acc.female++;
       if (curr.maritalStatus === 'Married') acc.married++;
+      if (curr.maritalStatus === 'Unmarried') acc.unmarried++;
       return acc;
     }, initial);
   }, [members]);
@@ -341,42 +346,56 @@ export default function MembersPage() {
         </div>
       </div>
 
-      <div className="grid gap-3 grid-cols-2 sm:grid-cols-3 md:grid-cols-5">
+      <div className="grid gap-3 grid-cols-2 sm:grid-cols-3 md:grid-cols-6">
         <Card className="border-none shadow-sm bg-primary text-white col-span-2 sm:col-span-1">
-          <CardHeader className="p-3 pb-0">
+          <CardHeader className="p-3 pb-0 flex flex-row items-center justify-between space-y-0">
             <CardTitle className="text-[9px] md:text-[10px] font-bold uppercase tracking-widest opacity-80">Total</CardTitle>
+            <Users className="h-3 w-3 opacity-60" />
           </CardHeader>
           <CardContent className="p-3 pt-1">
             <div className="text-xl md:text-2xl font-bold">{stats.total}</div>
           </CardContent>
         </Card>
-        <Card className="border-none shadow-sm">
-          <CardHeader className="p-3 pb-0">
-            <CardTitle className="text-[9px] md:text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Male</CardTitle>
+        <Card className="border-none shadow-sm bg-blue-50/50 border-blue-100">
+          <CardHeader className="p-3 pb-0 flex flex-row items-center justify-between space-y-0">
+            <CardTitle className="text-[9px] md:text-[10px] font-bold text-blue-700 uppercase tracking-widest">Male</CardTitle>
+            <User className="h-3 w-3 text-blue-400" />
           </CardHeader>
           <CardContent className="p-3 pt-1">
             <div className="text-lg md:text-xl font-bold text-blue-600">{stats.male}</div>
           </CardContent>
         </Card>
-        <Card className="border-none shadow-sm">
-          <CardHeader className="p-3 pb-0">
-            <CardTitle className="text-[9px] md:text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Female</CardTitle>
+        <Card className="border-none shadow-sm bg-rose-50/50 border-rose-100">
+          <CardHeader className="p-3 pb-0 flex flex-row items-center justify-between space-y-0">
+            <CardTitle className="text-[9px] md:text-[10px] font-bold text-rose-700 uppercase tracking-widest">Female</CardTitle>
+            <User className="h-3 w-3 text-rose-400" />
           </CardHeader>
           <CardContent className="p-3 pt-1">
             <div className="text-lg md:text-xl font-bold text-rose-500">{stats.female}</div>
           </CardContent>
         </Card>
-        <Card className="border-none shadow-sm bg-emerald-50">
-          <CardHeader className="p-3 pb-0">
+        <Card className="border-none shadow-sm bg-emerald-50/50 border-emerald-100">
+          <CardHeader className="p-3 pb-0 flex flex-row items-center justify-between space-y-0">
             <CardTitle className="text-[9px] md:text-[10px] font-bold text-emerald-700 uppercase tracking-widest">Married</CardTitle>
+            <Heart className="h-3 w-3 text-emerald-400" />
           </CardHeader>
           <CardContent className="p-3 pt-1">
             <div className="text-lg md:text-xl font-bold text-emerald-700">{stats.married}</div>
           </CardContent>
         </Card>
-        <Card className="border-none shadow-sm bg-accent/10">
-          <CardHeader className="p-3 pb-0">
+        <Card className="border-none shadow-sm bg-slate-50 border-slate-100">
+          <CardHeader className="p-3 pb-0 flex flex-row items-center justify-between space-y-0">
+            <CardTitle className="text-[9px] md:text-[10px] font-bold text-slate-700 uppercase tracking-widest">Unmarried</CardTitle>
+            <Heart className="h-3 w-3 text-slate-300" />
+          </CardHeader>
+          <CardContent className="p-3 pt-1">
+            <div className="text-lg md:text-xl font-bold text-slate-700">{stats.unmarried}</div>
+          </CardContent>
+        </Card>
+        <Card className="border-none shadow-sm bg-accent/10 border-accent/20">
+          <CardHeader className="p-3 pb-0 flex flex-row items-center justify-between space-y-0">
             <CardTitle className="text-[9px] md:text-[10px] font-bold text-accent-foreground uppercase tracking-widest">Active</CardTitle>
+            <Activity className="h-3 w-3 text-accent" />
           </CardHeader>
           <CardContent className="p-3 pt-1">
             <div className="text-lg md:text-xl font-bold text-accent-foreground">{stats.active}</div>
