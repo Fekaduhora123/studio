@@ -106,7 +106,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Designed Sanctuary Section with dropping scripture overlay (Light Theme) */}
+        {/* Designed Sanctuary Section (Bible Image) */}
         <section id="sanctuary" className="w-full py-16 md:py-24 bg-white border-b overflow-hidden">
           <div className="container px-4 md:px-6 mx-auto">
             <div className="grid gap-12 lg:grid-cols-2 items-center">
@@ -120,10 +120,10 @@ export default function Home() {
                     data-ai-hint={sanctuaryImage.imageHint}
                   />
                 )}
-                {/* AMEEN animated overlay */}
-                <div className="absolute inset-0 bg-white/75 flex items-center justify-center p-6 md:p-12 text-center backdrop-blur-[4px]">
+                {/* AMEEN animated overlay - Reduced opacity to make image visible */}
+                <div className="absolute inset-0 bg-black/10 flex items-center justify-center p-6 md:p-12 text-center backdrop-blur-[1px]">
                   <div className="animate-dropDown">
-                    <p className="text-accent text-base md:text-xl font-black uppercase tracking-widest drop-shadow-sm animate-pulse-slow">AMEEN</p>
+                    <p className="text-white text-base md:text-3xl font-black uppercase tracking-[0.5em] drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)] animate-pulse-slow">AMEEN</p>
                   </div>
                 </div>
               </div>
