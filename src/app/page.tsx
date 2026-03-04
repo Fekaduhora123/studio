@@ -46,16 +46,16 @@ export default function Home() {
       <header className="px-4 lg:px-6 h-16 md:h-20 flex items-center border-b bg-white/95 backdrop-blur-md sticky top-0 z-50">
         <Link className="flex items-center justify-center space-x-2" href="/">
           <Church className="h-5 w-5 md:h-6 md:w-6 text-primary" />
-          <span className="font-headline font-bold text-sm md:text-xl tracking-tight uppercase">MUGHER FULL GOSPEL</span>
+          <span className="font-headline font-bold text-sm md:text-xl tracking-tight uppercase text-primary">MUGHER FULL GOSPEL</span>
         </Link>
         <nav className="ml-auto flex gap-2 sm:gap-6 items-center">
-          <Link className="hidden lg:inline-flex text-sm font-medium hover:text-primary transition-colors" href="#features">
+          <Link className="hidden lg:inline-flex text-xs font-bold uppercase tracking-widest hover:text-primary transition-colors" href="#features">
             Features
           </Link>
-          <Link className="hidden sm:inline-flex text-sm font-medium hover:text-primary transition-colors" href="#events">
+          <Link className="hidden sm:inline-flex text-xs font-bold uppercase tracking-widest hover:text-primary transition-colors" href="#events">
             Events
           </Link>
-          <Link className="text-sm font-medium hover:text-primary transition-colors" href="/donate">
+          <Link className="text-xs font-bold uppercase tracking-widest hover:text-primary transition-colors" href="/donate">
             Donate
           </Link>
           <div className="border-l pl-2 sm:pl-4 ml-1 sm:ml-2">
@@ -66,7 +66,7 @@ export default function Home() {
         </nav>
       </header>
       <main className="flex-1">
-        {/* Full Viewport Hero Section with Diagonal Drop-Down */}
+        {/* Premium Full Viewport Hero Section with Diagonal Drop-Down */}
         <section className="relative w-full h-[100svh] overflow-hidden flex items-center justify-center">
           {exteriorImage && (
             <div className="absolute inset-0 z-0">
@@ -106,7 +106,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Our Sanctuary Section with dropping scripture overlay */}
+        {/* Designed Sanctuary Section with dropping scripture overlay */}
         <section id="sanctuary" className="w-full py-16 md:py-32 bg-white border-b overflow-hidden">
           <div className="container px-4 md:px-6 mx-auto">
             <div className="grid gap-12 lg:grid-cols-2 items-center">
@@ -147,7 +147,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Dynamic Events Grid */}
+        {/* Dynamic Events Grid with responsive scaling */}
         <section id="events" className="w-full py-16 md:py-32 bg-muted/40">
           <div className="container px-4 md:px-6 mx-auto">
             <div className="flex flex-col items-center justify-center space-y-4 text-center mb-16 md:mb-24">
@@ -192,7 +192,7 @@ export default function Home() {
                         {event.description}
                       </p>
                     </CardContent>
-                    <CardFooter className="pt-0 pb-8">
+                    <CardFooter className="pt-0 pb-8 px-6">
                       {mounted && (
                         <Dialog>
                           <DialogTrigger asChild>
@@ -250,7 +250,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Feature Highlights Section */}
+        {/* High-Contrast Management Integrity Section */}
         <section id="features" className="w-full py-16 md:py-32 bg-white">
           <div className="container px-4 md:px-6 mx-auto">
             <div className="flex flex-col items-center justify-center space-y-4 text-center mb-16 md:mb-24">
@@ -264,7 +264,7 @@ export default function Home() {
                 <div className="bg-primary/10 p-5 rounded-3xl group-hover:bg-primary transition-colors">
                   <Users className="h-10 w-10 md:h-12 md:w-12 text-primary group-hover:text-white" />
                 </div>
-                <h3 className="text-xl md:text-2xl font-bold font-headline uppercase tracking-tight">Congregation</h3>
+                <h3 className="text-xl md:text-2xl font-bold font-headline uppercase tracking-tight text-primary">Congregation</h3>
                 <p className="text-xs md:text-sm text-muted-foreground text-center leading-relaxed font-medium">
                   Centralized data management for our growing family, ministries, and outreach programs.
                 </p>
@@ -273,7 +273,7 @@ export default function Home() {
                 <div className="bg-accent/10 p-5 rounded-3xl group-hover:bg-accent transition-colors">
                   <Heart className="h-10 w-10 md:h-12 md:w-12 text-accent group-hover:text-white" />
                 </div>
-                <h3 className="text-xl md:text-2xl font-bold font-headline uppercase tracking-tight">Contributions</h3>
+                <h3 className="text-xl md:text-2xl font-bold font-headline uppercase tracking-tight text-primary">Contributions</h3>
                 <p className="text-xs md:text-sm text-muted-foreground text-center leading-relaxed font-medium">
                   Transparent tracking for Tithes and Offerings with secure AI-powered verification.
                 </p>
@@ -282,7 +282,7 @@ export default function Home() {
                 <div className="bg-primary/10 p-5 rounded-3xl group-hover:bg-primary transition-colors">
                   <PieChart className="h-10 w-10 md:h-12 md:w-12 text-primary group-hover:text-white" />
                 </div>
-                <h3 className="text-xl md:text-2xl font-bold font-headline uppercase tracking-tight">Analytics</h3>
+                <h3 className="text-xl md:text-2xl font-bold font-headline uppercase tracking-tight text-primary">Analytics</h3>
                 <p className="text-xs md:text-sm text-muted-foreground text-center leading-relaxed font-medium">
                   Data-driven insights that help church leadership make prayerful, informed decisions.
                 </p>
@@ -291,7 +291,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Final CTA with high impact */}
+        {/* High-Impact Final CTA */}
         <section className="w-full py-24 md:py-48 bg-primary text-white overflow-hidden relative">
           <div className="container px-4 md:px-6 mx-auto flex flex-col items-center space-y-10 text-center relative z-10">
             <div className="bg-white/15 p-6 md:p-10 rounded-full backdrop-blur-xl border border-white/20 animate-pulse-slow shadow-2xl">
@@ -307,7 +307,7 @@ export default function Home() {
               </Button>
             </div>
           </div>
-          {/* Enhanced decorative background elements */}
+          {/* Decorative background gradients */}
           <div className="absolute top-0 left-0 w-64 md:w-[600px] h-64 md:h-[600px] bg-accent/20 rounded-full blur-[120px] md:blur-[180px] -translate-x-1/3 -translate-y-1/3 opacity-40" />
           <div className="absolute bottom-0 right-0 w-96 md:w-[800px] h-96 md:h-[800px] bg-accent/15 rounded-full blur-[140px] md:blur-[220px] translate-x-1/4 translate-y-1/4 opacity-40" />
         </section>
