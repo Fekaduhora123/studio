@@ -66,8 +66,8 @@ export default function Home() {
         </nav>
       </header>
       <main className="flex-1">
-        {/* Premium Full Viewport Hero Section with Light Airy Content */}
-        <section className="relative w-full h-[100svh] overflow-hidden flex items-center justify-center">
+        {/* Premium Full Viewport Hero Section with Content at the Bottom */}
+        <section className="relative w-full h-[100svh] overflow-hidden flex items-end justify-center pb-12 md:pb-20">
           {exteriorImage && (
             <div className="absolute inset-0 z-0">
               <Image
@@ -83,7 +83,7 @@ export default function Home() {
           {/* Light Overlay for airy feel */}
           <div className="absolute inset-0 bg-white/30 z-10" />
           
-          <div className="container relative z-20 px-4 md:px-6 flex flex-col items-center justify-center">
+          <div className="container relative z-20 px-4 md:px-6 flex flex-col items-center">
             <div className="animate-dropDownLeft bg-white/95 backdrop-blur-xl p-8 md:p-12 text-center rounded-[3rem] border border-primary/10 shadow-[0_35px_80px_-15px_rgba(0,0,0,0.15)] max-w-4xl w-full">
               <Badge className="mb-4 bg-accent text-accent-foreground font-bold tracking-[0.2em] uppercase text-[9px] md:text-xs px-4 py-1 animate-fadeInText-title shadow-sm">
                 Growing Together in Faith
