@@ -1,4 +1,3 @@
-
 'use client';
 
 import * as React from 'react';
@@ -121,13 +120,10 @@ export default function Home() {
                     data-ai-hint={sanctuaryImage.imageHint}
                   />
                 )}
-                {/* Oromo Scripture Drop Down Animation Overlay (Light/Glass) */}
+                {/* AMEEN animated overlay */}
                 <div className="absolute inset-0 bg-white/75 flex items-center justify-center p-6 md:p-12 text-center backdrop-blur-[4px]">
-                  <div className="animate-dropDown space-y-4">
-                    <p className="text-primary font-headline font-bold text-[10px] md:text-lg lg:text-xl italic leading-relaxed drop-shadow-sm">
-                      "isaan dhugaa waa'ee waaqayyoo diddiiraniiru waqayyoon isa hundumaa uume dhisanii uumamaaf sagadanii ,hojjetaniif .waaqayyoo garuu bara baraan galateeffamaa dha"
-                    </p>
-                    <p className="text-accent text-base md:text-xl font-black uppercase tracking-widest mt-4 drop-shadow-sm animate-pulse-slow">AMEEN</p>
+                  <div className="animate-dropDown">
+                    <p className="text-accent text-base md:text-xl font-black uppercase tracking-widest drop-shadow-sm animate-pulse-slow">AMEEN</p>
                   </div>
                 </div>
               </div>
