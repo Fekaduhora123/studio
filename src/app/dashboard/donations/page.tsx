@@ -1,3 +1,4 @@
+
 "use client";
 
 import * as React from 'react';
@@ -192,11 +193,11 @@ export default function DonationsPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="text-center sm:text-left">
           <h1 className="text-2xl md:text-3xl font-headline font-bold text-primary uppercase tracking-tight">Income Control</h1>
-          <p className="text-muted-foreground font-medium text-xs md:text-sm">MUGHER FULL GOSPEL CHURCH verified categorization.</p>
+          <p className="text-muted-foreground font-medium text-[10px] md:text-sm">MUGHER FULL GOSPEL CHURCH verified categorization.</p>
         </div>
         <div className="flex justify-center sm:justify-end gap-2">
           <Button variant="outline" className="gap-2 font-bold uppercase text-[9px] md:text-[10px] tracking-widest border-primary/20 h-9">
-            <Download className="h-4 w-4" /> Export CSV
+            <Download className="h-4 w-4" /> Export
           </Button>
         </div>
       </div>
@@ -207,7 +208,7 @@ export default function DonationsPage() {
             <CardTitle className="text-[8px] md:text-[9px] font-bold uppercase tracking-widest opacity-80">Net Balance</CardTitle>
           </CardHeader>
           <CardContent className="p-3 pt-0 md:p-4 md:pt-0">
-            <div className="text-xl md:text-2xl font-bold">${stats.total.toLocaleString()}</div>
+            <div className="text-lg md:text-2xl font-bold">${stats.total.toLocaleString()}</div>
           </CardContent>
         </Card>
         {['Tithe', 'Offering', 'GoFund', 'Building Purposes'].map((category) => (
@@ -219,12 +220,9 @@ export default function DonationsPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="p-3 pt-0 md:p-4 md:pt-0">
-              <div className={`text-base md:text-xl font-bold truncate ${category === 'Building Purposes' && stats['Building Purposes'] < 0 ? 'text-rose-600' : ''}`}>
+              <div className={`text-sm md:text-xl font-bold truncate ${category === 'Building Purposes' && stats['Building Purposes'] < 0 ? 'text-rose-600' : ''}`}>
                 ${(stats as any)[category].toLocaleString()}
               </div>
-              {category === 'Building Purposes' && (
-                <p className="text-[7px] md:text-[8px] text-muted-foreground uppercase font-bold mt-1">Expenses Net</p>
-              )}
             </CardContent>
           </Card>
         ))}
@@ -233,7 +231,7 @@ export default function DonationsPage() {
             <CardTitle className="text-[8px] md:text-[9px] font-bold text-amber-700 uppercase tracking-widest">Pending</CardTitle>
           </CardHeader>
           <CardContent className="p-3 pt-0 md:p-4 md:pt-0">
-            <div className="text-base md:text-xl font-bold text-amber-700">{stats.pending}</div>
+            <div className="text-sm md:text-xl font-bold text-amber-700">{stats.pending}</div>
           </CardContent>
         </Card>
       </div>
@@ -244,8 +242,8 @@ export default function DonationsPage() {
             <div className="relative flex-1 lg:max-w-sm">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input 
-                placeholder="Search donor or reference..." 
-                className="pl-9 bg-white border-primary/10 h-10 text-xs"
+                placeholder="Search donor..." 
+                className="pl-9 bg-white border-primary/10 h-10 text-[10px] md:text-xs"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
@@ -322,7 +320,7 @@ export default function DonationsPage() {
                     <div className="flex items-center justify-center gap-1">
                       <Dialog>
                         <DialogTrigger asChild>
-                          <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-primary hover:bg-primary/5">
+                          <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-primary">
                             <Eye className="h-4 w-4" />
                           </Button>
                         </DialogTrigger>
@@ -331,7 +329,7 @@ export default function DonationsPage() {
                             <DialogTitle className="text-xl font-headline font-bold text-primary uppercase tracking-tight">Verification Details</DialogTitle>
                           </DialogHeader>
                           <div className="space-y-6 pt-4 max-h-[80vh] overflow-y-auto px-1">
-                            <div className="grid grid-cols-2 gap-4 text-sm bg-muted/20 p-4 rounded-lg border border-primary/5">
+                            <div className="grid grid-cols-2 gap-4 text-xs bg-muted/20 p-4 rounded-lg border border-primary/5">
                               <div className="space-y-1">
                                 <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-wider">Donor</p>
                                 <p className="font-bold text-primary text-xs truncate">{donation.donorName || 'Unidentified'}</p>
@@ -393,7 +391,7 @@ export default function DonationsPage() {
                               </div>
                             </div>
                             
-                            <div className="flex flex-col gap-2 pt-2">
+                            <div className="flex flex-col gap-2 pt-2 pb-4">
                               {donation.status === 'pending' && (
                                 <div className="flex flex-col sm:flex-row gap-2">
                                   <Button 
@@ -473,7 +471,7 @@ export default function DonationsPage() {
               <TableFooter className="bg-muted/50 border-t-2 border-primary/10">
                 <TableRow>
                   <TableCell colSpan={5} className="text-right font-bold uppercase tracking-wider text-[10px] text-muted-foreground">
-                    Filtered Subtotal
+                    Subtotal
                   </TableCell>
                   <TableCell className="text-right font-bold text-emerald-600 tabular-nums text-xs">
                     ${filteredTotal.toLocaleString()}

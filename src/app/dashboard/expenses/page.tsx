@@ -1,3 +1,4 @@
+
 "use client";
 
 import * as React from 'react';
@@ -111,7 +112,7 @@ export default function ExpensesPage() {
     updateDoc(expenseRef, { status }).then(() => {
       toast({
         title: `Expense ${status}`,
-        description: `The expenditure has been marked as ${status.toLowerCase()}.`,
+        description: `Marked as ${status.toLowerCase()}.`,
       });
     }).catch(async (err) => {
       const permissionError = new FirestorePermissionError({
@@ -135,7 +136,7 @@ export default function ExpensesPage() {
     if (editingExpense) {
       const expenseRef = doc(firestore, 'expenses', editingExpense.id);
       updateDoc(expenseRef, expenseData).then(() => {
-        toast({ title: "Expense Updated", description: "The record has been successfully updated." });
+        toast({ title: "Expense Updated" });
       }).catch(async (err) => {
         const permissionError = new FirestorePermissionError({
           path: expenseRef.path,
@@ -146,7 +147,7 @@ export default function ExpensesPage() {
       });
     } else {
       addDoc(collection(firestore, 'expenses'), expenseData).then(() => {
-        toast({ title: "Expense Recorded", description: "The expenditure has been logged." });
+        toast({ title: "Expense Recorded" });
       }).catch(async (err) => {
         const permissionError = new FirestorePermissionError({
           path: 'expenses',
@@ -162,10 +163,10 @@ export default function ExpensesPage() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!firestore || !confirm('Are you sure you want to delete this expense record?')) return;
+    if (!firestore || !confirm('Permanently delete this record?')) return;
     const expenseRef = doc(firestore, 'expenses', id);
     deleteDoc(expenseRef).then(() => {
-      toast({ title: "Expense Deleted", description: "The record was removed permanently." });
+      toast({ title: "Expense Deleted" });
     }).catch(async (err) => {
       const permissionError = new FirestorePermissionError({
         path: expenseRef.path,
@@ -213,18 +214,15 @@ export default function ExpensesPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="text-center sm:text-left">
           <h1 className="text-2xl md:text-3xl font-headline font-bold text-primary uppercase tracking-tight">Financial Outflow</h1>
-          <p className="text-muted-foreground font-medium text-xs md:text-sm">MUGHER FULL GOSPEL CHURCH expenditure monitoring.</p>
+          <p className="text-muted-foreground font-medium text-[10px] md:text-sm">MUGHER FULL GOSPEL CHURCH expenditure monitoring.</p>
         </div>
         <div className="flex justify-center sm:justify-end gap-2">
-          <Button variant="outline" className="hidden sm:flex gap-2 font-bold uppercase text-[10px] tracking-widest border-primary/20 h-9">
-            <Download className="h-4 w-4" /> Export CSV
-          </Button>
           <Dialog open={isDialogOpen} onOpenChange={(open) => {
             setIsDialogOpen(open);
             if (!open) setEditingExpense(null);
           }}>
             <DialogTrigger asChild>
-              <Button className="gap-2 bg-primary font-bold uppercase text-[10px] tracking-widest h-9">
+              <Button className="gap-2 bg-primary font-bold uppercase text-[9px] md:text-[10px] tracking-widest h-9">
                 <Plus className="h-4 w-4" /> Record
               </Button>
             </DialogTrigger>
@@ -242,7 +240,7 @@ export default function ExpensesPage() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-[10px] font-bold uppercase tracking-wider">Description</FormLabel>
-                        <FormControl><Input placeholder="e.g. Electricity Bill" {...field} /></FormControl>
+                        <FormControl><Input placeholder="e.g. Electricity" {...field} /></FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
@@ -254,7 +252,7 @@ export default function ExpensesPage() {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel className="text-[10px] font-bold uppercase tracking-wider">Category</FormLabel>
-                          <FormControl><Input placeholder="Utility, Salary, etc." {...field} /></FormControl>
+                          <FormControl><Input placeholder="Utility, etc." {...field} /></FormControl>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -271,42 +269,18 @@ export default function ExpensesPage() {
                       )}
                     />
                   </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <FormField
-                      control={form.control}
-                      name="approvedBy"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-[10px] font-bold uppercase tracking-wider">Approved By</FormLabel>
-                          <FormControl><Input placeholder="e.g. Pastor James" {...field} /></FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="status"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-[10px] font-bold uppercase tracking-wider">Current Status</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select status" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              <SelectItem value="Pending">Pending</SelectItem>
-                              <SelectItem value="Approved">Approved</SelectItem>
-                              <SelectItem value="Rejected">Rejected</SelectItem>
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  <DialogFooter className="pt-4">
+                  <FormField
+                    control={form.control}
+                    name="approvedBy"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-[10px] font-bold uppercase tracking-wider">Approved By</FormLabel>
+                        <FormControl><Input placeholder="Auditor Name" {...field} /></FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <DialogFooter className="pt-4 pb-4">
                     <Button type="submit" className="w-full bg-primary font-bold uppercase text-[10px] tracking-widest h-11">
                       {editingExpense ? 'Update Record' : 'Save Expenditure'}
                     </Button>
@@ -318,29 +292,29 @@ export default function ExpensesPage() {
         </div>
       </div>
 
-      <div className="grid gap-3 grid-cols-1 md:grid-cols-3">
-        <Card className="border-none shadow-sm bg-primary text-white">
-          <CardHeader className="p-4 pb-1 md:pb-2">
-            <CardTitle className="text-[9px] md:text-[10px] font-bold uppercase tracking-widest opacity-80">Total Approved (MTD)</CardTitle>
+      <div className="grid gap-3 grid-cols-2 md:grid-cols-3">
+        <Card className="border-none shadow-sm bg-primary text-white col-span-2 md:col-span-1">
+          <CardHeader className="p-3 pb-1 md:pb-2">
+            <CardTitle className="text-[8px] md:text-[9px] font-bold uppercase tracking-widest opacity-80">Total Outflow (MTD)</CardTitle>
           </CardHeader>
-          <CardContent className="p-4 pt-0">
-            <div className="text-xl md:text-2xl font-bold">ETB {stats.total.toLocaleString()}</div>
+          <CardContent className="p-3 pt-0">
+            <div className="text-lg md:text-2xl font-bold">ETB {stats.total.toLocaleString()}</div>
           </CardContent>
         </Card>
         <Card className="border-none shadow-sm">
-          <CardHeader className="p-4 pb-1 md:pb-2">
-            <CardTitle className="text-[9px] md:text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Top Spending</CardTitle>
+          <CardHeader className="p-3 pb-1 md:pb-2">
+            <CardTitle className="text-[8px] md:text-[9px] font-bold text-muted-foreground uppercase tracking-widest">Top Spending</CardTitle>
           </CardHeader>
-          <CardContent className="p-4 pt-0">
-            <div className="text-lg md:text-xl font-bold text-primary truncate">{stats.topCategory}</div>
+          <CardContent className="p-3 pt-0">
+            <div className="text-sm md:text-xl font-bold text-primary truncate">{stats.topCategory}</div>
           </CardContent>
         </Card>
         <Card className="border-none shadow-sm bg-accent/10">
-          <CardHeader className="p-4 pb-1 md:pb-2">
-            <CardTitle className="text-[9px] md:text-[10px] font-bold text-accent-foreground uppercase tracking-widest">Awaiting Approval</CardTitle>
+          <CardHeader className="p-3 pb-1 md:pb-2">
+            <CardTitle className="text-[8px] md:text-[9px] font-bold text-accent-foreground uppercase tracking-widest">Awaiting</CardTitle>
           </CardHeader>
-          <CardContent className="p-4 pt-0">
-            <div className="text-lg md:text-xl font-bold text-accent-foreground">{stats.pending}</div>
+          <CardContent className="p-3 pt-0">
+            <div className="text-sm md:text-xl font-bold text-accent-foreground">{stats.pending}</div>
           </CardContent>
         </Card>
       </div>
@@ -351,17 +325,15 @@ export default function ExpensesPage() {
             <div className="relative flex-1 lg:max-w-sm">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input 
-                placeholder="Search description..." 
-                className="pl-9 bg-white border-primary/10 h-10 text-xs"
+                placeholder="Search..." 
+                className="pl-9 bg-white border-primary/10 h-10 text-[10px] md:text-xs"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
-            <div className="flex items-center gap-2">
-              <Button variant="outline" size="sm" className="w-full sm:w-auto gap-2 font-bold uppercase text-[9px] md:text-[10px] tracking-widest border-primary/20 h-9">
-                <Filter className="h-4 w-4" /> Filter
-              </Button>
-            </div>
+            <Button variant="outline" size="sm" className="hidden sm:flex gap-2 font-bold uppercase text-[9px] md:text-[10px] tracking-widest border-primary/20 h-9">
+              <Download className="h-4 w-4" /> CSV
+            </Button>
           </div>
         </CardHeader>
         <CardContent className="p-0 overflow-x-auto">
@@ -380,11 +352,11 @@ export default function ExpensesPage() {
             <TableBody>
               {loading ? (
                 <TableRow>
-                  <TableCell colSpan={7} className="text-center py-12 text-muted-foreground text-xs italic">Loading ledger...</TableCell>
+                  <TableCell colSpan={7} className="text-center py-12 text-muted-foreground text-xs italic">Loading ledgers...</TableCell>
                 </TableRow>
               ) : filteredExpenses?.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={7} className="text-center py-12 text-muted-foreground text-xs italic">No expenditures found.</TableCell>
+                  <TableCell colSpan={7} className="text-center py-12 text-muted-foreground text-xs italic">No records found.</TableCell>
                 </TableRow>
               ) : filteredExpenses?.map((expense) => (
                 <TableRow key={expense.id} className="hover:bg-muted/10 group transition-colors">
@@ -413,12 +385,12 @@ export default function ExpensesPage() {
                   <TableCell className="text-right">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-primary">
+                        <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground">
                           <MoreVertical className="h-4 w-4" />
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end" className="w-48">
-                        <DropdownMenuLabel className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground">Expense Action</DropdownMenuLabel>
+                        <DropdownMenuLabel className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground">Action</DropdownMenuLabel>
                         {expense.status === 'Pending' && (
                           <>
                             <DropdownMenuItem 
@@ -433,7 +405,6 @@ export default function ExpensesPage() {
                             >
                               <XCircle className="h-4 w-4 mr-2" /> Reject
                             </DropdownMenuItem>
-                            <DropdownMenuSeparator />
                           </>
                         )}
                         <DropdownMenuItem 
@@ -443,14 +414,14 @@ export default function ExpensesPage() {
                             setIsDialogOpen(true);
                           }}
                         >
-                          <Edit className="h-4 w-4 mr-2" /> Edit Details
+                          <Edit className="h-4 w-4 mr-2" /> Edit
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem 
                           className="text-xs font-bold text-rose-700 focus:bg-rose-50" 
                           onClick={() => handleDelete(expense.id)}
                         >
-                          <Trash2 className="h-4 w-4 mr-2" /> Delete Record
+                          <Trash2 className="h-4 w-4 mr-2" /> Delete
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
