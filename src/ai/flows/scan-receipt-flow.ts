@@ -1,6 +1,7 @@
 'use server';
 /**
  * @fileOverview A Genkit flow for scanning digital banking receipts and QR transaction summaries.
+ * Optimized for mobile banking screenshots including Telebirr and CBE Birr.
  *
  * - scanReceipt - A function that processes a QR/Digital receipt image and extracts transaction details.
  * - ScanReceiptInput - The input type for the scanReceipt function.
@@ -38,18 +39,20 @@ const scanReceiptPrompt = ai.definePrompt({
   input: { schema: ScanReceiptInputSchema },
   output: { schema: ScanReceiptOutputSchema },
   prompt: `You are an expert financial auditor for MUGHER FULL GOSPEL CHURCH. 
-Your task is to scan the provided image (usually a mobile banking screenshot or QR receipt) and extract transaction details.
+Your task is to scan the provided image (usually a mobile banking screenshot like Telebirr, CBE Birr, or a QR receipt) and extract transaction details.
 
-Please analyze the image and extract:
-1. The donor's name (sender).
+Please analyze the image carefully and extract:
+1. The donor's name (the sender/from account).
 2. The exact amount transferred.
-3. The QR Transaction Number / Reference Number (e.g., 'QR Number', 'Ref No', 'Txn ID').
+3. The Reference Number or QR Transaction ID (look for 'Ref No', 'Txn ID', 'Transaction Number', or 'QR Number').
 4. The destination account.
 
 VERIFICATION RULES:
-Set 'isCorrectAccount' to true ONLY if the destination matches:
+Set 'isCorrectAccount' to true ONLY if the destination beneficiary matches:
 - Account: 1000221935978 (or ends in 5978)
 - Beneficiary: MUGHER FULL GOSPEL CHURCH (or variations like MUGHER FULL GOS, MUGHER BEL CHU)
+
+If you see multiple names, look for the 'From' or 'Sender' name for the donorName.
 
 Digital Receipt Image: {{media url=receiptDataUri}}`,
 });

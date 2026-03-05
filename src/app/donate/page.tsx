@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Church, QrCode, CheckCircle2, Loader2, Info, Sparkles, AlertTriangle, ShieldCheck } from 'lucide-react';
+import { Church, QrCode, CheckCircle2, Loader2, Info, Sparkles, AlertTriangle, ShieldCheck, Image as ImageIcon } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import Link from 'next/link';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
@@ -48,6 +48,45 @@ export default function PublicDonatePage() {
     },
   });
 
+  // Client-side image compression helper for mobile devices
+  const compressImage = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (event) => {
+        const img = new Image();
+        img.src = event.target?.result as string;
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const MAX_WIDTH = 1024;
+          const MAX_HEIGHT = 1024;
+          let width = img.width;
+          let height = img.height;
+
+          if (width > height) {
+            if (width > MAX_WIDTH) {
+              height *= MAX_WIDTH / width;
+              width = MAX_WIDTH;
+            }
+          } else {
+            if (height > MAX_HEIGHT) {
+              width *= MAX_HEIGHT / height;
+              height = MAX_HEIGHT;
+            }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx?.drawImage(img, 0, 0, width, height);
+          resolve(canvas.toDataURL('image/jpeg', 0.8));
+        };
+        img.onerror = reject;
+      };
+      reader.onerror = reject;
+    });
+  };
+
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files || files.length === 0) return;
@@ -55,38 +94,35 @@ export default function PublicDonatePage() {
     const file = files[0];
     setScanError(null);
     setIsAiVerified(false);
+    setIsScanning(true);
     
-    const reader = new FileReader();
-    reader.onloadend = async () => {
-      const dataUri = reader.result as string;
+    try {
+      // Compress image before sending to AI to avoid huge payloads and timeouts on mobile
+      const compressedDataUri = await compressImage(file);
       
-      setIsScanning(true);
-      try {
-        const result = await scanReceipt({ receiptDataUri: dataUri });
-        
-        if (!result.isCorrectAccount) {
-          setScanError("Verification Failed: This QR/Digital receipt was not sent to MUGHER FULL GOSPEL CHURCH (Account: 1000221935978).");
-        } else {
-          if (result.donorName) {
-            form.setValue('donorName', result.donorName, { shouldValidate: true });
-          }
-          if (result.amount > 0) {
-            form.setValue('amount', result.amount.toString(), { shouldValidate: true });
-          }
-          if (result.qrNumber) {
-            form.setValue('referenceNumber', result.qrNumber, { shouldValidate: true });
-          }
-          setIsAiVerified(true);
-          if (e.target) e.target.value = ''; 
+      const result = await scanReceipt({ receiptDataUri: compressedDataUri });
+      
+      if (!result.isCorrectAccount) {
+        setScanError("Verification Failed: This receipt was not sent to MUGHER FULL GOSPEL (Account: 1000221935978).");
+      } else {
+        if (result.donorName) {
+          form.setValue('donorName', result.donorName, { shouldValidate: true });
         }
-      } catch (err) {
-        console.error("AI Scan failed", err);
-        setScanError("AI could not read the image. Please enter details manually.");
-      } finally {
-        setIsScanning(false);
+        if (result.amount > 0) {
+          form.setValue('amount', result.amount.toString(), { shouldValidate: true });
+        }
+        if (result.qrNumber) {
+          form.setValue('referenceNumber', result.qrNumber, { shouldValidate: true });
+        }
+        setIsAiVerified(true);
       }
-    };
-    reader.readAsDataURL(file);
+    } catch (err) {
+      console.error("AI Scan failed", err);
+      setScanError("Unable to process the image. Please ensure it's a clear screenshot of your transaction success message.");
+    } finally {
+      setIsScanning(false);
+      if (e.target) e.target.value = ''; 
+    }
   };
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
@@ -131,9 +167,9 @@ export default function PublicDonatePage() {
               <CheckCircle2 className="h-10 w-10 md:h-12 md:w-12 text-emerald-600" />
             </div>
           </div>
-          <CardTitle className="text-xl md:text-2xl font-headline mb-2 text-primary">Verification Logged</CardTitle>
+          <CardTitle className="text-xl md:text-2xl font-headline mb-2 text-primary">Log Recorded</CardTitle>
           <CardDescription className="text-sm md:text-base mb-6">
-            Thank you! Your donation has been recorded. Our finance team will verify the transaction ID.
+            Thank you! Your donation has been logged for audit. Our finance team will verify the transaction reference shortly.
           </CardDescription>
           <div className="bg-muted p-4 rounded-xl mb-8">
             <p className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider mb-1">Reference Number</p>
@@ -152,14 +188,14 @@ export default function PublicDonatePage() {
       <div className="max-w-2xl mx-auto">
         <div className="flex flex-col items-center justify-center gap-2 mb-8 text-center">
           <Church className="h-8 w-8 md:h-10 md:w-10 text-primary" />
-          <h1 className="text-xl md:text-2xl font-headline font-bold text-primary uppercase">MUGHER FULL GOSPEL CHURCH</h1>
+          <h1 className="text-xl md:text-2xl font-headline font-bold text-primary uppercase">MUGHER FULL GOSPEL</h1>
         </div>
 
         <Alert className="mb-6 bg-primary/5 border-primary/20 shadow-sm rounded-xl">
           <Info className="h-5 w-5 text-primary" />
-          <AlertTitle className="text-primary font-bold uppercase tracking-tight text-xs md:text-sm">Official Account</AlertTitle>
+          <AlertTitle className="text-primary font-bold uppercase tracking-tight text-xs md:text-sm text-center">Transfer Account</AlertTitle>
           <AlertDescription className="text-[11px] md:text-sm font-medium leading-relaxed">
-            Please transfer to our verified church account:
+            Please complete your transfer to:
             <span className="block mt-2 p-3 bg-white border rounded-lg font-bold text-base md:text-lg text-primary tracking-widest shadow-inner text-center">
               1000221935978
             </span>
@@ -170,29 +206,29 @@ export default function PublicDonatePage() {
         {scanError && (
           <Alert variant="destructive" className="mb-6 animate-in fade-in slide-in-from-top-2 rounded-xl">
             <AlertTriangle className="h-4 w-4" />
-            <AlertTitle className="text-xs md:text-sm font-bold">Validation Alert</AlertTitle>
+            <AlertTitle className="text-xs md:text-sm font-bold">Verification Warning</AlertTitle>
             <AlertDescription className="text-[10px] md:text-xs">{scanError}</AlertDescription>
           </Alert>
         )}
 
         <Card className="border-none shadow-xl rounded-2xl">
           <CardHeader className="p-6 md:p-8">
-            <CardTitle className="text-lg md:text-xl font-headline text-primary">QR / Reference Verification</CardTitle>
+            <CardTitle className="text-lg md:text-xl font-headline text-primary">Transaction Logging</CardTitle>
             <CardDescription className="text-[11px] md:text-xs">
-              Upload a screenshot of your digital receipt or QR summary. Our AI will automatically extract the QR Number and details.
+              Take a screenshot of your successful transaction and upload it here. Our AI will verify the QR Number automatically.
             </CardDescription>
           </CardHeader>
           <CardContent className="px-6 md:px-8 pb-8">
             <div className="space-y-6">
               <div className="space-y-3">
-                <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Automated QR Number Scan</label>
+                <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Mobile Receipt Scan (AI)</label>
                 <div className={`border-2 border-dashed rounded-xl p-6 md:p-10 flex flex-col items-center justify-center gap-3 transition-all relative ${isAiVerified ? 'bg-emerald-50 border-emerald-200' : 'bg-muted/30 hover:bg-muted/50 border-primary/20'} ${isScanning ? 'opacity-50 pointer-events-none' : ''}`}>
                   {isScanning ? (
                     <div className="flex flex-col items-center gap-3 text-primary text-center">
                       <Loader2 className="h-8 w-8 md:h-10 md:w-10 animate-spin" />
                       <div className="space-y-1">
-                        <p className="text-[11px] md:text-sm font-bold uppercase tracking-widest animate-pulse">Scanning QR Data...</p>
-                        <p className="text-[9px] text-muted-foreground">Extracting Reference ID</p>
+                        <p className="text-[11px] md:text-sm font-bold uppercase tracking-widest animate-pulse">Reading Receipt...</p>
+                        <p className="text-[9px] text-muted-foreground">Optimizing image for scan</p>
                       </div>
                     </div>
                   ) : isAiVerified ? (
@@ -201,8 +237,8 @@ export default function PublicDonatePage() {
                         <ShieldCheck className="h-8 w-8 md:h-10 md:w-10" />
                       </div>
                       <div className="space-y-1">
-                        <p className="text-[11px] md:text-sm font-bold uppercase tracking-widest">QR Verified Secure</p>
-                        <p className="text-[9px] text-muted-foreground italic">Transaction ID extracted</p>
+                        <p className="text-[11px] md:text-sm font-bold uppercase tracking-widest">QR Verification Match</p>
+                        <p className="text-[9px] text-muted-foreground italic">Reference number extracted successfully</p>
                       </div>
                       <Button 
                         variant="outline" 
@@ -214,28 +250,29 @@ export default function PublicDonatePage() {
                           form.reset();
                         }}
                       >
-                        Scan Different Receipt
+                        Scan New Screenshot
                       </Button>
                     </div>
                   ) : (
                     <>
                       <div className="bg-primary/5 p-4 rounded-full">
-                        <QrCode className="h-6 w-6 md:h-8 md:w-8 text-primary/60" />
+                        <ImageIcon className="h-6 w-6 md:h-8 md:w-8 text-primary/60" />
                       </div>
                       <Input
                         type="file"
                         accept="image/*"
+                        capture="environment"
                         onChange={handleFileChange}
                         className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                       />
                       <div className="text-center space-y-1">
                         <p className="text-[11px] md:text-sm font-bold text-muted-foreground">
-                          Upload digital receipt screenshot
+                          Upload Success Screenshot
                         </p>
-                        <p className="text-[9px] text-muted-foreground">Telebirr, CBE Birr, or Banking App</p>
+                        <p className="text-[9px] text-muted-foreground">Telebirr, CBE Birr, or QR Receipt</p>
                       </div>
                       <div className="flex items-center gap-2 text-[9px] bg-primary text-white px-3 py-1 rounded-full font-bold uppercase tracking-widest shadow-sm">
-                        <Sparkles className="h-2.5 w-2.5" /> AI Scan
+                        <Sparkles className="h-2.5 w-2.5" /> AI AUTO-SCAN
                       </div>
                     </>
                   )}
@@ -244,8 +281,8 @@ export default function PublicDonatePage() {
 
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                 <div className="space-y-2">
-                  <label className="text-[10px] font-bold uppercase tracking-wider">Donor Full Name</label>
-                  <Input placeholder="Enter your full name" className="h-12 bg-white rounded-lg text-sm" {...form.register('donorName')} />
+                  <label className="text-[10px] font-bold uppercase tracking-wider">Donor Name</label>
+                  <Input placeholder="Enter sender name" className="h-12 bg-white rounded-lg text-sm" {...form.register('donorName')} />
                   {form.formState.errors.donorName && <p className="text-[10px] text-rose-500">{form.formState.errors.donorName.message}</p>}
                 </div>
                 
@@ -256,7 +293,7 @@ export default function PublicDonatePage() {
                     {form.formState.errors.amount && <p className="text-[10px] text-rose-500">{form.formState.errors.amount.message}</p>}
                   </div>
                   <div className="space-y-2">
-                    <label className="text-[10px] font-bold uppercase tracking-wider">Category</label>
+                    <label className="text-[10px] font-bold uppercase tracking-wider">Donation Type</label>
                     <Select onValueChange={(val) => form.setValue('type', val as any)} defaultValue={form.getValues('type')}>
                       <SelectTrigger className="h-12 bg-white rounded-lg text-sm">
                         <SelectValue placeholder="Select type" />
@@ -273,24 +310,24 @@ export default function PublicDonatePage() {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-[10px] font-bold uppercase tracking-wider">QR / Reference Number</label>
-                  <Input placeholder="e.g. FT240..." className="h-12 bg-white rounded-lg text-sm font-mono" {...form.register('referenceNumber')} />
+                  <label className="text-[10px] font-bold uppercase tracking-wider">QR / Transaction ID</label>
+                  <Input placeholder="e.g. FT24..." className="h-12 bg-white rounded-lg text-sm font-mono" {...form.register('referenceNumber')} />
                   {form.formState.errors.referenceNumber && <p className="text-[10px] text-rose-500">{form.formState.errors.referenceNumber.message}</p>}
                 </div>
                 
                 <Button type="submit" className="w-full h-14 text-base md:text-lg font-bold bg-primary uppercase tracking-widest shadow-lg rounded-xl transition-transform active:scale-95" disabled={isSubmitting || isScanning}>
                   {isSubmitting ? (
                     <>
-                      <Loader2 className="mr-2 h-5 w-5 animate-spin" /> Verifying...
+                      <Loader2 className="mr-2 h-5 w-5 animate-spin" /> Recording...
                     </>
-                  ) : "Confirm & Submit"}
+                  ) : "Log Contribution"}
                 </Button>
               </form>
             </div>
           </CardContent>
           <CardFooter className="justify-center border-t py-6 bg-muted/20 rounded-b-2xl">
             <Link href="/login" className="text-[10px] md:text-xs text-muted-foreground hover:text-primary underline flex items-center gap-1 font-medium tracking-wide">
-               Admin Dashboard Login
+               Admin Dashboard
             </Link>
           </CardFooter>
         </Card>
