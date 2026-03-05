@@ -1,4 +1,3 @@
-
 'use client';
 
 import * as React from 'react';
@@ -68,14 +67,14 @@ export default function Home() {
       </header>
       <main className="flex-1">
         {/* Cinema-Style Hero Section */}
-        <section className="relative w-full h-[100svh] overflow-hidden flex items-end justify-center pb-8 md:pb-16">
+        <section className="relative w-full h-screen min-h-[600px] md:h-[100svh] overflow-hidden flex items-end justify-center pb-8 md:pb-16">
           {exteriorImage && (
             <div className="absolute inset-0 z-0">
               <Image
                 src={exteriorImage.imageUrl}
                 alt="Mugher Full Gospel Church Exterior"
                 fill
-                className="object-cover object-left animate-dropDownLeft"
+                className="object-cover object-left md:animate-dropDownLeft animate-in fade-in duration-1000"
                 priority
                 data-ai-hint="church exterior"
               />
@@ -329,4 +328,3 @@ export default function Home() {
     </div>
   );
 }
-
