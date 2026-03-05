@@ -1,4 +1,3 @@
-
 "use client";
 
 import * as React from 'react';
@@ -31,7 +30,8 @@ import {
   Trash2,
   MoreVertical,
   Eraser,
-  TrendingDown
+  TrendingDown,
+  QrCode
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { useCollection, useFirestore } from '@/firebase';
@@ -100,8 +100,8 @@ export default function DonationsPage() {
     const donationRef = doc(firestore, 'donations', id);
     updateDoc(donationRef, { receiptData: null }).then(() => {
       toast({
-        title: "Image Purged",
-        description: "The receipt image has been removed to save storage.",
+        title: "Scan Purged",
+        description: "The digital screenshot has been removed.",
       });
     }).catch(async (err) => {
       const permissionError = new FirestorePermissionError({
@@ -192,8 +192,8 @@ export default function DonationsPage() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="text-center sm:text-left">
-          <h1 className="text-2xl md:text-3xl font-headline font-bold text-primary uppercase tracking-tight">Income Control</h1>
-          <p className="text-muted-foreground font-medium text-[10px] md:text-sm">MUGHER FULL GOSPEL CHURCH verified categorization.</p>
+          <h1 className="text-2xl md:text-3xl font-headline font-bold text-primary uppercase tracking-tight">Donation Audit</h1>
+          <p className="text-muted-foreground font-medium text-[10px] md:text-sm">Verified Transaction & QR Number Control.</p>
         </div>
         <div className="flex justify-center sm:justify-end gap-2">
           <Button variant="outline" className="gap-2 font-bold uppercase text-[9px] md:text-[10px] tracking-widest border-primary/20 h-9">
@@ -242,7 +242,7 @@ export default function DonationsPage() {
             <div className="relative flex-1 lg:max-w-sm">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input 
-                placeholder="Search donor..." 
+                placeholder="Search donor or QR number..." 
                 className="pl-9 bg-white border-primary/10 h-10 text-[10px] md:text-xs"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -273,9 +273,9 @@ export default function DonationsPage() {
             <TableHeader className="bg-muted/30">
               <TableRow>
                 <TableHead className="text-[10px] font-bold uppercase tracking-wider">Date</TableHead>
-                <TableHead className="text-[10px] font-bold uppercase tracking-wider">Donor Name</TableHead>
+                <TableHead className="text-[10px] font-bold uppercase tracking-wider">Donor</TableHead>
                 <TableHead className="text-[10px] font-bold uppercase tracking-wider">Type</TableHead>
-                <TableHead className="text-[10px] font-bold uppercase tracking-wider">Ref #</TableHead>
+                <TableHead className="text-[10px] font-bold uppercase tracking-wider">QR / Ref #</TableHead>
                 <TableHead className="text-[10px] font-bold uppercase tracking-wider">Status</TableHead>
                 <TableHead className="text-[10px] font-bold uppercase tracking-wider text-right">Amount</TableHead>
                 <TableHead className="text-[10px] font-bold uppercase tracking-wider text-center">Actions</TableHead>
@@ -296,14 +296,16 @@ export default function DonationsPage() {
                     {donation.timestamp?.toDate ? format(donation.timestamp.toDate(), 'MMM d, yyyy') : 'Pending'}
                   </TableCell>
                   <TableCell className="text-xs font-bold text-primary max-w-[150px] md:max-w-[200px] truncate">
-                    {donation.donorName || 'Unidentified Donor'}
+                    {donation.donorName || 'Unidentified'}
                   </TableCell>
                   <TableCell>
                     <Badge variant="outline" className="font-bold text-[9px] uppercase tracking-tighter border-primary/20 text-primary bg-primary/5">
                       {donation.type}
                     </Badge>
                   </TableCell>
-                  <TableCell className="text-[9px] font-mono opacity-60 group-hover:opacity-100">{donation.referenceNumber}</TableCell>
+                  <TableCell className="text-[9px] font-mono font-bold text-slate-600 group-hover:text-primary transition-colors">
+                    {donation.referenceNumber}
+                  </TableCell>
                   <TableCell>
                     <Badge className={`text-[9px] font-bold uppercase tracking-widest ${
                       donation.status === 'approved' ? 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20' : 
@@ -326,7 +328,7 @@ export default function DonationsPage() {
                         </DialogTrigger>
                         <DialogContent className="max-w-[95vw] sm:max-w-md border-none shadow-2xl rounded-xl">
                           <DialogHeader>
-                            <DialogTitle className="text-xl font-headline font-bold text-primary uppercase tracking-tight">Verification Details</DialogTitle>
+                            <DialogTitle className="text-xl font-headline font-bold text-primary uppercase tracking-tight">QR Audit Details</DialogTitle>
                           </DialogHeader>
                           <div className="space-y-6 pt-4 max-h-[80vh] overflow-y-auto px-1">
                             <div className="grid grid-cols-2 gap-4 text-xs bg-muted/20 p-4 rounded-lg border border-primary/5">
@@ -339,55 +341,31 @@ export default function DonationsPage() {
                                 <p className="font-bold text-emerald-600 text-xs">${donation.amount.toLocaleString()}</p>
                               </div>
                               <div className="space-y-1">
-                                <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-wider">Category</p>
+                                <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-wider">Type</p>
                                 <p className="font-bold text-xs">{donation.type}</p>
                               </div>
                               <div className="space-y-1">
-                                <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-wider">Reference</p>
-                                <p className="font-mono text-[10px] opacity-70 truncate">{donation.referenceNumber}</p>
+                                <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-wider">QR / Ref ID</p>
+                                <p className="font-mono text-[10px] text-primary font-bold truncate">{donation.referenceNumber}</p>
                               </div>
                             </div>
 
                             {donation.isAiVerified && (
                               <Alert className="bg-emerald-50 border-emerald-200">
                                 <ShieldCheck className="h-4 w-4 text-emerald-600" />
-                                <AlertTitle className="text-emerald-800 text-[9px] md:text-[10px] font-bold uppercase tracking-widest">AI Verified Secure</AlertTitle>
+                                <AlertTitle className="text-emerald-800 text-[9px] md:text-[10px] font-bold uppercase tracking-widest">AI Transaction Match</AlertTitle>
                                 <AlertDescription className="text-emerald-700 text-[9px] md:text-[10px] leading-relaxed">
-                                  Verified for **MUGHER FULL GOSPEL CHURCH** (Ends in **5978**).
+                                  Transaction verified for **MUGHER FULL GOSPEL** (Ends in **5978**).
                                 </AlertDescription>
                               </Alert>
                             )}
 
                             <div className="space-y-2">
-                              <p className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground">Receipt Image</p>
-                              <div className="border rounded-xl p-4 bg-muted/5 min-h-[150px] flex flex-col items-center justify-center text-center">
-                                {donation.receiptData ? (
-                                  <div className="space-y-4 w-full">
-                                    <img 
-                                      src={donation.receiptData} 
-                                      alt="Receipt" 
-                                      className="w-full h-auto rounded-lg border shadow-sm max-h-[300px] object-contain"
-                                    />
-                                    <Button 
-                                      variant="outline" 
-                                      size="sm" 
-                                      className="w-full text-rose-600 border-rose-200 hover:bg-rose-50 text-[10px] font-bold uppercase"
-                                      onClick={() => handlePurgeImage(donation.id)}
-                                    >
-                                      <Eraser className="h-4 w-4 mr-2" /> Purge Image
-                                    </Button>
-                                  </div>
-                                ) : (
-                                  <div className="space-y-3 p-6">
-                                    <div className="bg-primary/5 p-4 rounded-full w-fit mx-auto">
-                                      <ShieldCheck className="h-8 w-8 text-primary/40" />
-                                    </div>
-                                    <div className="space-y-1">
-                                      <p className="text-xs font-bold text-muted-foreground">Image Not Available</p>
-                                      <p className="text-[9px] text-muted-foreground italic">Discarded or Purged.</p>
-                                    </div>
-                                  </div>
-                                )}
+                              <p className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground">Digital Receipt Reference</p>
+                              <div className="border rounded-xl p-6 bg-muted/5 flex flex-col items-center justify-center text-center">
+                                <QrCode className="h-12 w-12 text-primary/20 mb-3" />
+                                <p className="text-xs font-bold text-primary">{donation.referenceNumber}</p>
+                                <p className="text-[9px] text-muted-foreground italic mt-1">Transaction Proof Logged via Scan</p>
                               </div>
                             </div>
                             
@@ -398,7 +376,7 @@ export default function DonationsPage() {
                                     className="flex-1 bg-emerald-600 hover:bg-emerald-700 font-bold uppercase text-[10px] h-11" 
                                     onClick={() => handleUpdateStatus(donation.id, 'approved')}
                                   >
-                                    <Check className="h-4 w-4 mr-2" /> Approve
+                                    <Check className="h-4 w-4 mr-2" /> Verify Match
                                   </Button>
                                   <Button 
                                     variant="destructive" 
@@ -428,7 +406,7 @@ export default function DonationsPage() {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="w-48">
-                          <DropdownMenuLabel className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground">Quick Actions</DropdownMenuLabel>
+                          <DropdownMenuLabel className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground">Audit Actions</DropdownMenuLabel>
                           {donation.status === 'pending' && (
                             <>
                               <DropdownMenuItem 
@@ -444,14 +422,6 @@ export default function DonationsPage() {
                                 <X className="h-4 w-4 mr-2" /> Reject
                               </DropdownMenuItem>
                             </>
-                          )}
-                          {donation.receiptData && (
-                            <DropdownMenuItem 
-                              className="text-xs font-bold text-blue-600"
-                              onClick={() => handlePurgeImage(donation.id)}
-                            >
-                              <Eraser className="h-4 w-4 mr-2" /> Purge Image
-                            </DropdownMenuItem>
                           )}
                           <DropdownMenuSeparator />
                           <DropdownMenuItem 

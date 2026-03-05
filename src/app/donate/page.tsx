@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Church, Upload, CheckCircle2, Loader2, Info, Sparkles, AlertTriangle, ShieldCheck } from 'lucide-react';
+import { Church, QrCode, CheckCircle2, Loader2, Info, Sparkles, AlertTriangle, ShieldCheck } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import Link from 'next/link';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
@@ -22,7 +22,7 @@ const formSchema = z.object({
   donorName: z.string().min(2, "Name is required"),
   amount: z.string().refine((val) => !isNaN(Number(val)) && Number(val) > 0, "Enter a valid amount"),
   type: z.enum(["Tithe", "Offering", "GoFund", "Special Seed", "Building Purposes"]),
-  receipt: z.any().optional(),
+  referenceNumber: z.string().min(3, "Reference or QR number is required"),
 });
 
 export default function PublicDonatePage() {
@@ -30,7 +30,6 @@ export default function PublicDonatePage() {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [isScanning, setIsScanning] = React.useState(false);
   const [submitted, setSubmitted] = React.useState(false);
-  const [refNum, setRefNum] = React.useState("");
   const [mounted, setMounted] = React.useState(false);
   const [scanError, setScanError] = React.useState<string | null>(null);
   const [isAiVerified, setIsAiVerified] = React.useState(false);
@@ -45,6 +44,7 @@ export default function PublicDonatePage() {
       donorName: "",
       amount: "",
       type: "Offering",
+      referenceNumber: "",
     },
   });
 
@@ -65,8 +65,7 @@ export default function PublicDonatePage() {
         const result = await scanReceipt({ receiptDataUri: dataUri });
         
         if (!result.isCorrectAccount) {
-          setScanError("Verification Failed: This receipt was not sent to MUGHER FULL GOSPEL CHURCH (Account: 1000221935978). Please check your transaction.");
-          form.setValue('receipt', undefined);
+          setScanError("Verification Failed: This QR/Digital receipt was not sent to MUGHER FULL GOSPEL CHURCH (Account: 1000221935978).");
         } else {
           if (result.donorName) {
             form.setValue('donorName', result.donorName, { shouldValidate: true });
@@ -74,12 +73,15 @@ export default function PublicDonatePage() {
           if (result.amount > 0) {
             form.setValue('amount', result.amount.toString(), { shouldValidate: true });
           }
+          if (result.qrNumber) {
+            form.setValue('referenceNumber', result.qrNumber, { shouldValidate: true });
+          }
           setIsAiVerified(true);
-          form.setValue('receipt', undefined);
           if (e.target) e.target.value = ''; 
         }
       } catch (err) {
         console.error("AI Scan failed", err);
+        setScanError("AI could not read the image. Please enter details manually.");
       } finally {
         setIsScanning(false);
       }
@@ -91,8 +93,6 @@ export default function PublicDonatePage() {
     if (!firestore) return;
     setIsSubmitting(true);
 
-    const referenceNumber = 'SL-' + Math.random().toString(36).substring(2, 9).toUpperCase();
-
     const donationData = {
       donorName: values.donorName,
       amount: Number(values.amount),
@@ -100,13 +100,12 @@ export default function PublicDonatePage() {
       receiptData: null,
       isAiVerified: isAiVerified,
       status: 'pending',
-      referenceNumber,
+      referenceNumber: values.referenceNumber,
       timestamp: serverTimestamp(),
     };
 
     addDoc(collection(firestore, 'donations'), donationData)
       .then(() => {
-        setRefNum(referenceNumber);
         setSubmitted(true);
         setIsSubmitting(false);
       })
@@ -132,13 +131,13 @@ export default function PublicDonatePage() {
               <CheckCircle2 className="h-10 w-10 md:h-12 md:w-12 text-emerald-600" />
             </div>
           </div>
-          <CardTitle className="text-xl md:text-2xl font-headline mb-2 text-primary">Thank You!</CardTitle>
+          <CardTitle className="text-xl md:text-2xl font-headline mb-2 text-primary">Verification Logged</CardTitle>
           <CardDescription className="text-sm md:text-base mb-6">
-            Your contribution has been submitted for validation.
+            Thank you! Your donation has been recorded. Our finance team will verify the transaction ID.
           </CardDescription>
           <div className="bg-muted p-4 rounded-xl mb-8">
             <p className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider mb-1">Reference Number</p>
-            <p className="text-lg md:text-xl font-mono font-bold text-primary">{refNum}</p>
+            <p className="text-lg md:text-xl font-mono font-bold text-primary">{form.getValues('referenceNumber')}</p>
           </div>
           <Button asChild className="w-full bg-primary h-12 rounded-xl font-bold uppercase tracking-widest text-xs">
             <Link href="/">Return Home</Link>
@@ -158,9 +157,9 @@ export default function PublicDonatePage() {
 
         <Alert className="mb-6 bg-primary/5 border-primary/20 shadow-sm rounded-xl">
           <Info className="h-5 w-5 text-primary" />
-          <AlertTitle className="text-primary font-bold uppercase tracking-tight text-xs md:text-sm">Official Deposit Account</AlertTitle>
+          <AlertTitle className="text-primary font-bold uppercase tracking-tight text-xs md:text-sm">Official Account</AlertTitle>
           <AlertDescription className="text-[11px] md:text-sm font-medium leading-relaxed">
-            Please ensure all deposits are made only to:
+            Please transfer to our verified church account:
             <span className="block mt-2 p-3 bg-white border rounded-lg font-bold text-base md:text-lg text-primary tracking-widest shadow-inner text-center">
               1000221935978
             </span>
@@ -171,29 +170,29 @@ export default function PublicDonatePage() {
         {scanError && (
           <Alert variant="destructive" className="mb-6 animate-in fade-in slide-in-from-top-2 rounded-xl">
             <AlertTriangle className="h-4 w-4" />
-            <AlertTitle className="text-xs md:text-sm font-bold">Validation Error</AlertTitle>
+            <AlertTitle className="text-xs md:text-sm font-bold">Validation Alert</AlertTitle>
             <AlertDescription className="text-[10px] md:text-xs">{scanError}</AlertDescription>
           </Alert>
         )}
 
         <Card className="border-none shadow-xl rounded-2xl">
           <CardHeader className="p-6 md:p-8">
-            <CardTitle className="text-lg md:text-xl font-headline text-primary">Submit Your Donation</CardTitle>
+            <CardTitle className="text-lg md:text-xl font-headline text-primary">QR / Reference Verification</CardTitle>
             <CardDescription className="text-[11px] md:text-xs">
-              Upload your bank receipt for automated AI verification. Images are discarded after scanning to save storage and protect privacy.
+              Upload a screenshot of your digital receipt or QR summary. Our AI will automatically extract the QR Number and details.
             </CardDescription>
           </CardHeader>
           <CardContent className="px-6 md:px-8 pb-8">
             <div className="space-y-6">
               <div className="space-y-3">
-                <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">AI Receipt Verification (Optional)</label>
+                <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Automated QR Number Scan</label>
                 <div className={`border-2 border-dashed rounded-xl p-6 md:p-10 flex flex-col items-center justify-center gap-3 transition-all relative ${isAiVerified ? 'bg-emerald-50 border-emerald-200' : 'bg-muted/30 hover:bg-muted/50 border-primary/20'} ${isScanning ? 'opacity-50 pointer-events-none' : ''}`}>
                   {isScanning ? (
                     <div className="flex flex-col items-center gap-3 text-primary text-center">
                       <Loader2 className="h-8 w-8 md:h-10 md:w-10 animate-spin" />
                       <div className="space-y-1">
-                        <p className="text-[11px] md:text-sm font-bold uppercase tracking-widest animate-pulse">Scanning Receipt...</p>
-                        <p className="text-[9px] text-muted-foreground">Verifying account details</p>
+                        <p className="text-[11px] md:text-sm font-bold uppercase tracking-widest animate-pulse">Scanning QR Data...</p>
+                        <p className="text-[9px] text-muted-foreground">Extracting Reference ID</p>
                       </div>
                     </div>
                   ) : isAiVerified ? (
@@ -202,8 +201,8 @@ export default function PublicDonatePage() {
                         <ShieldCheck className="h-8 w-8 md:h-10 md:w-10" />
                       </div>
                       <div className="space-y-1">
-                        <p className="text-[11px] md:text-sm font-bold uppercase tracking-widest">AI Verification Successful</p>
-                        <p className="text-[9px] text-muted-foreground italic">Raw image data purged</p>
+                        <p className="text-[11px] md:text-sm font-bold uppercase tracking-widest">QR Verified Secure</p>
+                        <p className="text-[9px] text-muted-foreground italic">Transaction ID extracted</p>
                       </div>
                       <Button 
                         variant="outline" 
@@ -212,17 +211,16 @@ export default function PublicDonatePage() {
                         onClick={(e) => {
                           e.preventDefault();
                           setIsAiVerified(false);
-                          form.setValue('donorName', '');
-                          form.setValue('amount', '');
+                          form.reset();
                         }}
                       >
-                        Rescan
+                        Scan Different Receipt
                       </Button>
                     </div>
                   ) : (
                     <>
                       <div className="bg-primary/5 p-4 rounded-full">
-                        <Upload className="h-6 w-6 md:h-8 md:w-8 text-primary/60" />
+                        <QrCode className="h-6 w-6 md:h-8 md:w-8 text-primary/60" />
                       </div>
                       <Input
                         type="file"
@@ -232,12 +230,12 @@ export default function PublicDonatePage() {
                       />
                       <div className="text-center space-y-1">
                         <p className="text-[11px] md:text-sm font-bold text-muted-foreground">
-                          Upload receipt to auto-fill
+                          Upload digital receipt screenshot
                         </p>
-                        <p className="text-[9px] text-muted-foreground">Secure verification ends in 5978</p>
+                        <p className="text-[9px] text-muted-foreground">Telebirr, CBE Birr, or Banking App</p>
                       </div>
                       <div className="flex items-center gap-2 text-[9px] bg-primary text-white px-3 py-1 rounded-full font-bold uppercase tracking-widest shadow-sm">
-                        <Sparkles className="h-2.5 w-2.5" /> Secure Scan
+                        <Sparkles className="h-2.5 w-2.5" /> AI Scan
                       </div>
                     </>
                   )}
@@ -248,12 +246,14 @@ export default function PublicDonatePage() {
                 <div className="space-y-2">
                   <label className="text-[10px] font-bold uppercase tracking-wider">Donor Full Name</label>
                   <Input placeholder="Enter your full name" className="h-12 bg-white rounded-lg text-sm" {...form.register('donorName')} />
+                  {form.formState.errors.donorName && <p className="text-[10px] text-rose-500">{form.formState.errors.donorName.message}</p>}
                 </div>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <label className="text-[10px] font-bold uppercase tracking-wider">Amount (ETB)</label>
                     <Input placeholder="0.00" className="h-12 bg-white rounded-lg text-sm" {...form.register('amount')} />
+                    {form.formState.errors.amount && <p className="text-[10px] text-rose-500">{form.formState.errors.amount.message}</p>}
                   </div>
                   <div className="space-y-2">
                     <label className="text-[10px] font-bold uppercase tracking-wider">Category</label>
@@ -271,13 +271,19 @@ export default function PublicDonatePage() {
                     </Select>
                   </div>
                 </div>
+
+                <div className="space-y-2">
+                  <label className="text-[10px] font-bold uppercase tracking-wider">QR / Reference Number</label>
+                  <Input placeholder="e.g. FT240..." className="h-12 bg-white rounded-lg text-sm font-mono" {...form.register('referenceNumber')} />
+                  {form.formState.errors.referenceNumber && <p className="text-[10px] text-rose-500">{form.formState.errors.referenceNumber.message}</p>}
+                </div>
                 
                 <Button type="submit" className="w-full h-14 text-base md:text-lg font-bold bg-primary uppercase tracking-widest shadow-lg rounded-xl transition-transform active:scale-95" disabled={isSubmitting || isScanning}>
                   {isSubmitting ? (
                     <>
-                      <Loader2 className="mr-2 h-5 w-5 animate-spin" /> Submitting...
+                      <Loader2 className="mr-2 h-5 w-5 animate-spin" /> Verifying...
                     </>
-                  ) : "Submit Verification"}
+                  ) : "Confirm & Submit"}
                 </Button>
               </form>
             </div>
@@ -287,7 +293,7 @@ export default function PublicDonatePage() {
                Admin Dashboard Login
             </Link>
           </CardFooter>
-Card        </Card>
+        </Card>
       </div>
     </div>
   );
