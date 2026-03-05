@@ -1,4 +1,3 @@
-
 'use client';
 
 import * as React from 'react';
@@ -97,7 +96,7 @@ export default function Home() {
         )}>
           <Link href="/login" className={cn(
             "text-[9px] font-black uppercase tracking-[0.2em] flex items-center gap-2",
-            isScrolled ? "text-primary hover:text-secondary" : "text-white/80 hover:text-white"
+            isScrolled ? "text-secondary hover:text-secondary/80" : "text-secondary hover:text-secondary/80"
           )}>
             <div className="h-1 w-1 rounded-full bg-secondary animate-pulse" />
             <UserCircle className="h-3 w-3" />
@@ -122,16 +121,15 @@ export default function Home() {
                 key={link.name} 
                 href={link.href} 
                 className={cn(
-                  "text-[11px] font-bold uppercase tracking-widest transition-colors hover:text-secondary",
-                  isScrolled ? "text-foreground" : "text-white/80"
+                  "text-[11px] font-bold uppercase tracking-widest transition-colors text-secondary hover:text-secondary/70",
                 )}
               >
                 {link.name}
               </Link>
             ))}
             <div className="flex gap-2">
-              <Button asChild variant="default" size="sm" className="bg-primary hover:bg-primary/90 rounded-full px-6 font-bold uppercase text-[9px] tracking-widest h-10 shadow-lg">
-                <Link href="/donate">Join Us</Link>
+              <Button asChild variant="default" size="sm" className="bg-secondary hover:bg-secondary/90 rounded-full px-6 font-bold uppercase text-[9px] tracking-widest h-10 shadow-lg">
+                <Link href="/donate">Join Us Now</Link>
               </Button>
             </div>
           </nav>
@@ -164,7 +162,7 @@ export default function Home() {
                   key={link.name} 
                   href={link.href} 
                   onClick={() => setMobileMenuOpen(false)}
-                  className="text-3xl font-headline font-bold text-white uppercase tracking-tighter"
+                  className="text-3xl font-headline font-bold text-secondary uppercase tracking-tighter"
                 >
                   {link.name}
                 </Link>
@@ -173,7 +171,7 @@ export default function Home() {
                 <Button asChild className="bg-secondary text-primary font-black h-14 w-full rounded-full uppercase tracking-widest text-sm shadow-xl">
                   <Link href="/donate" onClick={() => setMobileMenuOpen(false)}>Join Us Now</Link>
                 </Button>
-                <Button asChild variant="outline" className="border-white text-white h-14 w-full rounded-full uppercase tracking-widest text-sm">
+                <Button asChild variant="outline" className="border-secondary text-secondary h-14 w-full rounded-full uppercase tracking-widest text-sm">
                   <Link href="/login" onClick={() => setMobileMenuOpen(false)}>{user ? 'Dashboard' : 'Login'}</Link>
                 </Button>
               </div>
