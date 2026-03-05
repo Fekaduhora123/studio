@@ -31,18 +31,18 @@ export default function Home() {
   React.useEffect(() => {
     setMounted(true);
     
-    // Time-based quote logic
+    // Time-based quote logic in Afaan Oromoo
     const hour = new Date().getHours();
     if (hour >= 5 && hour < 17) {
       setDailyQuote({
-        text: "Satisfy us in the morning with your unfailing love, that we may sing for joy and be glad all our days.",
-        ref: "Psalm 90:14",
+        text: "Ganama ganama gaarummaa keetiin nu quubsi, nuyis bara jireenya keenya hundumaa gammachuudhaan sitti haa ilillinu!",
+        ref: "Faarfannaa 90:14",
         time: 'morning'
       });
     } else {
       setDailyQuote({
-        text: "I will lie down and sleep in peace, for you alone, O Lord, make me dwell in safety.",
-        ref: "Psalm 4:8",
+        text: "Ani nagaadhaan nan ciisa, nan rafas, si qofatu yaaddoo malee na jiraachisa yaa Waaqayyo!",
+        ref: "Faarfannaa 4:8",
         time: 'evening'
       });
     }
@@ -123,7 +123,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Daily Bread Section (Morning/Evening Quote) */}
+        {/* Daily Bread Section (Morning/Evening Quote in Afaan Oromoo) */}
         {mounted && dailyQuote && (
           <section className="w-full py-8 md:py-12 bg-white border-b overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-1000">
             <div className="container px-4 md:px-6 mx-auto">
@@ -136,7 +136,7 @@ export default function Home() {
                   )}
                 </div>
                 <Badge variant="outline" className="mb-4 border-primary/20 text-primary font-bold uppercase tracking-widest text-[8px] md:text-[9px]">
-                  {dailyQuote.time === 'morning' ? 'Morning Manna' : 'Evening Peace'}
+                  {dailyQuote.time === 'morning' ? 'Manna Ganamaa' : 'Nagaa Galgalaa'}
                 </Badge>
                 <blockquote className="space-y-4">
                   <p className="text-sm md:text-xl font-medium text-slate-700 italic leading-relaxed">
@@ -172,14 +172,14 @@ export default function Home() {
                 </div>
               </div>
               <div className="flex flex-col justify-center space-y-4 md:space-y-6 text-center lg:text-left">
-                <Badge variant="outline" className="w-fit mx-auto lg:mx-0 border-primary text-primary font-bold uppercase tracking-widest text-[8px] md:text-[9px]">The House of God</Badge>
-                <h2 className="text-xl md:text-4xl lg:text-5xl font-headline font-bold tracking-tighter text-primary uppercase leading-tight">Our Sanctuary</h2>
+                <Badge variant="outline" className="w-fit mx-auto lg:mx-0 border-primary text-primary font-bold uppercase tracking-widest text-[8px] md:text-[9px]">Mana Waaqayyoo</Badge>
+                <h2 className="text-xl md:text-4xl lg:text-5xl font-headline font-bold tracking-tighter text-primary uppercase leading-tight">Bakka Sagadaa</h2>
                 <div className="space-y-3 md:space-y-4">
                   <p className="text-muted-foreground leading-relaxed italic text-[10px] md:text-sm font-medium border-l-4 border-accent pl-4 bg-muted/20 py-2">
-                    "For where two or three are gathered together in my name, there am I in the midst of them." - Matthew 18:20
+                    "Bakka namoonni lama yookiin sadii maqa kootiin walitti qabamanitti, ani achuma gidduu isaaniittin argama." - Maatewos 18:20
                   </p>
                   <p className="text-muted-foreground leading-relaxed text-[10px] md:text-sm font-medium">
-                    Located in Muger Mokada at residential houses, our sanctuary serves as a beacon of hope and a center for vibrant worship. We provide a welcoming atmosphere for all to seek spiritual growth and fellowship.
+                    Muger Mokadaa keessatti kan argamnu bakki sagadaa keenya bakka tajaajilaa fi waaqeffannaa ho’aa itti gaggeeffamu dha. Namoonni hundummuu guddina hafuuraa fi tokkummaaf gara keenya akka dhufan jaalalaan afeerra.
                   </p>
                 </div>
               </div>
@@ -191,11 +191,11 @@ export default function Home() {
         <section id="events" className="w-full py-12 md:py-24 bg-muted/30">
           <div className="container px-4 md:px-6 mx-auto">
             <div className="flex flex-col items-center justify-center space-y-3 md:space-y-4 text-center mb-8 md:mb-16">
-              <Badge className="bg-primary text-white font-bold uppercase tracking-widest text-[8px] md:text-[9px] px-4 py-1">Community & Fellowship</Badge>
-              <h2 className="text-2xl md:text-5xl lg:text-6xl font-headline font-bold tracking-tighter text-primary uppercase">Upcoming Events</h2>
+              <Badge className="bg-primary text-white font-bold uppercase tracking-widest text-[8px] md:text-[9px] px-4 py-1">Tokkummaa & Fellowship</Badge>
+              <h2 className="text-2xl md:text-5xl lg:text-6xl font-headline font-bold tracking-tighter text-primary uppercase">Sagantaalee Keenya</h2>
               <div className="h-1 w-10 md:w-12 bg-accent mx-auto rounded-full" />
               <p className="max-w-[700px] text-muted-foreground text-[10px] md:text-base leading-relaxed mx-auto px-4 font-medium opacity-80">
-                Experience the life of our church. Join us for transformative worship and community events.
+                Jireenya waldaa keenyaa dhugoomsaa. Waaqeffannaa jijjiirama fidu fi sagantaalee hawaasummaa irratti nuun dabalamaa.
               </p>
             </div>
             
@@ -210,12 +210,12 @@ export default function Home() {
                     <div className="h-1 md:h-1.5 bg-primary group-hover:bg-accent transition-colors" />
                     <CardHeader className="pb-2 md:pb-3 px-5 md:px-6 pt-5 md:px-6">
                       <Badge variant="outline" className="w-fit text-[7px] md:text-[9px] font-bold uppercase tracking-tighter border-primary/20 text-primary bg-primary/5 mb-2 md:mb-3">
-                        {event.category || 'Worship'}
+                        {event.category || 'Waaqeffannaa'}
                       </Badge>
                       <CardTitle className="text-sm md:text-lg lg:text-xl font-headline font-bold line-clamp-2 text-primary group-hover:text-accent transition-colors">{event.title}</CardTitle>
                     </CardHeader>
                     <CardContent className="flex-1 px-5 md:px-6">
-                      <div className="space-y-1.5 md:space-y-2.5 text-[8px] md:text-[11px] text-muted-foreground mb-4 md:mb-5 font-bold uppercase tracking-wider">
+                      <div className="space-y-1.5 md:space-y-2.5 text-[8px] md:text-11px text-muted-foreground mb-4 md:mb-5 font-bold uppercase tracking-wider">
                         <div className="flex items-center gap-2 md:gap-2.5">
                           <CalendarIcon className="h-3 w-3 text-accent" /> {event.date}
                         </div>
@@ -244,7 +244,7 @@ export default function Home() {
                           <DialogContent className="max-w-[95vw] sm:max-w-3xl border-none shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] rounded-[1.5rem] md:rounded-[2rem] p-0 overflow-hidden">
                             <div className="bg-primary p-6 md:p-10 text-white relative">
                               <Badge className="mb-3 md:mb-4 bg-accent text-accent-foreground font-bold tracking-widest text-[8px] md:text-[9px]">
-                                {event.category || 'Worship'}
+                                {event.category || 'Waaqeffannaa'}
                               </Badge>
                               <DialogTitle className="text-lg md:text-4xl font-headline font-bold uppercase tracking-tight leading-tight">
                                 {event.title}
@@ -266,7 +266,7 @@ export default function Home() {
                                 </div>
                               </div>
                               <div className="space-y-3 md:space-y-4">
-                                <h4 className="font-bold text-[9px] md:text-[10px] uppercase tracking-[0.3em] text-muted-foreground border-b pb-2">Description</h4>
+                                <h4 className="font-bold text-[9px] md:text-[10px] uppercase tracking-[0.3em] text-muted-foreground border-b pb-2">Ibsa Sagantichaa</h4>
                                 <div className="text-[10px] md:text-base leading-relaxed whitespace-pre-wrap text-slate-700 font-medium">
                                   {event.description}
                                 </div>
@@ -281,7 +281,7 @@ export default function Home() {
               ) : (
                 <div className="col-span-full text-center py-16 md:py-20 bg-white rounded-[1.5rem] md:rounded-[2.5rem] shadow-inner border-2 border-dashed border-muted mx-2 md:mx-4">
                   <CalendarIcon className="h-8 w-8 md:h-10 md:w-10 mx-auto mb-4 opacity-10 text-primary" />
-                  <p className="text-[8px] md:text-xs font-bold uppercase tracking-widest text-muted-foreground">Stay tuned for upcoming fellowships.</p>
+                  <p className="text-[8px] md:text-xs font-bold uppercase tracking-widest text-muted-foreground">Sagantaalee itti aananiif nuun hordofaa.</p>
                 </div>
               )}
             </div>
@@ -302,18 +302,18 @@ export default function Home() {
                 <div className="bg-primary/5 p-3 md:p-4 rounded-2xl group-hover:bg-primary transition-colors">
                   <Users className="h-6 w-6 md:h-8 md:w-8 text-primary group-hover:text-white" />
                 </div>
-                <h3 className="text-sm md:text-lg font-bold font-headline uppercase tracking-tight text-primary">Congregation</h3>
+                <h3 className="text-sm md:text-lg font-bold font-headline uppercase tracking-tight text-primary">Namoota</h3>
                 <p className="text-[8px] md:text-[11px] text-muted-foreground text-center leading-relaxed font-medium">
-                  Centralized data management for our growing family, ministries, and outreach programs.
+                  Maatii keenya tajaajilaa jiru, tajaajiltootaa fi sagantaalee gargaarsaa hundaaf to'annoo giddu-galeessaa.
                 </p>
               </div>
               <div className="group flex flex-col items-center space-y-4 md:space-y-5 p-6 md:p-7 rounded-[1.5rem] md:rounded-[2rem] border border-accent/10 bg-white shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-1 md:hover:-translate-y-2">
                 <div className="bg-accent/5 p-3 md:p-4 rounded-2xl group-hover:bg-accent transition-colors">
                   <Heart className="h-6 w-6 md:h-8 md:w-8 text-accent group-hover:text-white" />
                 </div>
-                <h3 className="text-sm md:text-lg font-bold font-headline uppercase tracking-tight text-primary">Contributions</h3>
+                <h3 className="text-sm md:text-lg font-bold font-headline uppercase tracking-tight text-primary">Gumaacha</h3>
                 <p className="text-[8px] md:text-[11px] text-muted-foreground text-center leading-relaxed font-medium">
-                  Transparent tracking for Tithes and Offerings with secure AI-powered verification.
+                  Kurnee fi kennaawwan sirna to'annoo AI-tiinis deeggaramee iftoomaan hordofama.
                 </p>
               </div>
               <div className="group flex flex-col items-center space-y-4 md:space-y-5 p-6 md:p-7 rounded-[1.5rem] md:rounded-[2rem] border border-muted bg-white shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-1 md:hover:-translate-y-2">
@@ -322,7 +322,7 @@ export default function Home() {
                 </div>
                 <h3 className="text-sm md:text-lg font-bold font-headline uppercase tracking-tight text-primary">Analytics</h3>
                 <p className="text-[8px] md:text-[11px] text-muted-foreground text-center leading-relaxed font-medium">
-                  Data-driven insights that help church leadership make prayerful, informed decisions.
+                  Itti fayyadama ragaalee irratti hundaa'uun hogganoota waldaaf murteewwan ragaa irratti hundaa'an kennuuf gargaara.
                 </p>
               </div>
             </div>
