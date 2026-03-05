@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -88,5 +89,9 @@
 
   .animate-reveal {
     animation: scroll-reveal 0.8s ease-out forwards;
+  }
+
+  .animate-pulse-slow {
+    animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
 }
