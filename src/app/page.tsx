@@ -291,8 +291,8 @@ export default function Home() {
             <Badge variant="outline" className="border-primary text-primary font-black uppercase tracking-widest text-[10px] px-6 py-1.5 rounded-full">
               Foundations of Faith
             </Badge>
-            <h2 className="text-4xl md:text-6xl font-headline font-black text-primary uppercase leading-[1.1] tracking-tighter">
-              A Legacy of <br /> <span className="text-secondary italic">Spirit & Truth</span>
+            <h2 className="font-playfair font-medium italic text-[48px] text-primary uppercase leading-[1.1] tracking-tighter">
+              A Legacy of <br /> <span className="text-secondary">Spirit & Truth</span>
             </h2>
             <p className="text-muted-foreground text-lg leading-relaxed font-medium">
               Mugher Full Gospel Church began with a simple vision: to bring the transformative power of the Gospel to our local community. Today, we are a thriving family of believers committed to excellence in worship and integrity in life.
@@ -351,7 +351,7 @@ export default function Home() {
         <div className="container px-4 mx-auto">
           <div className="text-center max-w-2xl mx-auto mb-20 space-y-4">
             <Badge className="bg-primary/10 text-primary font-black uppercase tracking-widest text-[10px] px-6 py-1.5 rounded-full border border-primary/10">Specialized Fellowships</Badge>
-            <h2 className="text-4xl md:text-6xl font-headline font-black text-primary uppercase tracking-tighter">Our Ministries</h2>
+            <h2 className="font-playfair font-medium italic text-[48px] text-primary uppercase tracking-tighter">Our Ministries</h2>
             <p className="text-muted-foreground font-medium text-lg leading-relaxed">Discover a place where you belong, grow, and serve with others.</p>
           </div>
           
@@ -387,8 +387,8 @@ export default function Home() {
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-10 mb-20">
             <div className="space-y-4 text-center md:text-left">
               <Badge className="bg-secondary text-primary font-black uppercase tracking-widest text-[9px]">Church Calendar</Badge>
-              <h2 className="text-4xl md:text-7xl font-headline font-black text-primary uppercase tracking-tighter leading-none">
-                Upcoming <br /> <span className="text-secondary italic">Gatherings</span>
+              <h2 className="font-playfair font-medium italic text-[48px] text-primary uppercase tracking-tighter leading-none">
+                Upcoming <br /> <span className="text-secondary">Gatherings</span>
               </h2>
             </div>
             <Button asChild variant="outline" className="border-primary text-primary font-bold uppercase tracking-widest rounded-full px-10 h-14 border-2 hover:bg-primary/5">
@@ -555,7 +555,7 @@ export default function Home() {
       </section>
 
       {/* 10. PHOTO GALLERY */}
-      <section className="py-24 md:py-40 bg-muted/20">
+      <section className="py-24 md:py-40 bg-white border-t border-primary/5">
         <div className="container px-4 mx-auto">
           <div className="text-center space-y-4 mb-24">
             <h2 className="text-4xl md:text-7xl font-headline font-black text-primary uppercase tracking-tighter">Sacred Moments</h2>
