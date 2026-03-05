@@ -82,7 +82,7 @@ export default function Home() {
   if (!mounted) return null;
 
   return (
-    <div className="flex flex-col min-h-screen bg-background font-body selection:bg-primary/20">
+    <div className="flex flex-col min-h-screen bg-background font-body antialiased selection:bg-primary/20">
       
       {/* 1. ANIMATED NAVBAR WITH TOP LOGIN BAR */}
       <header className={cn(
@@ -212,8 +212,8 @@ export default function Home() {
               </div>
             </div>
             
-            <h1 className="text-4xl md:text-7xl lg:text-8xl font-headline font-black text-white leading-[0.85] uppercase tracking-tighter mb-8 max-w-5xl mx-auto drop-shadow-2xl">
-              Welcome to <br /> <span className="text-secondary underline decoration-primary decoration-4 underline-offset-8">Mugher Full Gospel</span>
+            <h1 className="text-[48px] font-roboto font-thin text-white leading-tight uppercase tracking-tight mb-8 max-w-5xl mx-auto drop-shadow-2xl">
+              Welcome to <br /> Mugher Full Gospel
             </h1>
             
             <p className="text-white/80 text-sm md:text-lg font-medium max-w-2xl mx-auto mb-10 leading-relaxed font-body">
