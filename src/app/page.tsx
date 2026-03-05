@@ -212,7 +212,7 @@ export default function Home() {
               </div>
             </div>
             
-            <h1 className="text-[48px] font-roboto font-thin text-white leading-tight uppercase tracking-tight mb-8 max-w-5xl mx-auto drop-shadow-2xl">
+            <h1 className="text-[48px] font-roboto font-bold text-secondary leading-tight uppercase tracking-tight mb-8 max-w-5xl mx-auto drop-shadow-2xl">
               Welcome to <br /> Mugher Full Gospel
             </h1>
             
