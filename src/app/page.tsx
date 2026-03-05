@@ -1,3 +1,4 @@
+
 'use client';
 
 import * as React from 'react';
@@ -5,7 +6,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { Church, ShieldCheck, PieChart, Users, Heart, Calendar as CalendarIcon, MapPin, Clock, ArrowRight, Loader2 } from 'lucide-react';
+import { Church, ShieldCheck, PieChart, Users, Heart, Calendar as CalendarIcon, MapPin, Clock, ArrowRight, Loader2, BookOpen, Sunrise, Sunset } from 'lucide-react';
 import { useCollection, useFirestore, useUser } from '@/firebase';
 import { collection, query, orderBy, limit } from 'firebase/firestore';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
@@ -25,9 +26,26 @@ export default function Home() {
   const exteriorImage = PlaceHolderImages.find(img => img.id === 'church-sanctuary');
   const sanctuaryImage = PlaceHolderImages.find(img => img.id === 'hero-church');
   const [mounted, setMounted] = React.useState(false);
+  const [dailyQuote, setDailyQuote] = React.useState<{ text: string, ref: string, time: 'morning' | 'evening' } | null>(null);
 
   React.useEffect(() => {
     setMounted(true);
+    
+    // Time-based quote logic
+    const hour = new Date().getHours();
+    if (hour >= 5 && hour < 17) {
+      setDailyQuote({
+        text: "Satisfy us in the morning with your unfailing love, that we may sing for joy and be glad all our days.",
+        ref: "Psalm 90:14",
+        time: 'morning'
+      });
+    } else {
+      setDailyQuote({
+        text: "I will lie down and sleep in peace, for you alone, O Lord, make me dwell in safety.",
+        ref: "Psalm 4:8",
+        time: 'evening'
+      });
+    }
   }, []);
 
   const eventsQuery = React.useMemo(() => {
@@ -83,7 +101,7 @@ export default function Home() {
           <div className="absolute inset-0 bg-white/10 z-10" />
           
           <div className="container relative z-20 px-4 md:px-6 flex flex-col items-center">
-            <div className="animate-dropDownLeft bg-white/90 backdrop-blur-lg p-5 md:p-8 text-center rounded-[1.5rem] md:rounded-[2rem] border border-primary/5 shadow-[0_20px_50px_-10px_rgba(0,0,0,0.1)] max-w-4xl w-full">
+            <div className="animate-dropDownLeft bg-white/90 backdrop-blur-lg p-6 md:p-8 text-center rounded-[2rem] border border-primary/5 shadow-[0_20px_50px_-10px_rgba(0,0,0,0.1)] max-w-4xl w-full">
               <Badge className="mb-2 md:mb-3 bg-accent text-accent-foreground font-bold tracking-[0.2em] uppercase text-[7px] md:text-[10px] px-3 py-0.5 animate-fadeInText-title shadow-sm">
                 Growing Together in Faith
               </Badge>
@@ -104,6 +122,34 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        {/* Daily Bread Section (Morning/Evening Quote) */}
+        {mounted && dailyQuote && (
+          <section className="w-full py-8 md:py-12 bg-white border-b overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-1000">
+            <div className="container px-4 md:px-6 mx-auto">
+              <div className="max-w-3xl mx-auto bg-muted/20 rounded-[1.5rem] md:rounded-[2.5rem] p-6 md:p-10 border border-primary/5 shadow-inner text-center relative">
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white p-2 rounded-full shadow-md border border-primary/10">
+                  {dailyQuote.time === 'morning' ? (
+                    <Sunrise className="h-6 w-6 text-accent" />
+                  ) : (
+                    <Sunset className="h-6 w-6 text-primary" />
+                  )}
+                </div>
+                <Badge variant="outline" className="mb-4 border-primary/20 text-primary font-bold uppercase tracking-widest text-[8px] md:text-[9px]">
+                  {dailyQuote.time === 'morning' ? 'Morning Manna' : 'Evening Peace'}
+                </Badge>
+                <blockquote className="space-y-4">
+                  <p className="text-sm md:text-xl font-medium text-slate-700 italic leading-relaxed">
+                    "{dailyQuote.text}"
+                  </p>
+                  <footer className="text-[10px] md:text-sm font-bold text-primary uppercase tracking-[0.2em]">
+                    — {dailyQuote.ref}
+                  </footer>
+                </blockquote>
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* Sanctuary Section */}
         <section id="sanctuary" className="w-full py-12 md:py-24 bg-white border-b overflow-hidden">
