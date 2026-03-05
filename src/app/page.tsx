@@ -12,7 +12,7 @@ import {
   Calendar as CalendarIcon, MapPin, Clock, ArrowRight, 
   Loader2, Play, BookOpen, Sunrise, Sunset, 
   Menu, X, Sparkles, Megaphone, Video, ChevronDown,
-  Facebook, Instagram, Youtube, Twitter
+  Facebook, Instagram, Youtube, Twitter, UserCircle
 } from 'lucide-react';
 import { useCollection, useFirestore, useUser } from '@/firebase';
 import { collection, query, orderBy, limit } from 'firebase/firestore';
@@ -85,53 +85,64 @@ export default function Home() {
   return (
     <div className="flex flex-col min-h-screen bg-background font-body selection:bg-primary/20">
       
-      {/* 1. ANIMATED NAVBAR */}
+      {/* 1. ANIMATED NAVBAR WITH TOP LOGIN BAR */}
       <header className={cn(
-        "fixed top-0 w-full z-[100] transition-all duration-500 h-20 flex items-center px-6 md:px-12",
+        "fixed top-0 w-full z-[100] transition-all duration-500 flex flex-col",
         isScrolled ? "bg-white/95 backdrop-blur-md shadow-lg border-b border-primary/5" : "bg-transparent"
       )}>
-        <Link href="/" className="flex items-center gap-2 group">
-          <div className="bg-primary p-1.5 rounded-lg group-hover:rotate-12 transition-transform shadow-lg">
-            <Church className="h-6 w-6 text-white" />
-          </div>
-          <span className={cn(
-            "font-headline font-black text-xl tracking-tighter uppercase",
-            isScrolled ? "text-primary" : "text-white"
-          )}>MUGHER <span className="text-secondary">FULL GOSPEL</span></span>
-        </Link>
+        {/* TOP UTILITY BAR */}
+        <div className={cn(
+          "w-full py-2 px-6 md:px-12 flex justify-end transition-all border-b",
+          isScrolled ? "border-primary/5 bg-primary/5" : "border-white/5 bg-black/10"
+        )}>
+          <Link href="/login" className={cn(
+            "text-[9px] font-black uppercase tracking-[0.2em] flex items-center gap-2",
+            isScrolled ? "text-primary hover:text-secondary" : "text-white/80 hover:text-white"
+          )}>
+            <div className="h-1 w-1 rounded-full bg-secondary animate-pulse" />
+            <UserCircle className="h-3 w-3" />
+            {user ? 'Admin Dashboard' : 'Administrator Login'}
+          </Link>
+        </div>
 
-        <nav className="hidden lg:flex ml-auto gap-8 items-center">
-          {navLinks.map((link) => (
-            <Link 
-              key={link.name} 
-              href={link.href} 
-              className={cn(
-                "text-[11px] font-bold uppercase tracking-widest transition-colors hover:text-secondary",
-                isScrolled ? "text-foreground" : "text-white/80"
-              )}
-            >
-              {link.name}
-            </Link>
-          ))}
-          <div className="flex gap-2">
-            <Button asChild variant="default" size="sm" className="bg-primary hover:bg-primary/90 rounded-full px-6 font-bold uppercase text-[9px] tracking-widest h-10 shadow-lg">
-              <Link href="/donate">Join Us</Link>
-            </Button>
-            <Button asChild variant="outline" size="sm" className={cn(
-              "rounded-full px-6 font-bold uppercase text-[9px] tracking-widest h-10 border-2",
-              isScrolled ? "border-primary text-primary" : "border-white text-white hover:bg-white/10"
-            )}>
-              <Link href="/login">{user ? 'Dashboard' : 'Login'}</Link>
-            </Button>
-          </div>
-        </nav>
+        <div className="h-20 flex items-center px-6 md:px-12">
+          <Link href="/" className="flex items-center gap-2 group">
+            <div className="bg-primary p-1.5 rounded-lg group-hover:rotate-12 transition-transform shadow-lg">
+              <Church className="h-6 w-6 text-white" />
+            </div>
+            <span className={cn(
+              "font-headline font-black text-xl tracking-tighter uppercase",
+              isScrolled ? "text-primary" : "text-white"
+            )}>MUGHER <span className="text-secondary">FULL GOSPEL</span></span>
+          </Link>
 
-        <button 
-          className="ml-auto lg:hidden text-primary"
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-        >
-          {mobileMenuOpen ? <X className="h-8 w-8 text-white" /> : <Menu className={cn("h-8 w-8", isScrolled ? "text-primary" : "text-white")} />}
-        </button>
+          <nav className="hidden lg:flex ml-auto gap-8 items-center">
+            {navLinks.map((link) => (
+              <Link 
+                key={link.name} 
+                href={link.href} 
+                className={cn(
+                  "text-[11px] font-bold uppercase tracking-widest transition-colors hover:text-secondary",
+                  isScrolled ? "text-foreground" : "text-white/80"
+                )}
+              >
+                {link.name}
+              </Link>
+            ))}
+            <div className="flex gap-2">
+              <Button asChild variant="default" size="sm" className="bg-primary hover:bg-primary/90 rounded-full px-6 font-bold uppercase text-[9px] tracking-widest h-10 shadow-lg">
+                <Link href="/donate">Join Us</Link>
+              </Button>
+            </div>
+          </nav>
+
+          <button 
+            className="ml-auto lg:hidden text-primary"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
+            {mobileMenuOpen ? <X className="h-8 w-8 text-white" /> : <Menu className={cn("h-8 w-8", isScrolled ? "text-primary" : "text-white")} />}
+          </button>
+        </div>
 
         <AnimatePresence>
           {mobileMenuOpen && (
@@ -158,9 +169,14 @@ export default function Home() {
                   {link.name}
                 </Link>
               ))}
-              <Button asChild className="bg-secondary text-primary font-black h-14 px-12 rounded-full uppercase tracking-widest text-sm mt-4">
-                <Link href="/donate" onClick={() => setMobileMenuOpen(false)}>Donate Now</Link>
-              </Button>
+              <div className="flex flex-col gap-4 mt-8 w-full px-12">
+                <Button asChild className="bg-secondary text-primary font-black h-14 w-full rounded-full uppercase tracking-widest text-sm shadow-xl">
+                  <Link href="/donate" onClick={() => setMobileMenuOpen(false)}>Join Us Now</Link>
+                </Button>
+                <Button asChild variant="outline" className="border-white text-white h-14 w-full rounded-full uppercase tracking-widest text-sm">
+                  <Link href="/login" onClick={() => setMobileMenuOpen(false)}>{user ? 'Dashboard' : 'Login'}</Link>
+                </Button>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
@@ -203,7 +219,7 @@ export default function Home() {
             </h1>
             
             <p className="text-white/80 text-sm md:text-lg font-medium max-w-2xl mx-auto mb-10 leading-relaxed font-body">
-              A place where faith meets action. We are a community dedicated to worshipping God, growing in faith, and serving the people of Muger Mokada with excellence.
+              A community where faith meets action. Located in Muger Mokada at residential houses, we are dedicated to worshipping God and serving our neighbors with excellence.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -234,7 +250,7 @@ export default function Home() {
         {[
           { icon: Sunrise, title: "Sunday Worship", desc: "Experience powerful worship every Sunday at 9:00 AM in our sanctuary.", color: "bg-primary", border: "border-primary/20" },
           { icon: BookOpen, title: "Prayer Fellowship", desc: "Mid-week gathering for deep study and communal prayer. Join the engine room.", color: "bg-secondary", border: "border-secondary/20" },
-          { icon: MapPin, title: "Church Location", desc: "Muger Mokada, Ethiopia. Located in the heart of our community.", color: "bg-accent", border: "border-accent/20" }
+          { icon: MapPin, title: "Our Sanctuary", desc: "Muger Mokada, Ethiopia. Located at residential houses in the heart of our community.", color: "bg-accent", border: "border-accent/20" }
         ].map((info, i) => (
           <motion.div
             key={i}
@@ -300,7 +316,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* DAILY MANNA - Bible Quote Integration */}
+      {/* DAILY MANNA - Afaan Oromoo Bible Quotes */}
       {dailyQuote && (
         <section className="py-24 bg-primary text-white relative overflow-hidden">
           <div className="container px-4 mx-auto text-center relative z-10">
