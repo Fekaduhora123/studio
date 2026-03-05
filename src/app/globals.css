@@ -4,69 +4,62 @@
 
 @layer base {
   :root {
-    --background: 210 20% 98%;
-    --foreground: 225 60% 10%;
+    /* Deep Church Red: #8B0000 -> hsl(0 100% 27%) */
+    --background: 0 0% 100%;
+    --foreground: 222 47% 11%;
     --card: 0 0% 100%;
-    --card-foreground: 225 60% 10%;
+    --card-foreground: 222 47% 11%;
     --popover: 0 0% 100%;
-    --popover-foreground: 225 60% 10%;
-    --primary: 225 60% 35%;
+    --popover-foreground: 222 47% 11%;
+    --primary: 0 100% 27%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 225 30% 90%;
-    --secondary-foreground: 225 60% 30%;
-    --muted: 210 20% 95%;
-    --muted-foreground: 225 10% 40%;
-    --accent: 44 95% 55%;
-    --accent-foreground: 225 60% 10%;
+    --secondary: 46 65% 52%; /* Gold: #D4AF37 */
+    --secondary-foreground: 0 0% 100%;
+    --muted: 210 20% 96%;
+    --muted-foreground: 215 16% 47%;
+    --accent: 46 65% 52%;
+    --accent-foreground: 222 47% 11%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
-    --border: 210 20% 90%;
-    --input: 210 20% 90%;
-    --ring: 225 60% 35%;
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 0 100% 27%;
     --radius: 1rem;
-    --chart-1: 225 60% 35%;
-    --chart-2: 44 95% 55%;
-    --chart-3: 197 37% 24%;
+    --chart-1: 0 100% 27%;
+    --chart-2: 46 65% 52%;
+    --chart-3: 222 47% 11%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
     --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 225 60% 15%;
-    --sidebar-primary: 225 60% 35%;
+    --sidebar-foreground: 222 47% 11%;
+    --sidebar-primary: 0 100% 27%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 210 20% 95%;
-    --sidebar-accent-foreground: 225 60% 15%;
+    --sidebar-accent-foreground: 222 47% 11%;
     --sidebar-border: 210 20% 90%;
-    --sidebar-ring: 225 60% 35%;
+    --sidebar-ring: 0 100% 27%;
   }
 
   .dark {
-    --background: 225 60% 5%;
-    --foreground: 210 20% 98%;
-    --card: 225 60% 8%;
-    --card-foreground: 210 20% 98%;
-    --popover: 225 60% 8%;
-    --popover-foreground: 210 20% 98%;
-    --primary: 225 60% 55%;
-    --primary-foreground: 225 60% 10%;
-    --secondary: 225 60% 15%;
-    --secondary-foreground: 210 20% 98%;
-    --muted: 225 60% 15%;
-    --muted-foreground: 225 10% 65%;
-    --accent: 44 95% 55%;
-    --accent-foreground: 225 60% 10%;
+    --background: 222 47% 4%;
+    --foreground: 210 40% 98%;
+    --card: 222 47% 6%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222 47% 6%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 0 100% 40%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 46 65% 52%;
+    --secondary-foreground: 222 47% 11%;
+    --muted: 222 47% 15%;
+    --muted-foreground: 215 20% 65%;
+    --accent: 46 65% 52%;
+    --accent-foreground: 210 40% 98%;
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 20% 98%;
-    --border: 225 60% 15%;
-    --input: 225 60% 15%;
-    --ring: 44 95% 55%;
-    --sidebar-background: 225 60% 5%;
-    --sidebar-foreground: 210 20% 95%;
-    --sidebar-primary: 225 60% 55%;
-    --sidebar-primary-foreground: 225 60% 10%;
-    --sidebar-accent: 225 60% 12%;
-    --sidebar-accent-foreground: 210 20% 98%;
-    --sidebar-border: 225 60% 15%;
-    --sidebar-ring: 44 95% 55%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 222 47% 12%;
+    --input: 222 47% 12%;
+    --ring: 0 100% 40%;
   }
 }
 
@@ -80,52 +73,20 @@
 }
 
 @layer utilities {
-  @keyframes fadeInOverlay {
+  .glass {
+    @apply bg-white/10 backdrop-blur-md border border-white/20;
+  }
+  
+  .glass-dark {
+    @apply bg-black/40 backdrop-blur-lg border border-white/10;
+  }
+
+  @keyframes scroll-reveal {
     from { opacity: 0; transform: translateY(30px); }
     to { opacity: 1; transform: translateY(0); }
   }
 
-  @keyframes fadeInText {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-
-  @keyframes dropDown {
-    from { opacity: 0; transform: translateY(-50px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  @keyframes dropDownLeft {
-    from { opacity: 0; transform: translate(-80px, -80px); }
-    to { opacity: 1; transform: translate(0, 0); }
-  }
-
-  @keyframes pulseSlow {
-    0%, 100% { opacity: 0.1; transform: scale(1); }
-    50% { opacity: 0.3; transform: scale(1.05); }
-  }
-
-  .animate-fadeInOverlay {
-    animation: fadeInOverlay 1.8s ease-in-out forwards;
-  }
-
-  .animate-fadeInText-title {
-    animation: fadeInText 2.2s ease-in-out forwards;
-  }
-
-  .animate-fadeInText-subtitle {
-    animation: fadeInText 2.6s ease-in-out forwards;
-  }
-
-  .animate-dropDown {
-    animation: dropDown 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  }
-
-  .animate-dropDownLeft {
-    animation: dropDownLeft 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  }
-
-  .animate-pulse-slow {
-    animation: pulseSlow 4s ease-in-out infinite;
+  .animate-reveal {
+    animation: scroll-reveal 0.8s ease-out forwards;
   }
 }

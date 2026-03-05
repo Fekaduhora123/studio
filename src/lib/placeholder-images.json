@@ -7,22 +7,34 @@
       "imageHint": "open bible"
     },
     {
-      "id": "church-sanctuary",
+      "id": "church-exterior",
       "description": "An exterior view of Mugher Full Gospel Church with a prominent cross.",
       "imageUrl": "https://i.ibb.co/k2n4tJCM/unnamed.jpg",
       "imageHint": "church exterior"
     },
     {
-      "id": "event-community",
+      "id": "worship-hands",
+      "description": "Worshippers with raised hands in a brightly lit sanctuary.",
+      "imageUrl": "https://images.unsplash.com/photo-1515162305285-0293e4767cc2?q=80&w=1000",
+      "imageHint": "worship hands"
+    },
+    {
+      "id": "community-gathering",
       "description": "A diverse group of community members gathering.",
-      "imageUrl": "https://images.unsplash.com/photo-1632580254134-94c4a73dab76?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHh8fHGNvbW11bml0eSUyMGdhdGhlcmluZ3xlbnwwfHx8fDE3NzIwNjk2NTd8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1632580254134-94c4a73dab76?q=80&w=1000",
       "imageHint": "community gathering"
     },
     {
-      "id": "financial-report",
-      "description": "A close up of financial charts and graphs.",
-      "imageUrl": "https://images.unsplash.com/photo-1768055105681-7d2096c5165f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8ZmluYW5jaWFsJTIwZGF0YXxlbnwwfHx8fDE3NzIwNDU1OTF8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "financial data"
+      "id": "sermon-video",
+      "description": "A pastor preaching from a wooden pulpit.",
+      "imageUrl": "https://images.unsplash.com/photo-1438232992991-995b7058bbb3?q=80&w=1000",
+      "imageHint": "pastor preaching"
+    },
+    {
+      "id": "baptism",
+      "description": "A church baptism ceremony in a pool.",
+      "imageUrl": "https://images.unsplash.com/photo-1544427920-c49ccfb85579?q=80&w=1000",
+      "imageHint": "baptism ceremony"
     }
   ]
 }
