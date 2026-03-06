@@ -42,7 +42,7 @@ export default function Home() {
     const hour = new Date().getHours();
     if (hour >= 5 && hour < 17) {
       setDailyQuote({
-        text: "Ganama ganama gaarummaa keetiin nu quubsi, nuyis bara jireenya keenya hundumaa gammachuudhaan sitti haa ilillinu!",
+        text: " Bara keenya guutuu gammadnee akka ililchinutti,ati ganama gaarummaa keetiin nu quufsi!",
         ref: "Faarfannaa 90:14",
         time: 'morning'
       });
@@ -308,7 +308,7 @@ export default function Home() {
               {dailyQuote.time === 'morning' ? 'Manna Ganamaa' : 'Nagaa Galgalaa'}
             </Badge>
             <blockquote className="max-w-4xl mx-auto px-4">
-              <p className="text-2xl md:text-5xl font-headline font-semibold italic mb-10 leading-tight tracking-tight">
+              <p className="font-bitter font-light italic text-[20px] mb-10 leading-relaxed tracking-wide">
                 "{dailyQuote.text}"
               </p>
               <cite className="text-secondary font-black uppercase tracking-[0.5em] not-italic text-sm md:text-base">

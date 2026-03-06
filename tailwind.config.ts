@@ -14,6 +14,7 @@ export default {
         headline: ['Inter', 'sans-serif'],
         roboto: ['Roboto', 'sans-serif'],
         playfair: ['Playfair Display', 'serif'],
+        bitter: ['Bitter', 'serif'],
         code: ['monospace'],
       },
       colors: {
