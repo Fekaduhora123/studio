@@ -84,12 +84,10 @@ export default function Home() {
   return (
     <div className="flex flex-col min-h-screen bg-background font-body antialiased selection:bg-primary/20">
       
-      {/* 1. ANIMATED NAVBAR WITH TOP LOGIN BAR */}
       <header className={cn(
         "fixed top-0 w-full z-[100] transition-all duration-500 flex flex-col",
         isScrolled ? "bg-white/95 backdrop-blur-md shadow-lg border-b border-primary/5" : "bg-transparent"
       )}>
-        {/* TOP UTILITY BAR (LOGIN) */}
         <div className={cn(
           "w-full py-2 px-6 md:px-12 flex justify-end transition-all border-b",
           isScrolled ? "border-primary/5 bg-primary/5" : "border-white/5 bg-black/10"
@@ -175,7 +173,6 @@ export default function Home() {
         </AnimatePresence>
       </header>
 
-      {/* 2. HERO SECTION */}
       <section className="relative h-screen flex items-end justify-center overflow-hidden">
         {heroImg && (
           <motion.div 
@@ -238,7 +235,6 @@ export default function Home() {
         </motion.div>
       </section>
 
-      {/* 3. QUICK INFO SECTION */}
       <section className="relative z-30 -mt-16 container px-4 mx-auto grid md:grid-cols-3 gap-6">
         {[
           { 
@@ -267,6 +263,9 @@ export default function Home() {
         ].map((info, i) => (
           <motion.div
             key={i}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
             whileHover={{ y: -10 }}
             className={cn("border bg-white p-8 rounded-[2rem] shadow-xl transition-all group relative overflow-hidden", info.border)}
           >
@@ -275,14 +274,13 @@ export default function Home() {
             </div>
             <h3 className={cn(
               "text-primary uppercase tracking-tighter mb-2",
-              info.customFont ? "font-garamond font-semibold text-[24px]" : "font-headline font-bold text-xl"
+              info.customFont ? "font-bitter font-light italic text-[24px]" : "font-headline font-bold text-xl"
             )}>{info.title}</h3>
             <p className="text-muted-foreground text-sm leading-relaxed">{info.desc}</p>
           </motion.div>
         ))}
       </section>
 
-      {/* 4. ABOUT SECTION */}
       <section id="about" className="py-24 md:py-40 container px-4 mx-auto overflow-hidden">
         <div className="grid lg:grid-cols-2 gap-20 items-center">
           <div className="relative group">
@@ -320,7 +318,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* DAILY MANNA - Afaan Oromoo Bible Quotes */}
       {dailyQuote && (
         <section className="py-24 bg-primary text-white relative overflow-hidden">
           <div className="container px-4 mx-auto text-center relative z-10">
@@ -347,7 +344,6 @@ export default function Home() {
         </section>
       )}
 
-      {/* 5. MINISTRIES GRID */}
       <section id="ministries" className="py-24 md:py-40 bg-white">
         <div className="container px-4 mx-auto">
           <div className="text-center max-w-2xl mx-auto mb-20 space-y-4">
@@ -365,6 +361,9 @@ export default function Home() {
             ].map((m, i) => (
               <motion.div 
                 key={i} 
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
                 whileHover={{ y: -15, boxShadow: "0 25px 50px -12px rgba(139, 0, 0, 0.15)" }}
                 className="group p-10 bg-white rounded-[2.5rem] border border-primary/5 shadow-lg flex flex-col items-center text-center transition-all"
               >
@@ -379,7 +378,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 6. UPCOMING EVENTS */}
       <section id="events" className="py-24 md:py-40 bg-muted/20 border-y border-primary/5">
         <div className="container px-4 mx-auto">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-10 mb-20">
@@ -403,6 +401,9 @@ export default function Home() {
               events.map((event, idx) => (
                 <motion.div 
                   key={event.id}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
                   className="bg-white rounded-[3rem] p-10 shadow-xl border border-primary/5 group hover:-translate-y-2 transition-all"
                 >
                   <div className="flex items-center justify-between mb-8">
@@ -425,7 +426,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 7. SERMONS SECTION */}
       <section id="sermons" className="py-24 md:py-40 container px-4 mx-auto">
         <div className="text-center space-y-4 mb-20">
           <Badge className="bg-primary/10 text-primary font-black uppercase tracking-widest text-[10px] px-6 py-1.5">Spiritual Nourishment</Badge>
@@ -476,7 +476,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 8. DONATION SECTION */}
       <section className="py-24 md:py-40 bg-accent text-white relative overflow-hidden">
         <div className="container px-4 mx-auto text-center relative z-10 space-y-10">
           <Badge className="bg-secondary text-primary font-black uppercase tracking-[0.5em] px-10 py-2.5 rounded-full mb-4">Honoring God with Wealth</Badge>
@@ -502,7 +501,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 9. TESTIMONIES SECTION */}
       <section className="py-24 md:py-40 bg-white">
         <div className="container px-4 mx-auto">
           <div className="text-center space-y-4 mb-24">
@@ -519,6 +517,9 @@ export default function Home() {
             ].map((t, i) => (
               <motion.div 
                 key={i} 
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
                 className="bg-muted/30 p-12 rounded-[4rem] relative shadow-lg group hover:bg-white hover:shadow-2xl transition-all duration-500"
               >
                 <div className="space-y-8">
@@ -539,7 +540,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 10. PHOTO GALLERY */}
       <section className="py-24 md:py-40 bg-white border-t border-primary/5">
         <div className="container px-4 mx-auto">
           <div className="text-center space-y-4 mb-24">
@@ -569,7 +569,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 11. INVITATION SECTION */}
       <section className="py-40 md:py-60 bg-black text-white relative overflow-hidden text-center">
         <div className="container relative z-10 px-4 space-y-10">
           <Badge className="bg-primary text-white font-black uppercase tracking-[0.5em] px-14 py-3.5 rounded-full mb-6">Your Seat is Reserved</Badge>
@@ -585,7 +584,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 12. FOOTER */}
       <footer className="bg-white border-t border-primary/5 pt-32 pb-16">
         <div className="container px-4 mx-auto grid md:grid-cols-2 lg:grid-cols-4 gap-16 mb-24">
           <div className="space-y-8">
