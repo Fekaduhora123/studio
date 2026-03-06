@@ -1,3 +1,4 @@
+
 'use client';
 
 import * as React from 'react';
@@ -92,9 +93,9 @@ export default function Home() {
           "w-full py-2 px-6 md:px-12 flex justify-end transition-all border-b",
           isScrolled ? "border-primary/5 bg-primary/5" : "border-white/5 bg-black/10"
         )}>
-          <Link href="/login" className="text-[9px] font-black uppercase tracking-[0.2em] flex items-center gap-2 text-secondary hover:text-secondary/80">
-            <div className="h-1 w-1 rounded-full bg-secondary animate-pulse" />
-            <UserCircle className="h-3 w-3" />
+          <Link href="/login" className="text-[11px] font-black uppercase tracking-[0.2em] flex items-center gap-2 text-secondary hover:text-secondary/80">
+            <div className="h-1.5 w-1.5 rounded-full bg-secondary animate-pulse" />
+            <UserCircle className="h-4 w-4" />
             {user ? 'Admin Dashboard' : 'Administrator Login'}
           </Link>
         </div>
@@ -115,13 +116,13 @@ export default function Home() {
               <Link 
                 key={link.name} 
                 href={link.href} 
-                className="text-[11px] font-bold uppercase tracking-widest transition-colors text-secondary hover:text-secondary/70"
+                className="text-[14px] font-bold uppercase tracking-widest transition-colors text-secondary hover:text-secondary/70"
               >
                 {link.name}
               </Link>
             ))}
             <div className="flex gap-2">
-              <Button asChild variant="default" size="sm" className="bg-secondary hover:bg-secondary/90 rounded-full px-6 font-bold uppercase text-[9px] tracking-widest h-10 shadow-lg">
+              <Button asChild variant="default" size="sm" className="bg-secondary hover:bg-secondary/90 rounded-full px-6 font-bold uppercase text-[11px] tracking-widest h-10 shadow-lg">
                 <Link href="/donate">Join Us Now</Link>
               </Button>
             </div>
@@ -210,6 +211,10 @@ export default function Home() {
             
             <p className="text-white/80 text-sm md:text-lg font-medium max-w-2xl mx-auto mb-10 leading-relaxed font-body">
               A place to worship God, grow in faith, and serve our community. Located in Muger Mokada, we are dedicated to excellence in ministry.
+              <br />
+              <span className="block mt-4 text-white/70 text-[20px] font-bitter font-light italic">
+                Iddoo Waaqayyo itti waaqeffatamu, amantiin itti guddatu, fi hawaasa keenya itti tajaajilludha. Muger Mokada keessatti kan argamnu yoo ta’u, tajaajila qulqullina qabuuf of laanneerra.
+              </span>
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
