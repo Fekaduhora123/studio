@@ -89,15 +89,12 @@ export default function Home() {
         "fixed top-0 w-full z-[100] transition-all duration-500 flex flex-col",
         isScrolled ? "bg-white/95 backdrop-blur-md shadow-lg border-b border-primary/5" : "bg-transparent"
       )}>
-        {/* TOP UTILITY BAR */}
+        {/* TOP UTILITY BAR (LOGIN) */}
         <div className={cn(
           "w-full py-2 px-6 md:px-12 flex justify-end transition-all border-b",
           isScrolled ? "border-primary/5 bg-primary/5" : "border-white/5 bg-black/10"
         )}>
-          <Link href="/login" className={cn(
-            "text-[9px] font-black uppercase tracking-[0.2em] flex items-center gap-2",
-            isScrolled ? "text-secondary hover:text-secondary/80" : "text-secondary hover:text-secondary/80"
-          )}>
+          <Link href="/login" className="text-[9px] font-black uppercase tracking-[0.2em] flex items-center gap-2 text-secondary hover:text-secondary/80">
             <div className="h-1 w-1 rounded-full bg-secondary animate-pulse" />
             <UserCircle className="h-3 w-3" />
             {user ? 'Admin Dashboard' : 'Administrator Login'}
@@ -120,9 +117,7 @@ export default function Home() {
               <Link 
                 key={link.name} 
                 href={link.href} 
-                className={cn(
-                  "text-[11px] font-bold uppercase tracking-widest transition-colors text-secondary hover:text-secondary/70",
-                )}
+                className="text-[11px] font-bold uppercase tracking-widest transition-colors text-secondary hover:text-secondary/70"
               >
                 {link.name}
               </Link>
@@ -135,7 +130,7 @@ export default function Home() {
           </nav>
 
           <button 
-            className="ml-auto lg:hidden text-primary"
+            className="ml-auto lg:hidden"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
             {mobileMenuOpen ? <X className="h-8 w-8 text-white" /> : <Menu className={cn("h-8 w-8", isScrolled ? "text-primary" : "text-white")} />}
@@ -180,7 +175,7 @@ export default function Home() {
         </AnimatePresence>
       </header>
 
-      {/* 2. HERO SECTION (IMMERSIVE EXPERIENCE) */}
+      {/* 2. HERO SECTION */}
       <section className="relative h-screen flex items-end justify-center overflow-hidden">
         {heroImg && (
           <motion.div 
@@ -212,12 +207,12 @@ export default function Home() {
               </div>
             </div>
             
-            <h1 className="text-[48px] font-roboto font-bold text-secondary leading-tight uppercase tracking-tight mb-8 max-w-5xl mx-auto drop-shadow-2xl">
+            <h1 className="font-roboto font-bold text-secondary text-[48px] leading-tight uppercase tracking-tight mb-8 max-w-5xl mx-auto drop-shadow-2xl">
               Welcome to <br /> Mugher Full Gospel
             </h1>
             
             <p className="text-white/80 text-sm md:text-lg font-medium max-w-2xl mx-auto mb-10 leading-relaxed font-body">
-              A community where faith meets action. Located in Muger Mokada at residential houses, we are dedicated to worshipping God and serving our neighbors with excellence.
+              A place to worship God, grow in faith, and serve our community. Located in Muger Mokada, we are dedicated to excellence in ministry.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -246,9 +241,9 @@ export default function Home() {
       {/* 3. QUICK INFO SECTION */}
       <section className="relative z-30 -mt-16 container px-4 mx-auto grid md:grid-cols-3 gap-6">
         {[
-          { icon: Sunrise, title: "Sunday Worship", desc: "Experience powerful worship every Sunday at 9:00 AM in our sanctuary.", color: "bg-primary", border: "border-primary/20" },
-          { icon: BookOpen, title: "Prayer Fellowship", desc: "Mid-week gathering for deep study and communal prayer. Join the engine room.", color: "bg-secondary", border: "border-secondary/20" },
-          { icon: MapPin, title: "Our Sanctuary", desc: "Muger Mokada, Ethiopia. Located at residential houses in the heart of our community.", color: "bg-accent", border: "border-accent/20" }
+          { icon: Sunrise, title: "Sunday Worship", desc: "Join us every Sunday at 9:00 AM in our main sanctuary.", color: "bg-primary", border: "border-primary/20" },
+          { icon: BookOpen, title: "Prayer Fellowship", desc: "Weekly gathering for deep study and communal prayer.", color: "bg-secondary", border: "border-secondary/20" },
+          { icon: MapPin, title: "Our Sanctuary", desc: "Muger Mokada, Ethiopia. Residential area fellowship.", color: "bg-accent", border: "border-accent/20" }
         ].map((info, i) => (
           <motion.div
             key={i}
@@ -260,7 +255,6 @@ export default function Home() {
             </div>
             <h3 className="text-primary font-headline font-bold text-xl uppercase tracking-tighter mb-2">{info.title}</h3>
             <p className="text-muted-foreground text-sm leading-relaxed">{info.desc}</p>
-            <div className="absolute -right-4 -bottom-4 w-24 h-24 bg-primary/5 rounded-full blur-2xl group-hover:bg-primary/10 transition-colors" />
           </motion.div>
         ))}
       </section>
@@ -279,12 +273,6 @@ export default function Home() {
                 />
               )}
             </div>
-            <div className="absolute -top-10 -left-10 w-40 h-40 bg-secondary/20 rounded-full blur-3xl z-0" />
-            <div className="absolute -bottom-10 -right-10 w-60 h-60 bg-primary/10 rounded-full blur-3xl z-0" />
-            <div className="absolute bottom-8 right-8 bg-white/90 backdrop-blur-md p-6 rounded-3xl shadow-2xl z-20 border border-primary/5 hidden md:block">
-              <p className="text-primary font-black text-4xl mb-1">15+</p>
-              <p className="text-muted-foreground text-[10px] font-bold uppercase tracking-widest">Years of Ministry</p>
-            </div>
           </div>
           
           <div className="space-y-8 text-center lg:text-left">
@@ -295,20 +283,10 @@ export default function Home() {
               A Legacy of <br /> <span className="text-secondary">Spirit & Truth</span>
             </h2>
             <p className="text-muted-foreground text-lg leading-relaxed font-medium">
-              Mugher Full Gospel Church began with a simple vision: to bring the transformative power of the Gospel to our local community. Today, we are a thriving family of believers committed to excellence in worship and integrity in life.
+              Mugher Full Gospel Church is a community of believers dedicated to worship, discipleship, and service. Our mission is to share the Gospel and build a strong faith community in Muger Mokada.
             </p>
-            <div className="grid grid-cols-2 gap-6 pt-4">
-              <div className="space-y-2">
-                <h4 className="font-headline font-bold text-primary uppercase text-sm tracking-tight">Our Vision</h4>
-                <p className="text-xs text-muted-foreground">To raise a generation that reflects the glory of God in all aspects of life.</p>
-              </div>
-              <div className="space-y-2">
-                <h4 className="font-headline font-bold text-primary uppercase text-sm tracking-tight">Our Mission</h4>
-                <p className="text-xs text-muted-foreground">Sharing the Gospel, building disciples, and serving Muger Mokada.</p>
-              </div>
-            </div>
-            <Button asChild size="lg" className="bg-primary text-white font-black h-16 px-12 rounded-full uppercase tracking-widest shadow-xl hover:translate-y-[-2px] transition-all">
-              <Link href="#ministries">Our Full Story</Link>
+            <Button asChild size="lg" className="bg-primary text-white font-black h-16 px-12 rounded-full uppercase tracking-widest shadow-xl">
+              <Link href="#about">Learn Our Story</Link>
             </Button>
           </div>
         </div>
@@ -333,16 +311,11 @@ export default function Home() {
               <p className="text-2xl md:text-5xl font-headline font-semibold italic mb-10 leading-tight tracking-tight">
                 "{dailyQuote.text}"
               </p>
-              <footer className="flex flex-col items-center gap-4">
-                <div className="h-px w-20 bg-secondary/50" />
-                <cite className="text-secondary font-black uppercase tracking-[0.5em] not-italic text-sm md:text-base">
-                  — {dailyQuote.ref}
-                </cite>
-              </footer>
+              <cite className="text-secondary font-black uppercase tracking-[0.5em] not-italic text-sm md:text-base">
+                — {dailyQuote.ref}
+              </cite>
             </blockquote>
           </div>
-          <div className="absolute top-0 right-0 w-80 h-80 bg-secondary/10 rounded-full blur-[120px]" />
-          <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-secondary/5 rounded-full blur-[180px]" />
         </section>
       )}
 
@@ -360,21 +333,18 @@ export default function Home() {
               { icon: Users, title: "Youth Ministry", desc: "Empowering young leaders to influence their generation for the Kingdom." },
               { icon: Heart, title: "Women Fellowship", desc: "A vibrant community of sisters building their homes on prayer and faith." },
               { icon: Sparkles, title: "Prayer Ministry", desc: "The strategic engine room where we stand in the gap for our church." },
-              { icon: Megaphone, title: "Outreach", desc: "Taking God's love beyond the sanctuary walls into the streets of Muger." }
+              { icon: Megaphone, title: "Outreach", desc: "Taking God's love beyond the sanctuary walls into the community." }
             ].map((m, i) => (
               <motion.div 
                 key={i}
                 whileHover={{ y: -15, boxShadow: "0 25px 50px -12px rgba(139, 0, 0, 0.15)" }}
                 className="group p-10 bg-white rounded-[2.5rem] border border-primary/5 shadow-lg flex flex-col items-center text-center transition-all"
               >
-                <div className="w-20 h-20 bg-primary/5 rounded-3xl flex items-center justify-center mb-8 group-hover:bg-primary transition-all duration-500 shadow-inner">
+                <div className="w-20 h-20 bg-primary/5 rounded-3xl flex items-center justify-center mb-8 group-hover:bg-primary transition-all duration-500">
                   <m.icon className="text-primary h-10 w-10 group-hover:text-white transition-colors" />
                 </div>
                 <h4 className="font-headline font-bold text-2xl text-primary uppercase tracking-tighter mb-4">{m.title}</h4>
                 <p className="text-muted-foreground text-sm leading-relaxed font-medium">{m.desc}</p>
-                <Button variant="link" className="mt-6 text-primary font-black uppercase tracking-widest text-[10px] gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                  Learn More <ArrowRight className="h-3 w-3" />
-                </Button>
               </motion.div>
             ))}
           </div>
@@ -392,7 +362,7 @@ export default function Home() {
               </h2>
             </div>
             <Button asChild variant="outline" className="border-primary text-primary font-bold uppercase tracking-widest rounded-full px-10 h-14 border-2 hover:bg-primary/5">
-              <Link href="#events">Explore Full Calendar</Link>
+              <Link href="#events">View All Events</Link>
             </Button>
           </div>
 
@@ -400,40 +370,27 @@ export default function Home() {
             {eventsLoading ? (
               <div className="col-span-full flex flex-col items-center justify-center py-24 gap-4">
                 <Loader2 className="h-12 w-12 animate-spin text-primary" />
-                <p className="text-xs font-bold uppercase tracking-[0.3em] text-muted-foreground">Syncing Calendar...</p>
               </div>
             ) : events && events.length > 0 ? (
               events.map((event, idx) => (
                 <motion.div 
                   key={event.id}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ delay: idx * 0.1 }}
-                  viewport={{ once: true }}
                   className="bg-white rounded-[3rem] p-10 shadow-xl border border-primary/5 group hover:-translate-y-2 transition-all"
                 >
                   <div className="flex items-center justify-between mb-8">
                     <Badge className="bg-secondary/20 text-primary font-black uppercase tracking-widest text-[9px] px-4 py-1.5 rounded-full">{event.category || 'Worship'}</Badge>
-                    <div className="text-primary font-headline font-black text-3xl opacity-10 group-hover:opacity-20 transition-opacity">0{idx + 1}</div>
                   </div>
                   <h3 className="text-2xl font-headline font-black text-primary uppercase leading-tight mb-6 group-hover:text-secondary transition-colors">{event.title}</h3>
-                  <div className="space-y-4 mb-8">
-                    <div className="flex items-center gap-4 text-xs font-bold text-muted-foreground uppercase tracking-widest">
-                      <div className="p-2 bg-primary/5 rounded-lg text-primary"><CalendarIcon className="h-4 w-4" /></div> {event.date}
-                    </div>
-                    <div className="flex items-center gap-4 text-xs font-bold text-muted-foreground uppercase tracking-widest">
-                      <div className="p-2 bg-primary/5 rounded-lg text-primary"><Clock className="h-4 w-4" /></div> {event.time}
-                    </div>
+                  <p className="text-slate-600 text-sm leading-relaxed mb-8">{event.description}</p>
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2 text-xs font-bold text-muted-foreground"><CalendarIcon className="h-4 w-4" /> {event.date}</div>
+                    <div className="flex items-center gap-2 text-xs font-bold text-muted-foreground"><Clock className="h-4 w-4" /> {event.time}</div>
                   </div>
-                  <p className="text-slate-600 text-sm leading-relaxed line-clamp-3 mb-8">{event.description}</p>
-                  <Button variant="ghost" className="p-0 text-primary font-black uppercase tracking-[0.2em] text-[10px] gap-2 hover:bg-transparent group-hover:text-secondary">
-                    View Details <ArrowRight className="h-3 w-3 group-hover:translate-x-1 transition-transform" />
-                  </Button>
                 </motion.div>
               ))
             ) : (
               <div className="col-span-full py-24 text-center">
-                <p className="text-muted-foreground font-medium italic">No events scheduled. Check back soon for our next gathering.</p>
+                <p className="text-muted-foreground font-medium italic text-lg">Our calendar is being refreshed. Stay tuned for new gatherings!</p>
               </div>
             )}
           </div>
@@ -445,7 +402,7 @@ export default function Home() {
         <div className="text-center space-y-4 mb-20">
           <Badge className="bg-primary/10 text-primary font-black uppercase tracking-widest text-[10px] px-6 py-1.5">Spiritual Nourishment</Badge>
           <h2 className="text-4xl md:text-6xl font-headline font-black text-primary uppercase tracking-tighter">Sermon Gallery</h2>
-          <p className="text-muted-foreground max-w-xl mx-auto text-lg">Revisit powerful messages from our pulpit anytime, anywhere.</p>
+          <p className="text-muted-foreground max-w-xl mx-auto text-lg">Watch latest messages and deep teachings from our pulpit.</p>
         </div>
         
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
@@ -469,16 +426,14 @@ export default function Home() {
                   />
                 )}
                 <div className="absolute inset-0 bg-black/50 group-hover:bg-black/30 transition-colors flex items-center justify-center">
-                  <div className="w-20 h-20 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/30 shadow-2xl group-hover:scale-110 transition-transform">
-                    <Play className="text-white fill-white h-8 w-8 ml-1" />
-                  </div>
+                  <Play className="text-white fill-white h-12 w-12" />
                 </div>
               </div>
               <div className="p-10">
-                <h3 className="text-xl font-headline font-black text-primary uppercase tracking-tight mb-6 leading-tight group-hover:text-secondary transition-colors">{s.title}</h3>
-                <div className="flex items-center justify-between border-t border-primary/5 pt-6">
-                  <span className="text-[10px] font-black uppercase text-muted-foreground tracking-widest">{s.speaker}</span>
-                  <span className="text-[10px] font-black uppercase text-secondary tracking-widest">{s.date}</span>
+                <h3 className="text-xl font-headline font-black text-primary uppercase tracking-tight mb-6 group-hover:text-secondary transition-colors">{s.title}</h3>
+                <div className="flex items-center justify-between border-t border-primary/5 pt-6 text-[10px] font-black uppercase text-muted-foreground">
+                  <span>{s.speaker}</span>
+                  <span className="text-secondary">{s.date}</span>
                 </div>
               </div>
             </motion.div>
@@ -490,24 +445,20 @@ export default function Home() {
       <section className="py-24 md:py-40 bg-accent text-white relative overflow-hidden">
         <div className="container px-4 mx-auto text-center relative z-10 space-y-10">
           <Badge className="bg-secondary text-primary font-black uppercase tracking-[0.5em] px-10 py-2.5 rounded-full mb-4">Honoring God with Wealth</Badge>
-          <h2 className="text-4xl md:text-8xl font-headline font-black uppercase tracking-tighter leading-[0.85] max-w-5xl mx-auto">
-            Your Support Fuels <br /> <span className="text-secondary italic">Our Mission</span>
+          <h2 className="font-playfair font-medium italic text-[48px] text-white uppercase leading-tight max-w-5xl mx-auto">
+            Your Support Fuels <br /> <span className="text-secondary">Our Mission</span>
           </h2>
           <p className="text-white/70 text-lg md:text-xl font-medium max-w-3xl mx-auto leading-relaxed">
-            Every tithe and offering helps us expand our reach in Muger Mokada, maintain our sanctuary, and support our community outreach initiatives.
+            Your giving helps us spread the Gospel and serve the community excellence. Join us in building God's Kingdom.
           </p>
           <div className="flex flex-col sm:flex-row gap-6 justify-center pt-10">
             <Button asChild size="lg" className="bg-white text-primary font-black uppercase tracking-widest px-14 h-20 rounded-full shadow-2xl hover:scale-105 transition-transform text-lg">
-              <Link href="/donate">Log Contribution</Link>
+              <Link href="/donate">Give Donation</Link>
             </Button>
             <Button asChild variant="outline" size="lg" className="border-white/40 text-white hover:bg-white/10 font-black uppercase tracking-widest px-14 h-20 rounded-full backdrop-blur-sm text-lg">
               <Link href="/donate">Upload QR Receipt</Link>
             </Button>
           </div>
-        </div>
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full opacity-10 pointer-events-none">
-          <div className="absolute top-20 left-10 w-96 h-96 bg-primary/20 rounded-full blur-[150px]" />
-          <div className="absolute bottom-20 right-10 w-[600px] h-[600px] bg-secondary/10 rounded-full blur-[200px]" />
         </div>
       </section>
 
@@ -516,31 +467,25 @@ export default function Home() {
         <div className="container px-4 mx-auto">
           <div className="text-center space-y-4 mb-24">
             <Badge className="bg-secondary/20 text-primary font-black uppercase tracking-widest text-[10px] px-6 py-1.5">Transformed Lives</Badge>
-            <h2 className="text-4xl md:text-6xl font-headline font-black text-primary uppercase tracking-tighter">Testimonies</h2>
-            <p className="text-muted-foreground font-medium text-lg">Voices from our church family sharing the goodness of God.</p>
+            <h2 className="font-playfair font-medium italic text-[48px] text-primary uppercase tracking-tighter">Testimonies</h2>
+            <p className="text-muted-foreground font-medium text-lg">Voices from our congregation sharing the goodness of God.</p>
           </div>
           
           <div className="grid md:grid-cols-3 gap-10 max-w-7xl mx-auto">
             {[
-              { name: "Sintayehu B.", text: "Walking through these doors was the start of a new chapter for my family. The support we found here is unparalleled.", initial: "S" },
-              { name: "Abebe K.", text: "The Wednesday prayer fellowships have been my source of strength. God has restored my hope through this ministry.", initial: "A" },
-              { name: "Tizita M.", text: "I love the transparency of the leadership. The AI-verified donations give me peace of mind in my giving.", initial: "T" }
+              { name: "Sintayehu B.", text: "Walking through these doors was the start of a new chapter for my family. The community here is truly family." },
+              { name: "Abebe K.", text: "The Wednesday prayer fellowships have been my source of strength during difficult times. God is faithful!" },
+              { name: "Tizita M.", text: "I love the transparency of the leadership. The QR verification system makes giving so easy and secure." }
             ].map((t, i) => (
               <motion.div 
                 key={i} 
-                initial={{ opacity: 0, scale: 0.95 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
                 className="bg-muted/30 p-12 rounded-[4rem] relative shadow-lg group hover:bg-white hover:shadow-2xl transition-all duration-500"
               >
-                <div className="absolute -top-6 left-12 w-14 h-14 bg-secondary rounded-2xl flex items-center justify-center shadow-lg group-hover:rotate-12 transition-transform">
-                  <Sparkles className="text-primary h-7 w-7" />
-                </div>
                 <div className="space-y-8">
                   <p className="text-primary font-medium italic text-xl leading-relaxed">"{t.text}"</p>
                   <div className="flex items-center gap-4 border-t border-primary/10 pt-8">
-                    <div className="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center font-black uppercase shadow-lg">
-                      {t.initial}
+                    <div className="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center font-black uppercase">
+                      {t.name.charAt(0)}
                     </div>
                     <div className="flex flex-col">
                       <span className="font-headline font-bold text-primary uppercase tracking-widest text-xs">{t.name}</span>
@@ -558,8 +503,8 @@ export default function Home() {
       <section className="py-24 md:py-40 bg-white border-t border-primary/5">
         <div className="container px-4 mx-auto">
           <div className="text-center space-y-4 mb-24">
-            <h2 className="text-4xl md:text-7xl font-headline font-black text-primary uppercase tracking-tighter">Sacred Moments</h2>
-            <p className="text-muted-foreground font-medium text-lg">Capturing our journey of faith in the heart of Muger Mokada.</p>
+            <h2 className="font-playfair font-medium italic text-[48px] text-primary uppercase tracking-tighter">Sacred Moments</h2>
+            <p className="text-muted-foreground font-medium text-lg">Capturing our journey of faith in Muger Mokada.</p>
           </div>
           
           <div className="columns-1 sm:columns-2 lg:columns-3 gap-8 space-y-8">
@@ -578,9 +523,6 @@ export default function Home() {
                     className="object-cover group-hover:scale-110 transition-transform duration-1000"
                   />
                 )}
-                <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                  <Button variant="outline" className="text-white border-white rounded-full bg-black/20 backdrop-blur-md uppercase font-black text-[10px] tracking-widest px-8">Explore Photo</Button>
-                </div>
               </motion.div>
             ))}
           </div>
@@ -591,19 +533,15 @@ export default function Home() {
       <section className="py-40 md:py-60 bg-black text-white relative overflow-hidden text-center">
         <div className="container relative z-10 px-4 space-y-10">
           <Badge className="bg-primary text-white font-black uppercase tracking-[0.5em] px-14 py-3.5 rounded-full mb-6">Your Seat is Reserved</Badge>
-          <h2 className="text-[48px] font-playfair font-medium italic uppercase tracking-tighter leading-none max-w-6xl mx-auto drop-shadow-2xl">
+          <h2 className="font-playfair font-medium italic text-[48px] text-white uppercase leading-tight max-w-6xl mx-auto">
             Experience <br /> <span className="text-secondary">Worship Together</span>
           </h2>
           <p className="text-white/60 text-lg md:text-2xl max-w-3xl mx-auto font-medium leading-relaxed">
             We are waiting to welcome you this Sunday. Come experience the life-changing power of Christ with us.
           </p>
-          <Button asChild size="lg" className="bg-primary text-white font-black uppercase tracking-widest px-20 h-24 rounded-full shadow-[0_25px_60px_-10px_rgba(139,0,0,0.5)] hover:scale-110 transition-transform text-2xl">
+          <Button asChild size="lg" className="bg-primary text-white font-black uppercase tracking-widest px-20 h-24 rounded-full shadow-2xl hover:scale-110 transition-transform text-2xl">
             <Link href="#events">Plan Your Visit</Link>
           </Button>
-        </div>
-        <div className="absolute inset-0 z-0 opacity-20">
-          <div className="absolute inset-0 bg-gradient-to-b from-primary/30 to-black z-10" />
-          {interiorImg && <Image src={interiorImg.imageUrl} alt="Sanctuary background" fill className="object-cover blur-sm" />}
         </div>
       </section>
 
@@ -612,18 +550,16 @@ export default function Home() {
         <div className="container px-4 mx-auto grid md:grid-cols-2 lg:grid-cols-4 gap-16 mb-24">
           <div className="space-y-8">
             <Link href="/" className="flex items-center gap-2">
-              <div className="bg-primary p-2 rounded-xl shadow-lg">
-                <Church className="h-7 w-7 text-white" />
-              </div>
+              <Church className="h-7 w-7 text-primary" />
               <span className="font-headline font-black text-2xl tracking-tighter uppercase text-primary">MUGHER <span className="text-secondary">FULL GOSPEL</span></span>
             </Link>
             <p className="text-muted-foreground text-base leading-relaxed font-medium">
               Muger Mokada, Ethiopia.<br />
-              A sanctuary of faith dedicated to the restoration of hearts and community.
+              A sanctuary of faith dedicated to the restoration of hearts.
             </p>
             <div className="flex gap-4">
               {[Facebook, Instagram, Youtube, Twitter].map((Icon, i) => (
-                <Link key={i} href="#" className="w-12 h-12 bg-primary/5 rounded-2xl flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all shadow-sm">
+                <Link key={i} href="#" className="w-12 h-12 bg-primary/5 rounded-2xl flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all">
                   <Icon className="h-5 w-5" />
                 </Link>
               ))}
@@ -631,47 +567,43 @@ export default function Home() {
           </div>
           
           <div className="space-y-8">
-            <h4 className="text-sm font-black uppercase tracking-[0.2em] text-primary">Quick Navigation</h4>
-            <nav className="flex flex-col gap-5">
-              {['Home', 'About Us', 'Ministries', 'Latest Events', 'Giving'].map((l) => (
-                <Link key={l} href="#" className="text-sm font-bold text-muted-foreground hover:text-primary transition-colors uppercase tracking-tight">{l}</Link>
-              ))}
-            </nav>
-          </div>
-          
-          <div className="space-y-8">
             <h4 className="text-sm font-black uppercase tracking-[0.2em] text-primary">Service Schedule</h4>
-            <div className="space-y-6">
+            <div className="space-y-4">
               <div className="space-y-1">
                 <span className="text-[10px] font-black text-secondary uppercase tracking-widest">Sunday Worship</span>
                 <p className="text-sm font-bold text-primary uppercase">Main Service • 9:00 AM</p>
               </div>
               <div className="space-y-1">
-                <span className="text-[10px] font-black text-secondary uppercase tracking-widest">Mid-Week Prayer</span>
-                <p className="text-sm font-bold text-primary uppercase">Fellowship • Wed 6:00 PM</p>
+                <span className="text-[10px] font-black text-secondary uppercase tracking-widest">Prayer Meeting</span>
+                <p className="text-sm font-bold text-primary uppercase">Wednesday • 6:00 PM</p>
               </div>
             </div>
           </div>
           
           <div className="space-y-8">
-            <h4 className="text-sm font-black uppercase tracking-[0.2em] text-primary">Ministry Contact</h4>
+            <h4 className="text-sm font-black uppercase tracking-[0.2em] text-primary">Quick Links</h4>
+            <nav className="flex flex-col gap-4">
+              {navLinks.map((link) => (
+                <Link key={link.name} href={link.href} className="text-sm font-bold text-muted-foreground hover:text-primary transition-colors uppercase tracking-tight">{link.name}</Link>
+              ))}
+            </nav>
+          </div>
+          
+          <div className="space-y-8">
+            <h4 className="text-sm font-black uppercase tracking-[0.2em] text-primary">Ministry Location</h4>
             <div className="space-y-4">
               <div className="flex items-center gap-4 text-muted-foreground font-medium text-sm">
-                <MapPin className="h-5 w-5 text-secondary" /> Muger Mokada, Residential Area
+                <MapPin className="h-5 w-5 text-secondary" /> Muger Mokada, Ethiopia
               </div>
               <div className="flex items-center gap-4 text-muted-foreground font-medium text-sm">
-                <Clock className="h-5 w-5 text-secondary" /> Office: Mon-Fri 9AM-5PM
+                <Clock className="h-5 w-5 text-secondary" /> Mon-Fri 9AM-5PM
               </div>
             </div>
           </div>
         </div>
         
-        <div className="container px-4 mx-auto pt-16 border-t border-primary/5 text-center space-y-4">
+        <div className="container px-4 mx-auto pt-16 border-t border-primary/5 text-center">
           <p className="text-[11px] font-black uppercase tracking-[0.5em] text-primary opacity-80">© 2024 Mugher Full Gospel Church • SanctuaryLink System</p>
-          <div className="flex justify-center gap-6">
-            <Link href="#" className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground hover:text-primary">Privacy Policy</Link>
-            <Link href="#" className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground hover:text-primary">Terms of Service</Link>
-          </div>
         </div>
       </footer>
     </div>
