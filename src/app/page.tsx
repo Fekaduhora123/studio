@@ -591,8 +591,8 @@ export default function Home() {
       <section className="py-40 md:py-60 bg-black text-white relative overflow-hidden text-center">
         <div className="container relative z-10 px-4 space-y-10">
           <Badge className="bg-primary text-white font-black uppercase tracking-[0.5em] px-14 py-3.5 rounded-full mb-6">Your Seat is Reserved</Badge>
-          <h2 className="text-5xl md:text-[9rem] font-headline font-black uppercase tracking-tighter leading-[0.75] max-w-6xl mx-auto drop-shadow-2xl">
-            Experience <br /> <span className="text-secondary italic">Worship Together</span>
+          <h2 className="text-[48px] font-playfair font-medium italic uppercase tracking-tighter leading-none max-w-6xl mx-auto drop-shadow-2xl">
+            Experience <br /> <span className="text-secondary">Worship Together</span>
           </h2>
           <p className="text-white/60 text-lg md:text-2xl max-w-3xl mx-auto font-medium leading-relaxed">
             We are waiting to welcome you this Sunday. Come experience the life-changing power of Christ with us.
