@@ -174,7 +174,7 @@ export default function Home() {
         </AnimatePresence>
       </header>
 
-      <section className="relative h-screen flex items-end justify-center overflow-hidden">
+      <section className="relative h-[100svh] flex items-end justify-center overflow-hidden">
         {heroImg && (
           <motion.div 
             initial={{ scale: 1.1 }}
@@ -209,13 +209,14 @@ export default function Home() {
               Welcome to <br /> Mugher Full Gospel
             </h1>
             
-            <p className="text-white/80 text-sm md:text-lg font-medium max-w-2xl mx-auto mb-10 leading-relaxed font-body">
-              A place to worship God, grow in faith, and serve our community. Located in Muger Mokada, we are dedicated to excellence in ministry.
-              <br />
-              <span className="block mt-4 text-white/70 text-[20px] font-bitter font-light italic">
+            <div className="space-y-4 max-w-2xl mx-auto mb-10">
+              <p className="text-white/80 text-sm md:text-lg font-medium leading-relaxed font-body">
+                A place to worship God, grow in faith, and serve our community. Located in Muger Mokada, we are dedicated to excellence in ministry.
+              </p>
+              <p className="text-white/70 text-[20px] font-bitter font-light italic leading-relaxed">
                 Iddoo Waaqayyo itti waaqeffatamu, amantiin itti guddatu, fi hawaasa keenya itti tajaajilludha. Muger Mokada keessatti kan argamnu yoo ta’u, tajaajila qulqullina qabuuf of laanneerra.
-              </span>
-            </p>
+              </p>
+            </div>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Button asChild size="lg" className="bg-primary text-white font-black uppercase tracking-widest px-10 h-16 rounded-full shadow-2xl hover:scale-105 transition-transform group">
@@ -308,14 +309,19 @@ export default function Home() {
             <h2 className="font-playfair font-medium italic text-[48px] text-primary uppercase leading-[1.1] tracking-tighter">
               A Legacy of <br /> <span className="text-secondary">Spirit & Truth</span>
             </h2>
-            <motion.p 
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="text-muted-foreground font-bitter font-light italic text-[20px] leading-relaxed"
-            >
-              Mugher Full Gospel Church is a community of believers dedicated to worship, discipleship, and service. Our mission is to share the Gospel and build a strong faith community in Muger Mokada,
-            </motion.p>
+            <div className="space-y-4">
+              <motion.p 
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="text-muted-foreground font-bitter font-light italic text-[20px] leading-relaxed"
+              >
+                Mugher Full Gospel Church is a community of believers dedicated to worship, discipleship, and service. Our mission is to share the Gospel and build a strong faith community in Mugher Mokada,
+              </motion.p>
+              <p className="text-muted-foreground/80 font-bitter font-light italic text-[20px] leading-relaxed">
+                Iddoo Waaqayyo itti waaqeffatamu, amantiin itti guddatu, fi hawaasa keenya itti tajaajilludha. Muger Mokada keessatti kan argamnu yoo ta’u, tajaajila qulqullina qabuuf of laanneerra.
+              </p>
+            </div>
             <Button asChild size="lg" className="bg-primary text-white font-black h-16 px-12 rounded-full uppercase tracking-widest shadow-xl">
               <Link href="#about">Learn Our Story</Link>
             </Button>
