@@ -241,9 +241,27 @@ export default function Home() {
       {/* 3. QUICK INFO SECTION */}
       <section className="relative z-30 -mt-16 container px-4 mx-auto grid md:grid-cols-3 gap-6">
         {[
-          { icon: Sunrise, title: "Sunday Worship", desc: "Join us every Sunday at 9:00 AM in our main sanctuary.", color: "bg-primary", border: "border-primary/20" },
-          { icon: BookOpen, title: "Prayer Fellowship", desc: "Weekly gathering for deep study and communal prayer.", color: "bg-secondary", border: "border-secondary/20" },
-          { icon: MapPin, title: "Our Sanctuary", desc: "Muger Mokada, Ethiopia. Residential area fellowship.", color: "bg-accent", border: "border-accent/20" }
+          { 
+            icon: Sunrise, 
+            title: "Sunday Worship", 
+            desc: "Sagantaan keenya idlee dilbataa akkummaa itti fufetti jirachuu isaa isinn beksiisna.sagantaan keenya kadhanaa,farfanaa,fi tajaajila barumsaa sunday 3:30-6:30", 
+            color: "bg-primary", 
+            border: "border-primary/20" 
+          },
+          { 
+            icon: BookOpen, 
+            title: "Thursday Program", 
+            desc: "gaafa guyyaa kamisaa sagantaan keenya akkummaa jirutti itti fufaa Thursday 11:00 AM", 
+            color: "bg-secondary", 
+            border: "border-secondary/20" 
+          },
+          { 
+            icon: MapPin, 
+            title: "Our Sanctuary", 
+            desc: "Muger Mokada, Ethiopia. Residential area fellowship.", 
+            color: "bg-accent", 
+            border: "border-accent/20" 
+          }
         ].map((info, i) => (
           <motion.div
             key={i}
@@ -282,9 +300,14 @@ export default function Home() {
             <h2 className="font-playfair font-medium italic text-[48px] text-primary uppercase leading-[1.1] tracking-tighter">
               A Legacy of <br /> <span className="text-secondary">Spirit & Truth</span>
             </h2>
-            <p className="text-muted-foreground text-lg leading-relaxed font-medium">
-              Mugher Full Gospel Church is a community of believers dedicated to worship, discipleship, and service. Our mission is to share the Gospel and build a strong faith community in Muger Mokada.
-            </p>
+            <motion.p 
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-muted-foreground font-bitter font-light italic text-[20px] leading-relaxed"
+            >
+              Mugher Full Gospel Church is a community of believers dedicated to worship, discipleship, and service. Our mission is to share the Gospel and build a strong faith community in Muger Mokada,
+            </motion.p>
             <Button asChild size="lg" className="bg-primary text-white font-black h-16 px-12 rounded-full uppercase tracking-widest shadow-xl">
               <Link href="#about">Learn Our Story</Link>
             </Button>
@@ -402,7 +425,14 @@ export default function Home() {
         <div className="text-center space-y-4 mb-20">
           <Badge className="bg-primary/10 text-primary font-black uppercase tracking-widest text-[10px] px-6 py-1.5">Spiritual Nourishment</Badge>
           <h2 className="text-4xl md:text-6xl font-headline font-black text-primary uppercase tracking-tighter">Sermon Gallery</h2>
-          <p className="text-muted-foreground max-w-xl mx-auto text-lg">Watch latest messages and deep teachings from our pulpit.</p>
+          <motion.p 
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-muted-foreground max-w-xl mx-auto font-bitter font-light italic text-[20px]"
+          >
+            Watch latest messages and deep teachings from our pulpit.
+          </motion.p>
         </div>
         
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
@@ -448,9 +478,14 @@ export default function Home() {
           <h2 className="font-playfair font-medium italic text-[48px] text-white uppercase leading-tight max-w-5xl mx-auto">
             Your Support Fuels <br /> <span className="text-secondary">Our Mission</span>
           </h2>
-          <p className="text-white/70 text-lg md:text-xl font-medium max-w-3xl mx-auto leading-relaxed">
+          <motion.p 
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-white/80 max-w-3xl mx-auto font-bitter font-light italic text-[20px] leading-relaxed"
+          >
             Your giving helps us spread the Gospel and serve the community excellence. Join us in building God's Kingdom.
-          </p>
+          </motion.p>
           <div className="flex flex-col sm:flex-row gap-6 justify-center pt-10">
             <Button asChild size="lg" className="bg-white text-primary font-black uppercase tracking-widest px-14 h-20 rounded-full shadow-2xl hover:scale-105 transition-transform text-lg">
               <Link href="/donate">Give Donation</Link>
