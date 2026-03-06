@@ -1,4 +1,3 @@
-
 'use client';
 
 import * as React from 'react';
@@ -158,9 +157,14 @@ export default function Home() {
         </div>
 
         <div className="h-20 flex items-center px-6 md:px-12">
-          <Link href="/" className="flex items-center gap-2 group">
-            <div className="bg-primary p-1.5 rounded-lg group-hover:rotate-12 transition-transform shadow-lg">
-              <Church className="h-6 w-6 text-white" />
+          <Link href="/" className="flex items-center gap-3 group">
+            <div className="relative h-12 w-12 rounded-full overflow-hidden border-2 border-primary/20 shadow-lg group-hover:scale-110 transition-transform bg-white">
+              <Image 
+                src="https://i.ibb.co/vxZd8ZzQ/photo-2026-03-06-15-19-1222.jpg" 
+                alt="Mugher Full Gospel Logo" 
+                fill 
+                className="object-cover"
+              />
             </div>
             <span className={cn(
               "font-headline font-black text-xl tracking-tighter uppercase",
