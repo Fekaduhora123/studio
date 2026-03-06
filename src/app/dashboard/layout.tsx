@@ -27,7 +27,8 @@ import {
   Settings,
   Bell,
   Loader2,
-  UserCircle
+  UserCircle,
+  MessageSquare
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -41,6 +42,7 @@ const navItems = [
   { icon: ReceiptText, label: 'Expenses', href: '/dashboard/expenses' },
   { icon: FileBarChart, label: 'Reports', href: '/dashboard/reports' },
   { icon: Megaphone, label: 'Events', href: '/dashboard/events' },
+  { icon: MessageSquare, label: 'Testimonies', href: '/dashboard/testimonies' },
 ];
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
