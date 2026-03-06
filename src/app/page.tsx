@@ -1,4 +1,3 @@
-
 'use client';
 
 import * as React from 'react';
@@ -314,7 +313,7 @@ export default function Home() {
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="text-muted-foreground font-bitter font-light italic text-[20px] leading-relaxed"
+                className="text-muted-foreground font-bitter font-light italic text-[20px] leading-relaxed border-2 border-primary/20 p-8 rounded-[2rem] bg-primary/5 shadow-inner"
               >
                 Mugher Full Gospel Church is a community of believers dedicated to worship, discipleship, and service. Our mission is to share the Gospel and build a strong faith community in Mugher Mokada.
               </motion.p>
