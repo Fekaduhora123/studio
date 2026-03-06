@@ -243,17 +243,19 @@ export default function Home() {
         {[
           { 
             icon: Sunrise, 
-            title: "Sunday Worship", 
+            title: "Sunday Service", 
             desc: "Sagantaan keenya idlee dilbataa akkummaa itti fufetti jirachuu isaa isinn beksiisna.sagantaan keenya kadhanaa,farfanaa,fi tajaajila barumsaa sunday 3:30-6:30", 
             color: "bg-primary", 
-            border: "border-primary/20" 
+            border: "border-primary/20",
+            customFont: true
           },
           { 
             icon: BookOpen, 
-            title: "Thursday Program", 
+            title: "Thursday Service", 
             desc: "gaafa guyyaa kamisaa sagantaan keenya akkummaa jirutti itti fufaa Thursday 11:00 AM", 
             color: "bg-secondary", 
-            border: "border-secondary/20" 
+            border: "border-secondary/20",
+            customFont: true
           },
           { 
             icon: MapPin, 
@@ -271,7 +273,10 @@ export default function Home() {
             <div className={cn("w-14 h-14 rounded-2xl flex items-center justify-center mb-6 group-hover:rotate-12 transition-transform shadow-lg", info.color)}>
               <info.icon className="text-white h-7 w-7" />
             </div>
-            <h3 className="text-primary font-headline font-bold text-xl uppercase tracking-tighter mb-2">{info.title}</h3>
+            <h3 className={cn(
+              "text-primary uppercase tracking-tighter mb-2",
+              info.customFont ? "font-garamond font-semibold text-[24px]" : "font-headline font-bold text-xl"
+            )}>{info.title}</h3>
             <p className="text-muted-foreground text-sm leading-relaxed">{info.desc}</p>
           </motion.div>
         ))}
@@ -359,7 +364,7 @@ export default function Home() {
               { icon: Megaphone, title: "Outreach", desc: "Taking God's love beyond the sanctuary walls into the community." }
             ].map((m, i) => (
               <motion.div 
-                key={i}
+                key={i} 
                 whileHover={{ y: -15, boxShadow: "0 25px 50px -12px rgba(139, 0, 0, 0.15)" }}
                 className="group p-10 bg-white rounded-[2.5rem] border border-primary/5 shadow-lg flex flex-col items-center text-center transition-all"
               >

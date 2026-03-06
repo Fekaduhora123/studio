@@ -15,6 +15,7 @@ export default {
         roboto: ['Roboto', 'sans-serif'],
         playfair: ['Playfair Display', 'serif'],
         bitter: ['Bitter', 'serif'],
+        garamond: ['EB Garamond', 'serif'],
         code: ['monospace'],
       },
       colors: {
