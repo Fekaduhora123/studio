@@ -1,3 +1,4 @@
+
 'use client';
 
 import * as React from 'react';
@@ -11,10 +12,11 @@ import {
   Calendar as CalendarIcon, MapPin, Clock, ArrowRight, 
   Loader2, Play, BookOpen, Sunrise, Sunset, 
   Menu, X, Sparkles, Megaphone, Video, ChevronDown,
-  Facebook, Instagram, Youtube, Twitter, UserCircle
+  Facebook, Instagram, Youtube, Twitter, UserCircle,
+  MessageSquare, Send
 } from 'lucide-react';
 import { useCollection, useFirestore, useUser } from '@/firebase';
-import { collection, query, orderBy, limit } from 'firebase/firestore';
+import { collection, query, orderBy, limit, addDoc, serverTimestamp, where } from 'firebase/firestore';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -23,16 +25,28 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogDescription,
+  DialogFooter
 } from "@/components/ui/dialog";
 import { cn } from '@/lib/utils';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { useToast } from '@/hooks/use-toast';
 
 export default function Home() {
   const firestore = useFirestore();
   const { user } = useUser();
+  const { toast } = useToast();
   const [mounted, setMounted] = React.useState(false);
   const [isScrolled, setIsScrolled] = React.useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
   const [dailyQuote, setDailyQuote] = React.useState<{ text: string, ref: string, time: 'morning' | 'evening' } | null>(null);
+  
+  // Testimony form state
+  const [testimonyName, setTestimonyName] = React.useState('');
+  const [testimonyContent, setTestimonyContent] = React.useState('');
+  const [isSubmittingTestimony, setIsSubmittingTestimony] = React.useState(false);
+  const [isTestimonyOpen, setIsTestimonyOpen] = React.useState(false);
 
   React.useEffect(() => {
     setMounted(true);
@@ -62,7 +76,13 @@ export default function Home() {
     return query(collection(firestore, 'events'), orderBy('createdAt', 'desc'), limit(3));
   }, [firestore]);
 
+  const testimoniesQuery = React.useMemo(() => {
+    if (!firestore) return null;
+    return query(collection(firestore, 'testimonies'), where('status', '==', 'approved'), orderBy('timestamp', 'desc'), limit(3));
+  }, [firestore]);
+
   const { data: events, loading: eventsLoading } = useCollection(eventsQuery);
+  const { data: dbTestimonies } = useCollection(testimoniesQuery);
 
   const heroImg = PlaceHolderImages.find(img => img.id === 'church-exterior');
   const interiorImg = PlaceHolderImages.find(img => img.id === 'hero-church');
@@ -78,6 +98,44 @@ export default function Home() {
     { name: 'Sermons', href: '#sermons' },
     { name: 'Donate', href: '/donate' },
   ];
+
+  const handleTestimonySubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!firestore || !testimonyName || !testimonyContent) return;
+    
+    setIsSubmittingTestimony(true);
+    try {
+      await addDoc(collection(firestore, 'testimonies'), {
+        name: testimonyName,
+        content: testimonyContent,
+        status: 'pending',
+        timestamp: serverTimestamp(),
+      });
+      toast({
+        title: "Testimony Received",
+        description: "Your story has been submitted for review. Thank you for sharing!",
+      });
+      setTestimonyName('');
+      setTestimonyContent('');
+      setIsTestimonyOpen(false);
+    } catch (err) {
+      toast({
+        variant: "destructive",
+        title: "Submission Failed",
+        description: "Something went wrong. Please try again later.",
+      });
+    } finally {
+      setIsSubmittingTestimony(false);
+    }
+  };
+
+  const staticTestimonies = [
+    { name: "Sintayehu B.", text: "Walking through these doors was the start of a new chapter for my family. The community here is truly family." },
+    { name: "Abebe K.", text: "The Wednesday prayer fellowships have been my source of strength during difficult times. God is faithful!" },
+    { name: "Tizita M.", text: "I love the transparency of the leadership. The QR verification system makes giving so easy and secure." }
+  ];
+
+  const displayTestimonies = dbTestimonies && dbTestimonies.length > 0 ? dbTestimonies : staticTestimonies;
 
   if (!mounted) return null;
 
@@ -247,16 +305,14 @@ export default function Home() {
             title: "Sunday Service", 
             desc: "Sagantaan keenya idlee dilbataa akkummaa itti fufetti jirachuu isaa isinn beksiisna.sagantaan keenya kadhanaa,farfanaa,fi tajaajila barumsaa sunday 3:30-6:30", 
             color: "bg-primary", 
-            border: "border-primary/20",
-            customFont: true
+            border: "border-primary/20"
           },
           { 
             icon: BookOpen, 
             title: "Thursday Service", 
             desc: "gaafa guyyaa kamisaa sagantaan keenya akkummaa jirutti itti fufaa Thursday 11:00 AM", 
             color: "bg-secondary", 
-            border: "border-secondary/20",
-            customFont: true
+            border: "border-secondary/20"
           },
           { 
             icon: MapPin, 
@@ -277,10 +333,7 @@ export default function Home() {
             <div className={cn("w-14 h-14 rounded-2xl flex items-center justify-center mb-6 group-hover:rotate-12 transition-transform shadow-lg", info.color)}>
               <info.icon className="text-white h-7 w-7" />
             </div>
-            <h3 className={cn(
-              "text-primary uppercase tracking-tighter mb-2",
-              info.customFont ? "font-bitter font-light italic text-[24px]" : "font-headline font-bold text-xl"
-            )}>{info.title}</h3>
+            <h3 className="font-bitter font-light italic text-[24px] text-primary uppercase tracking-tighter mb-2">{info.title}</h3>
             <p className="text-muted-foreground text-sm leading-relaxed">{info.desc}</p>
           </motion.div>
         ))}
@@ -309,14 +362,14 @@ export default function Home() {
               A Legacy of <br /> <span className="text-secondary">Spirit & Truth</span>
             </h2>
             <div className="space-y-6">
-              <motion.p 
+              <motion.div 
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 className="text-muted-foreground font-bitter font-light italic text-[20px] leading-relaxed border-2 border-primary/20 p-8 rounded-[2rem] bg-primary/5 shadow-inner"
               >
                 Mugher Full Gospel Church is a community of believers dedicated to worship, discipleship, and service. Our mission is to share the Gospel and build a strong faith community in Mugher Mokada.
-              </motion.p>
+              </motion.div>
               
               <div className="space-y-4">
                 <motion.p 
@@ -568,15 +621,57 @@ export default function Home() {
           <div className="text-center space-y-4 mb-24">
             <Badge className="bg-secondary/20 text-primary font-black uppercase tracking-widest text-[10px] px-6 py-1.5">Transformed Lives</Badge>
             <h2 className="font-playfair font-medium italic text-[48px] text-primary uppercase tracking-tighter">Testimonies</h2>
-            <p className="text-muted-foreground font-medium text-lg">Voices from our congregation sharing the goodness of God.</p>
+            <p className="text-muted-foreground font-medium text-lg mb-8">Voices from our congregation sharing the goodness of God.</p>
+            
+            <Dialog open={isTestimonyOpen} onOpenChange={setIsTestimonyOpen}>
+              <DialogTrigger asChild>
+                <Button variant="outline" className="border-primary text-primary font-black uppercase tracking-widest rounded-full px-10 h-14 border-2 hover:bg-primary/5 transition-all">
+                  <MessageSquare className="mr-2 h-5 w-5" /> Share Your Story / Idea
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-md rounded-[2rem] border-none shadow-2xl">
+                <DialogHeader>
+                  <DialogTitle className="font-headline font-black text-primary uppercase text-xl">Submit Your Testimony</DialogTitle>
+                  <DialogDescription>Share your experience or ideas with the community. Your submission will be reviewed by our team.</DialogDescription>
+                </DialogHeader>
+                <form onSubmit={handleTestimonySubmit} className="space-y-6 pt-4">
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">Your Name</label>
+                    <Input 
+                      placeholder="Enter your name" 
+                      className="h-12 rounded-xl"
+                      value={testimonyName}
+                      onChange={(e) => setTestimonyName(e.target.value)}
+                      required
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">Your Story or Idea</label>
+                    <Textarea 
+                      placeholder="What has God done in your life? Or share an idea for our community..." 
+                      className="min-h-[150px] rounded-[1.5rem]"
+                      value={testimonyContent}
+                      onChange={(e) => setTestimonyContent(e.target.value)}
+                      required
+                    />
+                  </div>
+                  <DialogFooter>
+                    <Button 
+                      type="submit" 
+                      className="w-full h-14 bg-primary text-white font-black uppercase tracking-widest rounded-xl shadow-lg"
+                      disabled={isSubmittingTestimony}
+                    >
+                      {isSubmittingTestimony ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <Send className="mr-2 h-5 w-5" />}
+                      {isSubmittingTestimony ? "Submitting..." : "Send Testimony"}
+                    </Button>
+                  </DialogFooter>
+                </form>
+              </DialogContent>
+            </Dialog>
           </div>
           
           <div className="grid md:grid-cols-3 gap-10 max-w-7xl mx-auto">
-            {[
-              { name: "Sintayehu B.", text: "Walking through these doors was the start of a new chapter for my family. The community here is truly family." },
-              { name: "Abebe K.", text: "The Wednesday prayer fellowships have been my source of strength during difficult times. God is faithful!" },
-              { name: "Tizita M.", text: "I love the transparency of the leadership. The QR verification system makes giving so easy and secure." }
-            ].map((t, i) => (
+            {displayTestimonies.map((t: any, i: number) => (
               <motion.div 
                 key={i} 
                 initial={{ opacity: 0, y: 20 }}
@@ -585,10 +680,10 @@ export default function Home() {
                 className="bg-muted/30 p-12 rounded-[4rem] relative shadow-lg group hover:bg-white hover:shadow-2xl transition-all duration-500"
               >
                 <div className="space-y-8">
-                  <p className="text-primary font-medium italic text-xl leading-relaxed">"{t.text}"</p>
+                  <p className="text-primary font-medium italic text-xl leading-relaxed">"{t.text || t.content}"</p>
                   <div className="flex items-center gap-4 border-t border-primary/10 pt-8">
                     <div className="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center font-black uppercase">
-                      {t.name.charAt(0)}
+                      {(t.name || 'C').charAt(0)}
                     </div>
                     <div className="flex flex-col">
                       <span className="font-headline font-bold text-primary uppercase tracking-widest text-xs">{t.name}</span>

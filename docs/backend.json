@@ -88,6 +88,19 @@
         "status": { "type": "string", "enum": ["Approved", "Pending", "Rejected"] }
       },
       "required": ["description", "amount", "date", "status"]
+    },
+    "Testimony": {
+      "title": "Testimony",
+      "description": "A personal story or idea shared by a community member.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "content": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "status": { "type": "string", "enum": ["pending", "approved"], "default": "pending" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "content", "timestamp"]
     }
   },
   "auth": {
@@ -109,6 +122,10 @@
     "/expenses/{expenseId}": {
       "schema": "Expense",
       "description": "Collection of church expenses."
+    },
+    "/testimonies/{testimonyId}": {
+      "schema": "Testimony",
+      "description": "Collection of shared testimonies and community ideas."
     }
   }
 }
