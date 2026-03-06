@@ -28,13 +28,18 @@ export function useDoc<T = DocumentData>(ref: DocumentReference<T> | null) {
           setData(null);
         }
         setLoading(false);
+        setError(null);
       },
-      async (err) => {
-        const permissionError = new FirestorePermissionError({
-          path: ref.path,
-          operation: 'get',
-        });
-        errorEmitter.emit('permission-error', permissionError);
+      (err: any) => {
+        // Only emit permission error if it's actually a permission-denied code
+        if (err.code === 'permission-denied') {
+          const permissionError = new FirestorePermissionError({
+            path: ref.path,
+            operation: 'get',
+          });
+          errorEmitter.emit('permission-error', permissionError);
+        }
+        
         setError(err);
         setLoading(false);
       }

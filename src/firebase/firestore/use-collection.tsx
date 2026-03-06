@@ -2,7 +2,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Query, onSnapshot, QuerySnapshot, DocumentData, CollectionReference } from 'firebase/firestore';
+import { Query, onSnapshot, QuerySnapshot, DocumentData } from 'firebase/firestore';
 import { errorEmitter } from '../error-emitter';
 import { FirestorePermissionError } from '../errors';
 
@@ -28,16 +28,19 @@ export function useCollection<T = DocumentData>(query: Query<T> | null) {
         }));
         setData(items);
         setLoading(false);
+        setError(null);
       },
-      async (err) => {
-        // Try to extract the path from the query object if possible
-        const path = (query as any).path || (query as any)._query?.path?.relativeName || 'collections';
+      (err: any) => {
+        // Only emit permission error if it's actually a permission-denied code
+        if (err.code === 'permission-denied') {
+          const path = (query as any).path || (query as any)._query?.path?.relativeName || 'collections';
+          const permissionError = new FirestorePermissionError({
+            path: path,
+            operation: 'list',
+          });
+          errorEmitter.emit('permission-error', permissionError);
+        }
         
-        const permissionError = new FirestorePermissionError({
-          path: path,
-          operation: 'list',
-        });
-        errorEmitter.emit('permission-error', permissionError);
         setError(err);
         setLoading(false);
       }

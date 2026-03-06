@@ -2,27 +2,43 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+    // Helper function to check if the user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Donations: Public can create, Admins can manage
     match /donations/{donationId} {
       allow create: if true;
-      allow read, update, delete: if request.auth != null;
+      allow read, update, delete: if isAuthenticated();
     }
+
+    // Events: Public can read, Admins can manage
     match /events/{eventId} {
       allow read: if true;
-      allow write: if request.auth != null;
+      allow write: if isAuthenticated();
     }
+
+    // Members: Only Admins can access
     match /members/{memberId} {
-      allow read, write: if request.auth != null;
+      allow read, write: if isAuthenticated();
     }
+
+    // Expenses: Only Admins can access
     match /expenses/{expenseId} {
-      allow read, write: if request.auth != null;
+      allow read, write: if isAuthenticated();
     }
+
+    // Testimonies: Public can create/read, Admins can manage
     match /testimonies/{testimonyId} {
       allow create: if true;
       allow read: if true;
-      allow update, delete: if request.auth != null;
+      allow update, delete: if isAuthenticated();
     }
+
+    // Default deny for everything else unless explicitly allowed above
     match /{document=**} {
-      allow read, write: if request.auth != null;
+      allow read, write: if isAuthenticated();
     }
   }
 }
