@@ -209,11 +209,11 @@ export default function Home() {
               Welcome to <br /> Mugher Full Gospel
             </h1>
             
-            <div className="space-y-4 max-w-2xl mx-auto mb-10">
+            <div className="space-y-4 max-w-3xl mx-auto mb-10">
               <p className="text-white/80 text-sm md:text-lg font-medium leading-relaxed font-body">
-                A place to worship God, grow in faith, and serve our community. Located in Muger Mokada, we are dedicated to excellence in ministry.
+                A place to worship God, grow in faith, and serve our community. Located in Mugher Mokada, we are dedicated to excellence in ministry.
               </p>
-              <p className="text-white/70 text-[20px] font-bitter font-light italic leading-relaxed">
+              <p className="text-white/70 font-bitter font-light italic text-[20px] leading-relaxed">
                 Iddoo Waaqayyo itti waaqeffatamu, amantiin itti guddatu, fi hawaasa keenya itti tajaajilludha. Muger Mokada keessatti kan argamnu yoo ta’u, tajaajila qulqullina qabuuf of laanneerra.
               </p>
             </div>
@@ -309,18 +309,70 @@ export default function Home() {
             <h2 className="font-playfair font-medium italic text-[48px] text-primary uppercase leading-[1.1] tracking-tighter">
               A Legacy of <br /> <span className="text-secondary">Spirit & Truth</span>
             </h2>
-            <div className="space-y-4">
+            <div className="space-y-6">
               <motion.p 
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 className="text-muted-foreground font-bitter font-light italic text-[20px] leading-relaxed"
               >
-                Mugher Full Gospel Church is a community of believers dedicated to worship, discipleship, and service. Our mission is to share the Gospel and build a strong faith community in Mugher Mokada,
+                Mugher Full Gospel Church is a community of believers dedicated to worship, discipleship, and service. Our mission is to share the Gospel and build a strong faith community in Mugher Mokada.
               </motion.p>
-              <p className="text-muted-foreground/80 font-bitter font-light italic text-[20px] leading-relaxed">
-                Iddoo Waaqayyo itti waaqeffatamu, amantiin itti guddatu, fi hawaasa keenya itti tajaajilludha. Muger Mokada keessatti kan argamnu yoo ta’u, tajaajila qulqullina qabuuf of laanneerra.
-              </p>
+              
+              <div className="space-y-4">
+                <motion.p 
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  className="text-muted-foreground font-bitter font-light italic text-[20px] leading-relaxed"
+                >
+                  Manni Amantaa Guutuu Wangellaa Muger bara 1978 (A.L.H.) yoo hundaa’u, aanaa Ada'a Bargaa keessatti mana amantaa ishee jalqabaa ta’uun seenaa boonsaa qabdi. Hundeeffamni ishee naannichatti sochi tajaajilaa bal’aaf bu’uura cimaa kan kaaye dha.
+                </motion.p>
+                <motion.p 
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  className="text-muted-foreground font-bitter font-light italic text-[20px] leading-relaxed"
+                >
+                  Adeemsa waggoota darban keessatti, manni amantaa kun gufuwwan fi rakkinnoota akkaan baay’ee keessa darbiteetti. Haata’u malee, haalota rakkisoo sana hunda obsaa fi amantaa cimaan dandamachuun, har’a sadarkaa kanaan ga’uun ishee danda’ameera. Kunis seenaa injifannoo fi resilience (dandamachuu) agarsiisudha.
+                </motion.p>
+                <motion.p 
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  className="text-muted-foreground font-bitter font-light italic text-[20px] leading-relaxed"
+                >
+                  Guddinni manni amantaa kun argisiifte akkaan ajaa’ibsiisaadha. Jalqaba irratti miseensoota muraasa qofaan kan hundaa’te yoo ta’u, yeroo ammaa kana garuu bal’attee miseensoota kumaatamaan lakkā’aman qabaachuu dandeetteetti. Sochiin kunis amantaa xiqqoorraa ka’ee gara tajaajila bal’aa fi humna qabeessaatti akka jijjiirame ragaa dha.
+                </motion.p>
+              </div>
+
+              <div className="space-y-4 pt-4 border-t border-primary/5">
+                <h4 className="font-playfair font-medium italic text-2xl text-primary">የሙገር ሙሉ ወንጌል አማኞች ቤተክርስቲያን ታሪክ</h4>
+                <motion.p 
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  className="text-muted-foreground font-bitter font-light italic text-[20px] leading-relaxed"
+                >
+                  የሙገር ሙሉ ወንጌል አማኞች ቤተክርስቲያን በ 1978 ዓ.ም. የተመሰረተች ሲሆን፣ በአዳአ በርጋ ወረዳ ውስጥ የመጀመሪያዋ ቤተክርስቲያን በመሆን የታወቀች ናት። የቤተክርስቲያኗ መመሥረት በአካባቢው ላለው መንፈሳዊ አገልግሎት እንደ ትልቅ መጀመሪያና መሠረት ይቆጠራል።
+                </motion.p>
+                <motion.p 
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  className="text-muted-foreground font-bitter font-light italic text-[20px] leading-relaxed"
+                >
+                  ቤተክርስቲያኗ ከተመሰረተችበት ጊዜ ጀምሮ በርካታ አስቸጋሪ ሁኔታዎችንና ፈተናዎችን በትዕግስት አልፋለች። እነዚህን ሁሉ መሰናክሎች በፅናት በመቋቋም ዛሬ ለደረሰችበት የከፍታ ደረጃ ላይ ለመድረስ ችላለች። ይህም የፅናትና የድል ጉዞ ታሪክ ማሳያ ነው።
+                </motion.p>
+                <motion.p 
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  className="text-muted-foreground font-bitter font-light italic text-[20px] leading-relaxed"
+                >
+                  የቤተክርስቲያኗ እድገት እጅግ አስደናቂ ነው። በመጀመሪያ ጥቂት አባላትን ብቻ ይዛ የተነሳች ቢሆንም፣ በአሁኑ ጊዜ አገልግሎቷ በሰፊው ተስፋፍቶ በሺዎች የሚቆጠሩ ምዕመናንን ማፍራት ችላለች። ይህም ከትንሽ ጅማሮ ወደ ታላቅና ጠንካራ አገልግሎት መቀየሯን የሚያረጋግጥ ትልቅ ምስክርነት ነው።
+                </motion.p>
+              </div>
             </div>
             <Button asChild size="lg" className="bg-primary text-white font-black h-16 px-12 rounded-full uppercase tracking-widest shadow-xl">
               <Link href="#about">Learn Our Story</Link>
