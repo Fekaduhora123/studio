@@ -32,20 +32,41 @@ import {
   CheckCircle2, 
   XCircle,
   MessageSquare,
-  Clock
+  Clock,
+  Plus,
+  Edit
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { useCollection, useFirestore } from '@/firebase';
-import { collection, query, orderBy, doc, deleteDoc, updateDoc } from 'firebase/firestore';
+import { collection, query, orderBy, doc, deleteDoc, updateDoc, addDoc, serverTimestamp } from 'firebase/firestore';
 import { errorEmitter } from '@/firebase/error-emitter';
 import { FirestorePermissionError, type SecurityRuleContext } from '@/firebase/errors';
 import { format } from 'date-fns';
 import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/components/ui/dialog';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { useToast } from '@/hooks/use-toast';
+
+const testimonySchema = z.object({
+  name: z.string().min(2, "Name is required"),
+  email: z.string().email("Invalid email").optional().or(z.literal('')),
+  content: z.string().min(10, "Story content is too short"),
+  status: z.enum(["approved", "pending"]).default("pending"),
+});
+
+type TestimonyFormValues = z.infer<typeof testimonySchema>;
 
 export default function TestimoniesManagementPage() {
   const firestore = useFirestore();
+  const { toast } = useToast();
   const [mounted, setMounted] = React.useState(false);
   const [searchTerm, setSearchTerm] = React.useState('');
+  const [isDialogOpen, setIsDialogOpen] = React.useState(false);
+  const [editingTestimony, setEditingTestimony] = React.useState<any>(null);
 
   React.useEffect(() => {
     setMounted(true);
@@ -58,10 +79,40 @@ export default function TestimoniesManagementPage() {
 
   const { data: testimonies, loading } = useCollection(testimoniesQuery);
 
+  const form = useForm<TestimonyFormValues>({
+    resolver: zodResolver(testimonySchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      content: "",
+      status: "pending",
+    },
+  });
+
+  React.useEffect(() => {
+    if (editingTestimony) {
+      form.reset({
+        name: editingTestimony.name,
+        email: editingTestimony.email || "",
+        content: editingTestimony.content,
+        status: editingTestimony.status || "pending",
+      });
+    } else {
+      form.reset({
+        name: "",
+        email: "",
+        content: "",
+        status: "pending",
+      });
+    }
+  }, [editingTestimony, form]);
+
   const handleUpdateStatus = (id: string, status: 'approved' | 'pending') => {
     if (!firestore) return;
     const testimonyRef = doc(firestore, 'testimonies', id);
-    updateDoc(testimonyRef, { status }).catch(async (err) => {
+    updateDoc(testimonyRef, { status }).then(() => {
+      toast({ title: `Status updated to ${status}` });
+    }).catch(async (err) => {
       const permissionError = new FirestorePermissionError({
         path: testimonyRef.path,
         operation: 'update',
@@ -71,10 +122,49 @@ export default function TestimoniesManagementPage() {
     });
   };
 
+  const onSubmit = async (values: TestimonyFormValues) => {
+    if (!firestore) return;
+
+    const data = {
+      ...values,
+      timestamp: editingTestimony ? editingTestimony.timestamp : serverTimestamp(),
+    };
+
+    if (editingTestimony) {
+      const testimonyRef = doc(firestore, 'testimonies', editingTestimony.id);
+      updateDoc(testimonyRef, data).then(() => {
+        toast({ title: "Story updated successfully" });
+      }).catch(async (err) => {
+        const permissionError = new FirestorePermissionError({
+          path: testimonyRef.path,
+          operation: 'update',
+          requestResourceData: data,
+        } satisfies SecurityRuleContext);
+        errorEmitter.emit('permission-error', permissionError);
+      });
+    } else {
+      addDoc(collection(firestore, 'testimonies'), data).then(() => {
+        toast({ title: "Story registered successfully" });
+      }).catch(async (err) => {
+        const permissionError = new FirestorePermissionError({
+          path: 'testimonies',
+          operation: 'create',
+          requestResourceData: data,
+        } satisfies SecurityRuleContext);
+        errorEmitter.emit('permission-error', permissionError);
+      });
+    }
+
+    setIsDialogOpen(false);
+    setEditingTestimony(null);
+  };
+
   const handleDelete = (id: string) => {
     if (!firestore || !confirm('Permanently delete this story? This cannot be undone.')) return;
     const testimonyRef = doc(firestore, 'testimonies', id);
-    deleteDoc(testimonyRef).catch(async (err) => {
+    deleteDoc(testimonyRef).then(() => {
+      toast({ title: "Story deleted permanently" });
+    }).catch(async (err) => {
       const permissionError = new FirestorePermissionError({
         path: testimonyRef.path,
         operation: 'delete',
@@ -101,8 +191,67 @@ export default function TestimoniesManagementPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-headline font-bold text-primary uppercase tracking-tight">Testimonies & Ideas</h1>
-          <p className="text-muted-foreground text-sm">Review and manage stories shared by the congregation.</p>
+          <p className="text-muted-foreground text-sm font-medium">Full administrative control over community submissions.</p>
         </div>
+        <Dialog open={isDialogOpen} onOpenChange={(open) => {
+          setIsDialogOpen(open);
+          if (!open) setEditingTestimony(null);
+        }}>
+          <DialogTrigger asChild>
+            <Button className="gap-2 bg-primary font-bold uppercase text-[10px] tracking-widest h-10 shadow-lg">
+              <Plus className="h-4 w-4" /> Register Story
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-[95vw] sm:max-w-xl rounded-2xl">
+            <DialogHeader>
+              <DialogTitle className="text-xl font-headline font-bold text-primary uppercase tracking-tight">
+                {editingTestimony ? 'Edit Testimony Content' : 'Manual Entry: Testimony'}
+              </DialogTitle>
+            </DialogHeader>
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 pt-4">
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-[10px] font-bold uppercase tracking-wider">Member Name</FormLabel>
+                      <FormControl><Input placeholder="John Doe" {...field} /></FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-[10px] font-bold uppercase tracking-wider">Email (Optional)</FormLabel>
+                      <FormControl><Input placeholder="email@address.com" {...field} /></FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="content"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-[10px] font-bold uppercase tracking-wider">The Story / Idea</FormLabel>
+                      <FormControl><Textarea rows={5} placeholder="Type the story here..." {...field} /></FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <DialogFooter className="pt-4">
+                  <Button type="submit" className="w-full bg-primary font-bold uppercase text-xs h-12">
+                    {editingTestimony ? 'Update Entry' : 'Post to Database'}
+                  </Button>
+                </DialogFooter>
+              </form>
+            </Form>
+          </DialogContent>
+        </Dialog>
       </div>
 
       <div className="grid gap-4 md:grid-cols-3">
@@ -211,6 +360,12 @@ export default function TestimoniesManagementPage() {
                             <XCircle className="h-4 w-4 mr-2" /> Move to Pending
                           </DropdownMenuItem>
                         )}
+                        <DropdownMenuItem onClick={() => {
+                          setEditingTestimony(t);
+                          setIsDialogOpen(true);
+                        }} className="text-xs font-bold text-blue-600">
+                          <Edit className="h-4 w-4 mr-2" /> Edit Content
+                        </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem onClick={() => handleDelete(t.id)} className="text-xs font-bold text-rose-700">
                           <Trash2 className="h-4 w-4 mr-2" /> Delete Permanently

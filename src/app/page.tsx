@@ -128,14 +128,6 @@ export default function Home() {
     }
   };
 
-  const staticTestimonies = [
-    { name: "Sintayehu B.", text: "Walking through these doors was the start of a new chapter for my family. The community here is truly family." },
-    { name: "Abebe K.", text: "The Wednesday prayer fellowships have been my source of strength during difficult times. God is faithful!" },
-    { name: "Tizita M.", text: "I love the transparency of the leadership. The QR verification system makes giving so easy and secure." }
-  ];
-
-  const displayTestimonies = dbTestimonies && dbTestimonies.length > 0 ? dbTestimonies : staticTestimonies;
-
   if (!mounted) return null;
 
   return (
@@ -595,8 +587,8 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="py-24 md:py-40 bg-accent text-white relative overflow-hidden">
-        <div className="container px-4 mx-auto text-center relative z-10 space-y-10">
+      <section className="py-24 md:py-40 bg-accent text-white relative overflow-hidden text-center">
+        <div className="container px-4 mx-auto relative z-10 space-y-10">
           <Badge className="bg-secondary text-primary font-black uppercase tracking-[0.5em] px-10 py-2.5 rounded-full mb-4">Honoring God with Wealth</Badge>
           <h2 className="font-playfair font-medium italic text-[48px] text-white uppercase leading-tight max-w-5xl mx-auto">
             Your Support Fuels <br /> <span className="text-secondary">Our Mission</span>
@@ -620,7 +612,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="py-24 md:py-40 bg-white">
+      <section id="testimonies" className="py-24 md:py-40 bg-white">
         <div className="container px-4 mx-auto">
           <div className="text-center space-y-4 mb-24">
             <Badge className="bg-secondary/20 text-primary font-black uppercase tracking-widest text-[10px] px-6 py-1.5">Transformed Lives</Badge>
@@ -675,37 +667,43 @@ export default function Home() {
           </div>
           
           <div className="grid md:grid-cols-3 gap-10 max-w-7xl mx-auto">
-            {displayTestimonies.map((t: any, i: number) => (
-              <motion.div 
-                key={i} 
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                className="bg-muted/30 p-12 rounded-[4rem] relative shadow-lg group hover:bg-white hover:shadow-2xl transition-all duration-500"
-              >
-                <div className="space-y-8">
-                  <p className="text-primary font-medium italic text-xl leading-relaxed">"{t.text || t.content}"</p>
-                  <div className="flex items-center gap-4 border-t border-primary/10 pt-8">
-                    <div className="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center font-black uppercase">
-                      {(t.name || 'C').charAt(0)}
-                    </div>
-                    <div className="flex flex-col">
-                      <span className="font-headline font-bold text-primary uppercase tracking-widest text-xs">{t.name}</span>
-                      <span className="text-[9px] font-bold uppercase text-muted-foreground tracking-widest">Church Member</span>
+            {dbTestimonies && dbTestimonies.length > 0 ? (
+              dbTestimonies.map((t: any, i: number) => (
+                <motion.div 
+                  key={i} 
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  className="bg-muted/30 p-12 rounded-[4rem] relative shadow-lg group hover:bg-white hover:shadow-2xl transition-all duration-500"
+                >
+                  <div className="space-y-8">
+                    <p className="text-primary font-medium italic text-xl leading-relaxed">"{t.content}"</p>
+                    <div className="flex items-center gap-4 border-t border-primary/10 pt-8">
+                      <div className="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center font-black uppercase">
+                        {(t.name || 'C').charAt(0)}
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="font-headline font-bold text-primary uppercase tracking-widest text-xs">{t.name}</span>
+                        <span className="text-[9px] font-bold uppercase text-muted-foreground tracking-widest">Church Member</span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </motion.div>
-            ))}
+                </motion.div>
+              ))
+            ) : (
+              <div className="col-span-full py-20 text-center text-muted-foreground italic">
+                Our church family's stories are being reviewed. Come back soon!
+              </div>
+            )}
           </div>
         </div>
       </section>
 
-      <section className="py-24 md:py-40 bg-white border-t border-primary/5">
+      <section className="py-24 md:py-40 bg-white border-t border-primary/5 text-center">
         <div className="container px-4 mx-auto">
           <div className="text-center space-y-4 mb-24">
             <h2 className="font-playfair font-medium italic text-[48px] text-primary uppercase tracking-tighter">Sacred Moments</h2>
-            <p className="text-muted-foreground font-medium text-lg">Capturing our journey of faith in Muger Mokada.</p>
+            <p className="text-muted-foreground font-medium text-lg">Capturing our journey of faith in Mugher Mokada.</p>
           </div>
           
           <div className="columns-1 sm:columns-2 lg:columns-3 gap-8 space-y-8">
