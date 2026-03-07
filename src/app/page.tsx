@@ -263,7 +263,7 @@ export default function Home() {
             </h1>
             
             <div className="space-y-4 max-w-3xl mx-auto mb-10">
-              <p className="text-white/80 text-sm md:text-lg font-medium leading-relaxed font-body">
+              <p className="text-white/80 font-robotoSlab font-normal text-[20px] leading-relaxed">
                 A place to worship God, grow in faith, and serve our community. Located in Mugher Mokada, we are dedicated to excellence in ministry.
               </p>
               <p className="text-white/70 font-bitter font-light italic text-[20px] leading-relaxed">
@@ -329,7 +329,7 @@ export default function Home() {
             <div className={cn("w-14 h-14 rounded-2xl flex items-center justify-center mb-6 group-hover:rotate-12 transition-transform shadow-lg", info.color)}>
               <info.icon className="text-white h-7 w-7" />
             </div>
-            <h3 className="font-bitter font-light italic text-[24px] text-primary uppercase tracking-tighter mb-2">{info.title}</h3>
+            <h3 className="font-bitter font-light italic text-[24px] text-primary uppercase tracking-tighter mb-2 animate-in fade-in duration-1000">{info.title}</h3>
             <p className="text-muted-foreground text-sm leading-relaxed font-medium">{info.desc}</p>
           </motion.div>
         ))}
