@@ -347,6 +347,11 @@ export default function Home() {
                   className="object-cover group-hover:scale-110 transition-transform duration-1000"
                 />
               )}
+              <div className="absolute top-10 left-10 right-10 z-20">
+                <p className="text-white font-robotoSlab font-normal text-[20px] leading-relaxed drop-shadow-2xl">
+                  kiristos lubbuu isaa nuuf kennuu isaatiin jaalalli maal akka ta'e hubanneerraa,egaa nus immoo lubbuu keenya obbolootaaf kennuun nuuf ta'a.yohaniis3:16
+                </p>
+              </div>
             </div>
           </div>
           
@@ -747,7 +752,14 @@ export default function Home() {
         <div className="container px-4 mx-auto grid md:grid-cols-2 lg:grid-cols-4 gap-16 mb-24">
           <div className="space-y-8">
             <Link href="/" className="flex items-center gap-2">
-              <Church className="h-7 w-7 text-primary" />
+              <div className="relative h-10 w-10 rounded-full overflow-hidden border-2 border-primary/20 shadow-md bg-white">
+                <Image 
+                  src="https://i.ibb.co/vxZd8ZzQ/photo-2026-03-06-15-19-1222.jpg" 
+                  alt="Mugher Full Gospel Logo" 
+                  fill 
+                  className="object-cover"
+                />
+              </div>
               <span className="font-headline font-black text-2xl tracking-tighter uppercase text-primary">MUGHER <span className="text-secondary">FULL GOSPEL</span></span>
             </Link>
             <p className="text-muted-foreground text-base leading-relaxed font-medium">

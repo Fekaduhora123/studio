@@ -13,6 +13,7 @@ export default {
         body: ['Inter', 'sans-serif'],
         headline: ['Inter', 'sans-serif'],
         roboto: ['Roboto', 'sans-serif'],
+        robotoSlab: ['Roboto Slab', 'serif'],
         playfair: ['Playfair Display', 'serif'],
         bitter: ['Bitter', 'serif'],
         garamond: ['EB Garamond', 'serif'],

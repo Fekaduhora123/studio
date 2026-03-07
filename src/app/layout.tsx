@@ -19,7 +19,7 @@ export default function RootLayout({
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto:wght@100;700;900&family=Playfair+Display:ital,wght@1,500&family=Bitter:ital,wght@1,300&family=EB+Garamond:wght@600&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto:wght@100;700;900&family=Roboto+Slab:wght@400&family=Playfair+Display:ital,wght@1,500&family=Bitter:ital,wght@1,300&family=EB+Garamond:wght@600&display=swap" rel="stylesheet" />
       </head>
       <body className="font-body antialiased">
         <FirebaseClientProvider>
