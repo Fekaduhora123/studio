@@ -330,7 +330,7 @@ export default function Home() {
               <info.icon className="text-white h-7 w-7" />
             </div>
             <h3 className="font-bitter font-light italic text-[24px] text-primary uppercase tracking-tighter mb-2">{info.title}</h3>
-            <p className="text-muted-foreground text-sm leading-relaxed">{info.desc}</p>
+            <p className="text-muted-foreground text-sm leading-relaxed font-medium">{info.desc}</p>
           </motion.div>
         ))}
       </section>
@@ -347,8 +347,8 @@ export default function Home() {
                   className="object-cover group-hover:scale-110 transition-transform duration-1000"
                 />
               )}
-              <div className="absolute top-10 left-10 right-10 z-20">
-                <p className="text-white font-robotoSlab font-normal text-[20px] leading-relaxed drop-shadow-2xl">
+              <div className="absolute top-24 left-10 right-10 z-20">
+                <p className="text-blue-600 font-robotoSlab font-normal text-[20px] leading-relaxed drop-shadow-2xl">
                   kiristos lubbuu isaa nuuf kennuu isaatiin jaalalli maal akka ta'e hubanneerraa,egaa nus immoo lubbuu keenya obbolootaaf kennuun nuuf ta'a.yohaniis3:16
                 </p>
               </div>
