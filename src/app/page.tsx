@@ -611,9 +611,13 @@ export default function Home() {
             className="text-white/80 max-w-3xl mx-auto font-bitter font-light italic text-[20px] leading-relaxed"
           >
             Your giving helps us spread the Gospel and serve the community excellence. Join us in building God's Kingdom.
+            <br /><br />
+            Kennaan keessan Wangeela babal’isuu fi hawaasa keenyaf tajaajila qulqullina qabuun tajaajiluuf nu gargaara. Mootummaa Waaqayyoo ijaaruu irratti nuun waliin hiriiraa.
+            <br /><br />
+            የእርስዎ ስጦታ ወንጌልን ለማስፋፋት እና ማህበረሰቡን በላቀ ሁኔታ ለማገልገል ይረዳናል። የእግዚአብሔርን መንግሥት ለመገንባት ከእኛ ጋር ይተባበሩ
           </motion.p>
           <div className="flex flex-col sm:flex-row gap-6 justify-center pt-10">
-            <Button asChild size="lg" className="bg-white text-primary font-black uppercase tracking-widest px-14 h-20 rounded-full shadow-2xl hover:scale-105 transition-transform text-lg">
+            <Button asChild size="lg" className="bg-primary text-white font-black uppercase tracking-widest px-14 h-20 rounded-full shadow-2xl hover:scale-105 transition-transform text-lg">
               <Link href="/donate">Give Donation</Link>
             </Button>
             <Button asChild variant="outline" size="lg" className="border-white/40 text-white hover:bg-white/10 font-black uppercase tracking-widest px-14 h-20 rounded-full backdrop-blur-sm text-lg">
