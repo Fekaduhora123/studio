@@ -347,11 +347,17 @@ export default function Home() {
                   className="object-cover group-hover:scale-110 transition-transform duration-1000"
                 />
               )}
-              <div className="absolute top-24 left-10 right-10 z-20">
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1, delay: 0.3 }}
+                className="absolute top-32 left-10 right-10 z-20"
+              >
                 <p className="text-blue-600 font-robotoSlab font-normal text-[20px] leading-relaxed drop-shadow-2xl">
                   kiristos lubbuu isaa nuuf kennuu isaatiin jaalalli maal akka ta'e hubanneerraa,egaa nus immoo lubbuu keenya obbolootaaf kennuun nuuf ta'a.yohaniis3:16
                 </p>
-              </div>
+              </motion.div>
             </div>
           </div>
           
