@@ -352,7 +352,7 @@ export default function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 1, delay: 0.3 }}
-                className="absolute top-32 left-10 right-10 z-20"
+                className="absolute top-32 left-10 right-10 z-20 border-2 border-blue-400/50 p-6 rounded-[2rem] bg-white/10 backdrop-blur-sm animate-pulse"
               >
                 <p className="text-blue-600 font-robotoSlab font-normal text-[20px] leading-relaxed drop-shadow-2xl">
                   kiristos lubbuu isaa nuuf kennuu isaatiin jaalalli maal akka ta'e hubanneerraa,egaa nus immoo lubbuu keenya obbolootaaf kennuun nuuf ta'a.yohaniis3:16
