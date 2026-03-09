@@ -1,3 +1,4 @@
+
 "use client";
 
 import * as React from 'react';
@@ -28,7 +29,8 @@ import {
   Bell,
   Loader2,
   UserCircle,
-  MessageSquare
+  MessageSquare,
+  Video
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -42,6 +44,7 @@ const navItems = [
   { icon: ReceiptText, label: 'Expenses', href: '/dashboard/expenses' },
   { icon: FileBarChart, label: 'Reports', href: '/dashboard/reports' },
   { icon: Megaphone, label: 'Events', href: '/dashboard/events' },
+  { icon: Video, label: 'Sermons', href: '/dashboard/sermons' },
   { icon: MessageSquare, label: 'Testimonies', href: '/dashboard/testimonies' },
 ];
 

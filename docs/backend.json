@@ -101,6 +101,20 @@
         "timestamp": { "type": "string", "format": "date-time" }
       },
       "required": ["name", "content", "timestamp"]
+    },
+    "Sermon": {
+      "title": "Sermon",
+      "description": "A recorded sermon message for the gallery.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "speaker": { "type": "string" },
+        "date": { "type": "string" },
+        "videoUrl": { "type": "string" },
+        "thumbnailUrl": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "speaker", "date", "videoUrl"]
     }
   },
   "auth": {
@@ -126,6 +140,10 @@
     "/testimonies/{testimonyId}": {
       "schema": "Testimony",
       "description": "Collection of shared testimonies and community ideas."
+    },
+    "/sermons/{sermonId}": {
+      "schema": "Sermon",
+      "description": "Collection of sermons for the gallery."
     }
   }
 }

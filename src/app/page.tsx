@@ -80,8 +80,14 @@ export default function Home() {
     return query(collection(firestore, 'testimonies'), where('status', '==', 'approved'), orderBy('timestamp', 'desc'), limit(3));
   }, [firestore]);
 
+  const sermonsQuery = React.useMemo(() => {
+    if (!firestore) return null;
+    return query(collection(firestore, 'sermons'), orderBy('createdAt', 'desc'), limit(3));
+  }, [firestore]);
+
   const { data: events, loading: eventsLoading } = useCollection(eventsQuery);
   const { data: dbTestimonies } = useCollection(testimoniesQuery);
+  const { data: dbSermons } = useCollection(sermonsQuery);
 
   const heroImg = PlaceHolderImages.find(img => img.id === 'church-exterior');
   const interiorImg = PlaceHolderImages.find(img => img.id === 'hero-church');
@@ -563,38 +569,46 @@ export default function Home() {
         </div>
         
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
-          {[
-            { title: "The Power of Unwavering Faith", speaker: "Pastor James M.", date: "May 24, 2024", id: 1 },
-            { title: "Living with Integrity in 2024", speaker: "Elder Samson K.", date: "June 2, 2024", id: 2 },
-            { title: "The Joy of Abundant Service", speaker: "Pastor James M.", date: "June 9, 2024", id: 3 }
-          ].map((s) => (
-            <motion.div 
-              key={s.id} 
-              whileHover={{ scale: 1.02 }}
-              className="group cursor-pointer bg-white rounded-[2.5rem] overflow-hidden shadow-2xl border border-primary/5"
-            >
-              <div className="relative aspect-video overflow-hidden">
-                {sermonImg && (
-                  <Image 
-                    src={sermonImg.imageUrl} 
-                    alt={s.title} 
-                    fill 
-                    className="object-cover group-hover:scale-110 transition-transform duration-700"
-                  />
-                )}
-                <div className="absolute inset-0 bg-black/50 group-hover:bg-black/30 transition-colors flex items-center justify-center">
-                  <Play className="text-white fill-white h-12 w-12" />
+          {dbSermons && dbSermons.length > 0 ? (
+            dbSermons.map((s: any) => (
+              <motion.div 
+                key={s.id} 
+                whileHover={{ scale: 1.02 }}
+                className="group cursor-pointer bg-white rounded-[2.5rem] overflow-hidden shadow-2xl border border-primary/5"
+              >
+                <Link href={s.videoUrl} target="_blank">
+                  <div className="relative aspect-video overflow-hidden">
+                    {s.thumbnailUrl ? (
+                      <Image 
+                        src={s.thumbnailUrl} 
+                        alt={s.title} 
+                        fill 
+                        className="object-cover group-hover:scale-110 transition-transform duration-700"
+                      />
+                    ) : (
+                      <div className="absolute inset-0 bg-primary/10 flex items-center justify-center">
+                        <Video className="h-12 w-12 text-primary/20" />
+                      </div>
+                    )}
+                    <div className="absolute inset-0 bg-black/50 group-hover:bg-black/30 transition-colors flex items-center justify-center">
+                      <Play className="text-white fill-white h-12 w-12" />
+                    </div>
+                  </div>
+                </Link>
+                <div className="p-10">
+                  <h3 className="text-xl font-headline font-black text-primary uppercase tracking-tight mb-6 group-hover:text-secondary transition-colors">{s.title}</h3>
+                  <div className="flex items-center justify-between border-t border-primary/5 pt-6 text-[10px] font-black uppercase text-muted-foreground">
+                    <span>{s.speaker}</span>
+                    <span className="text-secondary">{s.date}</span>
+                  </div>
                 </div>
-              </div>
-              <div className="p-10">
-                <h3 className="text-xl font-headline font-black text-primary uppercase tracking-tight mb-6 group-hover:text-secondary transition-colors">{s.title}</h3>
-                <div className="flex items-center justify-between border-t border-primary/5 pt-6 text-[10px] font-black uppercase text-muted-foreground">
-                  <span>{s.speaker}</span>
-                  <span className="text-secondary">{s.date}</span>
-                </div>
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            ))
+          ) : (
+            <div className="col-span-full py-24 text-center">
+              <p className="text-muted-foreground font-medium italic text-lg">Our media library is being populated. New sermons coming soon!</p>
+            </div>
+          )}
         </div>
       </section>
 

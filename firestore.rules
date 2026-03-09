@@ -36,6 +36,12 @@ service cloud.firestore {
       allow update, delete: if isAuthenticated();
     }
 
+    // Sermons: Public can read, Admins can manage
+    match /sermons/{sermonId} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+
     // Default deny for everything else unless explicitly allowed above
     match /{document=**} {
       allow read, write: if isAuthenticated();
