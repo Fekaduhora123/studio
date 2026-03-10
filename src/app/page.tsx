@@ -144,19 +144,19 @@ export default function Home() {
         isScrolled ? "bg-white/95 backdrop-blur-md shadow-lg border-b border-primary/5" : "bg-transparent"
       )}>
         <div className={cn(
-          "w-full py-2 px-6 md:px-12 flex justify-end transition-all border-b",
+          "w-full py-2 px-4 md:px-12 flex justify-end transition-all border-b",
           isScrolled ? "border-primary/5 bg-primary/5" : "border-white/5 bg-black/10"
         )}>
-          <Link href="/login" className="text-[11px] font-black uppercase tracking-[0.2em] flex items-center gap-2 text-secondary hover:text-secondary/80">
+          <Link href="/login" className="text-[9px] md:text-[11px] font-black uppercase tracking-[0.2em] flex items-center gap-2 text-secondary hover:text-secondary/80">
             <div className="h-1.5 w-1.5 rounded-full bg-secondary animate-pulse" />
             <UserCircle className="h-4 w-4" />
             {user ? 'Admin Dashboard' : 'Administrator Login'}
           </Link>
         </div>
 
-        <div className="h-20 flex items-center px-6 md:px-12">
-          <Link href="/" className="flex items-center gap-3 group">
-            <div className="relative h-12 w-12 rounded-full overflow-hidden border-2 border-primary/20 shadow-lg group-hover:scale-110 transition-transform bg-white">
+        <div className="h-16 md:h-20 flex items-center px-4 md:px-12">
+          <Link href="/" className="flex items-center gap-2 md:gap-3 group">
+            <div className="relative h-8 w-8 md:h-12 md:w-12 rounded-full overflow-hidden border-2 border-primary/20 shadow-lg group-hover:scale-110 transition-transform bg-white">
               <Image 
                 src="https://i.ibb.co/vxZd8ZzQ/photo-2026-03-06-15-19-1222.jpg" 
                 alt="Mugher Full Gospel Logo" 
@@ -165,7 +165,7 @@ export default function Home() {
               />
             </div>
             <span className={cn(
-              "font-headline font-black text-xl tracking-tighter uppercase",
+              "font-headline font-black text-sm md:text-xl tracking-tighter uppercase",
               isScrolled ? "text-primary" : "text-white"
             )}>MUGHER <span className="text-secondary">FULL GOSPEL</span></span>
           </Link>
@@ -188,10 +188,10 @@ export default function Home() {
           </nav>
 
           <button 
-            className="ml-auto lg:hidden"
+            className="ml-auto lg:hidden p-2"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
-            {mobileMenuOpen ? <X className="h-8 w-8 text-white" /> : <Menu className={cn("h-8 w-8", isScrolled ? "text-primary" : "text-white")} />}
+            {mobileMenuOpen ? <X className="h-6 w-6 text-white" /> : <Menu className={cn("h-6 w-6", isScrolled ? "text-primary" : "text-white")} />}
           </button>
         </div>
 
@@ -205,26 +205,26 @@ export default function Home() {
               className="fixed inset-0 bg-primary/95 flex flex-col items-center justify-center gap-8 z-[110] lg:hidden"
             >
               <button 
-                className="absolute top-6 right-6 text-white"
+                className="absolute top-6 right-6 text-white p-2"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                <X className="h-10 w-10" />
+                <X className="h-8 w-8" />
               </button>
               {navLinks.map((link) => (
                 <Link 
                   key={link.name} 
                   href={link.href} 
                   onClick={() => setMobileMenuOpen(false)}
-                  className="text-3xl font-headline font-bold text-secondary uppercase tracking-tighter"
+                  className="text-2xl md:text-3xl font-headline font-bold text-secondary uppercase tracking-tighter"
                 >
                   {link.name}
                 </Link>
               ))}
               <div className="flex flex-col gap-4 mt-8 w-full px-12">
-                <Button asChild className="bg-secondary text-primary font-black h-14 w-full rounded-full uppercase tracking-widest text-sm shadow-xl">
+                <Button asChild className="bg-secondary text-primary font-black h-12 md:h-14 w-full rounded-full uppercase tracking-widest text-xs md:text-sm shadow-xl">
                   <Link href="/donate" onClick={() => setMobileMenuOpen(false)}>Join Us Now</Link>
                 </Button>
-                <Button asChild variant="outline" className="border-secondary text-secondary h-14 w-full rounded-full uppercase tracking-widest text-sm">
+                <Button asChild variant="outline" className="border-secondary text-secondary h-12 md:h-14 w-full rounded-full uppercase tracking-widest text-xs md:text-sm">
                   <Link href="/login" onClick={() => setMobileMenuOpen(false)}>{user ? 'Dashboard' : 'Login'}</Link>
                 </Button>
               </div>
@@ -252,39 +252,39 @@ export default function Home() {
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/40 z-10" />
         
-        <div className="container relative z-20 pb-20 md:pb-32 px-4 text-center">
+        <div className="container relative z-20 pb-16 md:pb-32 px-4 text-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5, duration: 1 }}
           >
             <div className="inline-block p-1 md:p-2 bg-primary/20 backdrop-blur-md rounded-2xl border border-primary/20 mb-6">
-              <div className="bg-primary/40 px-4 py-1.5 rounded-xl border border-white/10 shadow-inner">
-                <span className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.4em] text-secondary">A Sanctuary of Transformation</span>
+              <div className="bg-primary/40 px-3 md:px-4 py-1.5 rounded-xl border border-white/10 shadow-inner">
+                <span className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.4em] text-secondary">A Sanctuary of Transformation</span>
               </div>
             </div>
             
-            <h1 className="font-roboto font-bold text-secondary text-[48px] leading-tight uppercase tracking-tight mb-8 max-w-5xl mx-auto drop-shadow-2xl">
+            <h1 className="font-roboto font-bold text-secondary text-4xl md:text-6xl lg:text-7xl leading-tight uppercase tracking-tight mb-6 md:mb-8 max-w-5xl mx-auto drop-shadow-2xl">
               Welcome to <br /> Mugher Full Gospel
             </h1>
             
-            <div className="space-y-4 max-w-3xl mx-auto mb-10">
-              <p className="text-white/80 font-robotoSlab font-normal text-[20px] leading-relaxed">
+            <div className="space-y-4 max-w-3xl mx-auto mb-8 md:mb-10">
+              <p className="text-white/80 font-robotoSlab font-normal text-base md:text-[20px] leading-relaxed">
                 A place to worship God, grow in faith, and serve our community. Located in Mugher Mokada, we are dedicated to excellence in ministry.
               </p>
-              <p className="text-white/70 font-bitter font-light italic text-[20px] leading-relaxed">
+              <p className="text-white/70 font-bitter font-light italic text-base md:text-[20px] leading-relaxed">
                 Iddoo Waaqayyo itti waaqeffatamu, amantiin itti guddatu, fi hawaasa keenya itti tajaajilludha. Muger Mokada keessatti kan argamnu yoo ta’u, tajaajila qulqullina qabuuf of laanneerra.
               </p>
             </div>
             
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Button asChild size="lg" className="bg-primary text-white font-black uppercase tracking-widest px-10 h-16 rounded-full shadow-2xl hover:scale-105 transition-transform group">
+            <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center items-center">
+              <Button asChild size="lg" className="w-full sm:w-auto bg-primary text-white font-black uppercase tracking-widest px-8 md:px-10 h-14 md:h-16 rounded-full shadow-2xl hover:scale-105 transition-transform group">
                 <Link href="#events">
-                  Join Sunday Service <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                  Join Sunday <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </Button>
-              <Button asChild variant="outline" size="lg" className="border-white/20 text-white hover:bg-white/10 font-black uppercase tracking-widest px-10 h-16 rounded-full backdrop-blur-md transition-all">
-                <Link href="#events">View Announcements</Link>
+              <Button asChild variant="outline" size="lg" className="w-full sm:w-auto border-white/20 text-white hover:bg-white/10 font-black uppercase tracking-widest px-8 md:px-10 h-14 md:h-16 rounded-full backdrop-blur-md transition-all">
+                <Link href="#events">Announcements</Link>
               </Button>
             </div>
           </motion.div>
@@ -300,7 +300,7 @@ export default function Home() {
         </motion.div>
       </section>
 
-      <section className="relative z-30 -mt-16 container px-4 mx-auto grid md:grid-cols-3 gap-6">
+      <section className="relative z-30 -mt-10 md:-mt-16 container px-4 mx-auto grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
         {[
           { 
             icon: Sunrise, 
@@ -329,22 +329,22 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            whileHover={{ y: -10 }}
-            className={cn("border bg-white p-8 rounded-[2rem] shadow-xl transition-all group relative overflow-hidden", info.border)}
+            whileHover={{ y: -5 }}
+            className={cn("border bg-white p-6 md:p-8 rounded-[1.5rem] md:rounded-[2rem] shadow-xl transition-all group relative overflow-hidden", info.border)}
           >
-            <div className={cn("w-14 h-14 rounded-2xl flex items-center justify-center mb-6 group-hover:rotate-12 transition-transform shadow-lg", info.color)}>
-              <info.icon className="text-white h-7 w-7" />
+            <div className={cn("w-10 h-10 md:w-14 md:h-14 rounded-xl md:rounded-2xl flex items-center justify-center mb-4 md:mb-6 group-hover:rotate-12 transition-transform shadow-lg", info.color)}>
+              <info.icon className="text-white h-5 w-5 md:h-7 md:w-7" />
             </div>
-            <h3 className="font-bitter font-light italic text-[24px] text-primary uppercase tracking-tighter mb-2 animate-in fade-in duration-1000">{info.title}</h3>
-            <p className="text-muted-foreground text-sm leading-relaxed font-medium">{info.desc}</p>
+            <h3 className="font-bitter font-light italic text-xl md:text-[24px] text-primary uppercase tracking-tighter mb-2">{info.title}</h3>
+            <p className="text-muted-foreground text-xs md:text-sm leading-relaxed font-medium">{info.desc}</p>
           </motion.div>
         ))}
       </section>
 
-      <section id="about" className="py-24 md:py-40 container px-4 mx-auto overflow-hidden">
-        <div className="grid lg:grid-cols-2 gap-20 items-center">
+      <section id="about" className="py-16 md:py-40 container px-4 mx-auto overflow-hidden">
+        <div className="grid lg:grid-cols-2 gap-12 md:gap-20 items-center">
           <div className="relative group">
-            <div className="relative aspect-[4/5] rounded-[3rem] overflow-hidden shadow-2xl z-10">
+            <div className="relative aspect-[4/5] rounded-[2rem] md:rounded-[3rem] overflow-hidden shadow-2xl z-10">
               {interiorImg && (
                 <Image 
                   src={interiorImg.imageUrl} 
@@ -358,20 +358,20 @@ export default function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 1, delay: 0.3 }}
-                className="absolute top-32 left-10 right-10 z-20 border-2 border-blue-400/50 p-6 rounded-[2rem] bg-white/10 backdrop-blur-sm animate-pulse"
+                className="absolute top-20 md:top-32 left-6 right-6 md:left-10 md:right-10 z-20 border-2 border-blue-400/50 p-4 md:p-6 rounded-[1.5rem] md:rounded-[2rem] bg-white/10 backdrop-blur-sm animate-pulse"
               >
-                <p className="text-blue-600 font-robotoSlab font-normal text-[20px] leading-relaxed drop-shadow-2xl">
+                <p className="text-blue-600 font-robotoSlab font-normal text-sm md:text-[20px] leading-relaxed drop-shadow-2xl text-center md:text-left">
                   kiristos lubbuu isaa nuuf kennuu isaatiin jaalalli maal akka ta'e hubanneerraa,egaa nus immoo lubbuu keenya obbolootaaf kennuun nuuf ta'a.yohaniis3:16
                 </p>
               </motion.div>
             </div>
           </div>
           
-          <div className="space-y-8 text-center lg:text-left">
-            <Badge variant="outline" className="border-primary text-primary font-black uppercase tracking-widest text-[10px] px-6 py-1.5 rounded-full">
+          <div className="space-y-6 md:space-y-8 text-center lg:text-left">
+            <Badge variant="outline" className="border-primary text-primary font-black uppercase tracking-widest text-[9px] md:text-[10px] px-4 md:px-6 py-1.5 rounded-full">
               Foundations of Faith
             </Badge>
-            <h2 className="font-playfair font-medium italic text-[48px] text-primary uppercase leading-[1.1] tracking-tighter">
+            <h2 className="font-playfair font-medium italic text-3xl md:text-[48px] text-primary uppercase leading-[1.1] tracking-tighter">
               A Legacy of <br /> <span className="text-secondary">Spirit & Truth</span>
             </h2>
             <div className="space-y-6">
@@ -379,67 +379,35 @@ export default function Home() {
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="text-muted-foreground font-bitter font-light italic text-[20px] leading-relaxed border-2 border-primary/20 p-8 rounded-[2rem] bg-primary/5 shadow-inner"
+                className="text-muted-foreground font-bitter font-light italic text-base md:text-[20px] leading-relaxed border-2 border-primary/20 p-6 md:p-8 rounded-[1.5rem] md:rounded-[2rem] bg-primary/5 shadow-inner"
               >
                 Mugher Full Gospel Church is a community of believers dedicated to worship, discipleship, and service. Our mission is to share the Gospel and build a strong faith community in Mugher Mokada.
               </motion.div>
               
-              <div className="space-y-4">
+              <div className="space-y-4 text-left">
                 <motion.p 
                   initial={{ opacity: 0, y: 10 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  className="text-muted-foreground font-bitter font-light italic text-[20px] leading-relaxed"
+                  className="text-muted-foreground font-bitter font-light italic text-base md:text-[20px] leading-relaxed"
                 >
-                  Manni Amantaa Guutuu Wangellaa Muger bara 1978 (A.L.H.) yoo hundaa’u, aanaa Ada'a Bargaa keessatti mana amantaa ishee jalqabaa ta’uun seenaa boonsaa qabdi. Hundeeffamni ishee naannichatti sochi tajaajilaa bal’aaf bu’uura cimaa kan kaaye dha.
-                </motion.p>
-                <motion.p 
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  className="text-muted-foreground font-bitter font-light italic text-[20px] leading-relaxed"
-                >
-                  Adeemsa waggoota darban keessatti, manni amantaa kun gufuwwan fi rakkinnoota akkaan baay’ee keessa darbiteetti. Haata’u malee, haalota rakkisoo sana hunda obsaa fi amantaa cimaan dandamachuun, har’a sadarkaa kanaan ga’uun ishee danda’ameera. Kunis seenaa injifannoo fi resilience (dandamachuu) agarsiisudha.
-                </motion.p>
-                <motion.p 
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  className="text-muted-foreground font-bitter font-light italic text-[20px] leading-relaxed"
-                >
-                  Guddinni manni amantaa kun argisiifte akkaan ajaa’ibsiisaadha. Jalqaba irratti miseensoota muraasa qofaan kan hundaa’te yoo ta’u, yeroo ammaa kana garuu bal’attee miseensoota kumaatamaan lakkā’aman qabaachuu dandeetteetti. Sochiin kunis amantaa xiqqoorraa ka’ee gara tajaajila bal’aa fi humna qabeessaatti akka jijjiirame ragaa dha.
+                  Manni Amantaa Guutuu Wangellaa Muger bara 1978 (A.L.H.) yoo hundaa’u, aanaa Ada'a Bargaa keessatti mana amantaa ishee jalqabaa ta’uun seenaa boonsaa qabdi.
                 </motion.p>
               </div>
 
-              <div className="space-y-4 pt-4 border-t border-primary/5">
-                <h4 className="font-playfair font-medium italic text-2xl text-primary">የሙገር ሙሉ ወንጌል አማኞች ቤተክርስቲያን ታሪክ</h4>
+              <div className="space-y-4 pt-4 border-t border-primary/5 text-left">
+                <h4 className="font-playfair font-medium italic text-xl md:text-2xl text-primary">የሙገር ሙሉ ወንጌል አማኞች ቤተክርስቲያን ታሪክ</h4>
                 <motion.p 
                   initial={{ opacity: 0, y: 10 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  className="text-muted-foreground font-bitter font-light italic text-[20px] leading-relaxed"
+                  className="text-muted-foreground font-bitter font-light italic text-base md:text-[20px] leading-relaxed"
                 >
-                  የሙገር ሙሉ ወንጌል አማኞች ቤተክርስቲያን በ 1978 ዓ.ም. የተመሰረተች ሲሆን፣ በአዳአ በርጋ ወረዳ ውስጥ የመጀመሪያዋ ቤተክርስቲያን በመሆን የታወቀች ናት። የቤተክርስቲያኗ መመሥረት በአካባቢው ላለው መንፈሳዊ አገልግሎት እንደ ትልቅ መጀመሪያና መሠረት ይቆጠራል።
-                </motion.p>
-                <motion.p 
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  className="text-muted-foreground font-bitter font-light italic text-[20px] leading-relaxed"
-                >
-                  ቤተክርስቲያኗ ከተመሰረተችበት ጊዜ ጀምሮ በርካታ አስቸጋሪ ሁኔታዎችንና ፈተናዎችን በትዕግስት አልፋለች። እነዚህን ሁሉ መሰናክሎች በፅናት በመቋቋም ዛሬ ለደረሰችበት የከፍታ ደረጃ ላይ ለመድረስ ችላለች። ይህም የፅናትና የድል ጉዞ ታሪክ ማሳያ ነው።
-                </motion.p>
-                <motion.p 
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  className="text-muted-foreground font-bitter font-light italic text-[20px] leading-relaxed"
-                >
-                  የቤተክርስቲያኗ እድገት እጅግ አስደናቂ ነው። በመጀመሪያ ጥቂት አባላትን ብቻ ይዛ የተነሳች ቢሆንም፣ በአሁኑ ጊዜ አገልግሎቷ በሰፊው ተስፋፍቶ በሺዎች የሚቆጠሩ ምዕመናንን ማፍራት ችላለች። ይህም ከትንሽ ጅማሮ ወደ ታላቅና ጠንካራ አገልግሎት መቀየሯን የሚያረጋግጥ ትልቅ ምስክርነት ነው።
+                  የሙገር ሙሉ ወንጌል አማኞች ቤተክርስቲያን በ 1978 ዓ.ም. የተመሰረተች ሲሆን፣ በአዳአ በርጋ ወረዳ ውስጥ የመጀመሪያዋ ቤተክርስቲያን በመሆን የታወቀች ናት።
                 </motion.p>
               </div>
             </div>
-            <Button asChild size="lg" className="bg-primary text-white font-black h-16 px-12 rounded-full uppercase tracking-widest shadow-xl">
+            <Button asChild size="lg" className="w-full sm:w-auto bg-primary text-white font-black h-14 md:h-16 px-10 md:px-12 rounded-full uppercase tracking-widest shadow-xl">
               <Link href="#about">Learn Our Story</Link>
             </Button>
           </div>
@@ -447,24 +415,24 @@ export default function Home() {
       </section>
 
       {dailyQuote && (
-        <section className="py-24 bg-primary text-white relative overflow-hidden">
+        <section className="py-16 md:py-24 bg-primary text-white relative overflow-hidden">
           <div className="container px-4 mx-auto text-center relative z-10">
             <motion.div 
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
-              className="mb-8 flex justify-center"
+              className="mb-6 md:mb-8 flex justify-center"
             >
-              {dailyQuote.time === 'morning' ? <Sunrise className="h-16 w-16 text-secondary animate-pulse-slow" /> : <Sunset className="h-16 w-16 text-secondary animate-pulse-slow" />}
+              {dailyQuote.time === 'morning' ? <Sunrise className="h-12 w-12 md:h-16 md:w-16 text-secondary animate-pulse-slow" /> : <Sunset className="h-12 w-12 md:h-16 md:w-16 text-secondary animate-pulse-slow" />}
             </motion.div>
-            <Badge variant="outline" className="mb-8 border-white/30 text-white font-black tracking-[0.3em] uppercase px-8 py-2">
+            <Badge variant="outline" className="mb-6 md:mb-8 border-white/30 text-white font-black tracking-[0.2em] md:tracking-[0.3em] uppercase px-6 md:px-8 py-2 text-[10px] md:text-xs">
               {dailyQuote.time === 'morning' ? 'Manna Ganamaa' : 'Nagaa Galgalaa'}
             </Badge>
-            <blockquote className="max-w-4xl mx-auto px-4">
-              <p className="font-bitter font-light italic text-[20px] mb-10 leading-relaxed tracking-wide">
+            <blockquote className="max-w-4xl mx-auto px-2">
+              <p className="font-bitter font-light italic text-lg md:text-[20px] mb-8 md:mb-10 leading-relaxed tracking-wide">
                 "{dailyQuote.text}"
               </p>
-              <cite className="text-secondary font-black uppercase tracking-[0.5em] not-italic text-sm md:text-base">
+              <cite className="text-secondary font-black uppercase tracking-[0.3em] md:tracking-[0.5em] not-italic text-xs md:text-base">
                 — {dailyQuote.ref}
               </cite>
             </blockquote>
@@ -472,15 +440,15 @@ export default function Home() {
         </section>
       )}
 
-      <section id="ministries" className="py-24 md:py-40 bg-white">
+      <section id="ministries" className="py-16 md:py-40 bg-white">
         <div className="container px-4 mx-auto">
-          <div className="text-center max-w-2xl mx-auto mb-20 space-y-4">
-            <Badge className="bg-primary/10 text-primary font-black uppercase tracking-widest text-[10px] px-6 py-1.5 rounded-full border border-primary/10">Specialized Fellowships</Badge>
-            <h2 className="font-playfair font-medium italic text-[48px] text-primary uppercase tracking-tighter">Our Ministries</h2>
-            <p className="text-muted-foreground font-medium text-lg leading-relaxed">Discover a place where you belong, grow, and serve with others.</p>
+          <div className="text-center max-w-2xl mx-auto mb-12 md:mb-20 space-y-4">
+            <Badge className="bg-primary/10 text-primary font-black uppercase tracking-widest text-[9px] md:text-[10px] px-6 py-1.5 rounded-full border border-primary/10">Specialized Fellowships</Badge>
+            <h2 className="font-playfair font-medium italic text-3xl md:text-[48px] text-primary uppercase tracking-tighter">Our Ministries</h2>
+            <p className="text-muted-foreground font-medium text-base md:text-lg leading-relaxed px-4">Discover a place where you belong, grow, and serve with others.</p>
           </div>
           
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
             {[
               { icon: Users, title: "Youth Ministry", desc: "Empowering young leaders to influence their generation for the Kingdom." },
               { icon: Heart, title: "Women Fellowship", desc: "A vibrant community of sisters building their homes on prayer and faith." },
@@ -492,38 +460,38 @@ export default function Home() {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                whileHover={{ y: -15, boxShadow: "0 25px 50px -12px rgba(139, 0, 0, 0.15)" }}
-                className="group p-10 bg-white rounded-[2.5rem] border border-primary/5 shadow-lg flex flex-col items-center text-center transition-all"
+                whileHover={{ y: -5 }}
+                className="group p-8 md:p-10 bg-white rounded-[2rem] md:rounded-[2.5rem] border border-primary/5 shadow-lg flex flex-col items-center text-center transition-all"
               >
-                <div className="w-20 h-20 bg-primary/5 rounded-3xl flex items-center justify-center mb-8 group-hover:bg-primary transition-all duration-500">
-                  <m.icon className="text-primary h-10 w-10 group-hover:text-white transition-colors" />
+                <div className="w-16 h-16 md:w-20 md:h-20 bg-primary/5 rounded-2xl md:rounded-3xl flex items-center justify-center mb-6 md:mb-8 group-hover:bg-primary transition-all duration-500">
+                  <m.icon className="text-primary h-8 w-8 md:h-10 md:w-10 group-hover:text-white transition-colors" />
                 </div>
-                <h4 className="font-headline font-bold text-2xl text-primary uppercase tracking-tighter mb-4">{m.title}</h4>
-                <p className="text-muted-foreground text-sm leading-relaxed font-medium">{m.desc}</p>
+                <h4 className="font-headline font-bold text-xl md:text-2xl text-primary uppercase tracking-tighter mb-4">{m.title}</h4>
+                <p className="text-muted-foreground text-xs md:text-sm leading-relaxed font-medium">{m.desc}</p>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      <section id="events" className="py-24 md:py-40 bg-muted/20 border-y border-primary/5">
+      <section id="events" className="py-16 md:py-40 bg-muted/20 border-y border-primary/5">
         <div className="container px-4 mx-auto">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-10 mb-20">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 md:gap-10 mb-12 md:mb-20">
             <div className="space-y-4 text-center md:text-left">
-              <Badge className="bg-secondary text-primary font-black uppercase tracking-widest text-[9px]">Church Calendar</Badge>
-              <h2 className="font-playfair font-medium italic text-[48px] text-primary uppercase tracking-tighter leading-none">
+              <Badge className="bg-secondary text-primary font-black uppercase tracking-widest text-[8px] md:text-[9px]">Church Calendar</Badge>
+              <h2 className="font-playfair font-medium italic text-3xl md:text-[48px] text-primary uppercase tracking-tighter leading-none">
                 Upcoming <br /> <span className="text-secondary">Gatherings</span>
               </h2>
             </div>
-            <Button asChild variant="outline" className="border-primary text-primary font-bold uppercase tracking-widest rounded-full px-10 h-14 border-2 hover:bg-primary/5">
+            <Button asChild variant="outline" className="w-full md:w-auto border-primary text-primary font-bold uppercase tracking-widest rounded-full px-10 h-12 md:h-14 border-2 hover:bg-primary/5">
               <Link href="#events">View All Events</Link>
             </Button>
           </div>
 
-          <div className="grid gap-10 md:grid-cols-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10">
             {eventsLoading ? (
               <div className="col-span-full flex flex-col items-center justify-center py-24 gap-4">
-                <Loader2 className="h-12 w-12 animate-spin text-primary" />
+                <Loader2 className="h-10 w-10 md:h-12 md:w-12 animate-spin text-primary" />
               </div>
             ) : events && events.length > 0 ? (
               events.map((event, idx) => (
@@ -532,49 +500,49 @@ export default function Home() {
                   initial={{ opacity: 0, scale: 0.95 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
-                  className="bg-white rounded-[3rem] p-10 shadow-xl border border-primary/5 group hover:-translate-y-2 transition-all"
+                  className="bg-white rounded-[2rem] md:rounded-[3rem] p-8 md:p-10 shadow-xl border border-primary/5 group hover:shadow-2xl transition-all"
                 >
-                  <div className="flex items-center justify-between mb-8">
-                    <Badge className="bg-secondary/20 text-primary font-black uppercase tracking-widest text-[9px] px-4 py-1.5 rounded-full">{event.category || 'Worship'}</Badge>
+                  <div className="flex items-center justify-between mb-6 md:mb-8">
+                    <Badge className="bg-secondary/20 text-primary font-black uppercase tracking-widest text-[8px] md:text-[9px] px-4 py-1.5 rounded-full">{event.category || 'Worship'}</Badge>
                   </div>
-                  <h3 className="text-2xl font-headline font-black text-primary uppercase leading-tight mb-6 group-hover:text-secondary transition-colors">{event.title}</h3>
-                  <p className="text-slate-600 text-sm leading-relaxed mb-8">{event.description}</p>
+                  <h3 className="text-xl md:text-2xl font-headline font-black text-primary uppercase leading-tight mb-4 md:mb-6 group-hover:text-secondary transition-colors">{event.title}</h3>
+                  <p className="text-slate-600 text-xs md:text-sm leading-relaxed mb-6 md:mb-8">{event.description}</p>
                   <div className="space-y-2">
-                    <div className="flex items-center gap-2 text-xs font-bold text-muted-foreground"><CalendarIcon className="h-4 w-4" /> {event.date}</div>
-                    <div className="flex items-center gap-2 text-xs font-bold text-muted-foreground"><Clock className="h-4 w-4" /> {event.time}</div>
+                    <div className="flex items-center gap-2 text-[10px] md:text-xs font-bold text-muted-foreground"><CalendarIcon className="h-4 w-4" /> {event.date}</div>
+                    <div className="flex items-center gap-2 text-[10px] md:text-xs font-bold text-muted-foreground"><Clock className="h-4 w-4" /> {event.time}</div>
                   </div>
                 </motion.div>
               ))
             ) : (
-              <div className="col-span-full py-24 text-center">
-                <p className="text-muted-foreground font-medium italic text-lg">Our calendar is being refreshed. Stay tuned for new gatherings!</p>
+              <div className="col-span-full py-16 text-center">
+                <p className="text-muted-foreground font-medium italic text-base md:text-lg">Stay tuned for new gatherings!</p>
               </div>
             )}
           </div>
         </div>
       </section>
 
-      <section id="sermons" className="py-24 md:py-40 container px-4 mx-auto">
-        <div className="text-center space-y-4 mb-20">
-          <Badge className="bg-primary/10 text-primary font-black uppercase tracking-widest text-[10px] px-6 py-1.5">Spiritual Nourishment</Badge>
-          <h2 className="text-4xl md:text-6xl font-headline font-black text-primary uppercase tracking-tighter">Sermon Gallery</h2>
+      <section id="sermons" className="py-16 md:py-40 container px-4 mx-auto">
+        <div className="text-center space-y-4 mb-12 md:mb-20">
+          <Badge className="bg-primary/10 text-primary font-black uppercase tracking-widest text-[9px] md:text-[10px] px-6 py-1.5">Spiritual Nourishment</Badge>
+          <h2 className="text-3xl md:text-6xl font-headline font-black text-primary uppercase tracking-tighter">Sermon Gallery</h2>
           <motion.p 
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-muted-foreground max-w-xl mx-auto font-bitter font-light italic text-[20px]"
+            className="text-muted-foreground max-w-xl mx-auto font-bitter font-light italic text-base md:text-[20px] px-4"
           >
             Watch latest messages and deep teachings from our pulpit.
           </motion.p>
         </div>
         
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10">
           {dbSermons && dbSermons.length > 0 ? (
             dbSermons.map((s: any) => (
               <motion.div 
                 key={s.id} 
                 whileHover={{ scale: 1.02 }}
-                className="group cursor-pointer bg-white rounded-[2.5rem] overflow-hidden shadow-2xl border border-primary/5"
+                className="group cursor-pointer bg-white rounded-[1.5rem] md:rounded-[2.5rem] overflow-hidden shadow-2xl border border-primary/5"
               >
                 <Link href={s.videoUrl} target="_blank">
                   <div className="relative aspect-video overflow-hidden">
@@ -587,94 +555,90 @@ export default function Home() {
                       />
                     ) : (
                       <div className="absolute inset-0 bg-primary/10 flex items-center justify-center">
-                        <Video className="h-12 w-12 text-primary/20" />
+                        <Video className="h-10 w-10 md:h-12 md:w-12 text-primary/20" />
                       </div>
                     )}
                     <div className="absolute inset-0 bg-black/50 group-hover:bg-black/30 transition-colors flex items-center justify-center">
-                      <Play className="text-white fill-white h-12 w-12" />
+                      <Play className="text-white fill-white h-10 w-10 md:h-12 md:w-12" />
                     </div>
                   </div>
                 </Link>
-                <div className="p-10">
-                  <h3 className="text-xl font-headline font-black text-primary uppercase tracking-tight mb-6 group-hover:text-secondary transition-colors">{s.title}</h3>
-                  <div className="flex items-center justify-between border-t border-primary/5 pt-6 text-[10px] font-black uppercase text-muted-foreground">
-                    <span>{s.speaker}</span>
-                    <span className="text-secondary">{s.date}</span>
+                <div className="p-6 md:p-10">
+                  <h3 className="text-lg md:text-xl font-headline font-black text-primary uppercase tracking-tight mb-4 md:mb-6 group-hover:text-secondary transition-colors">{s.title}</h3>
+                  <div className="flex items-center justify-between border-t border-primary/5 pt-4 md:pt-6 text-[8px] md:text-[10px] font-black uppercase text-muted-foreground">
+                    <span className="truncate max-w-[120px]">{s.speaker}</span>
+                    <span className="text-secondary whitespace-nowrap">{s.date}</span>
                   </div>
                 </div>
               </motion.div>
             ))
           ) : (
-            <div className="col-span-full py-24 text-center">
-              <p className="text-muted-foreground font-medium italic text-lg">Our media library is being populated. New sermons coming soon!</p>
+            <div className="col-span-full py-16 text-center text-muted-foreground italic">
+              New sermons coming soon!
             </div>
           )}
         </div>
       </section>
 
-      <section className="py-24 md:py-40 bg-accent text-white relative overflow-hidden text-center">
-        <div className="container px-4 mx-auto relative z-10 space-y-10">
-          <Badge className="bg-secondary text-primary font-black uppercase tracking-[0.5em] px-10 py-2.5 rounded-full mb-4">Honoring God with Wealth</Badge>
-          <h2 className="font-playfair font-medium italic text-[48px] text-white uppercase leading-tight max-w-5xl mx-auto">
-            Your Support Fuels <br /> <span className="text-secondary">Our Mission</span>
+      <section className="py-20 md:py-40 bg-accent text-white relative overflow-hidden text-center">
+        <div className="container px-4 mx-auto relative z-10 space-y-8 md:space-y-10">
+          <Badge className="bg-secondary text-primary font-black uppercase tracking-[0.3em] md:tracking-[0.5em] px-6 md:px-10 py-2.5 rounded-full mb-2 md:mb-4 text-[9px] md:text-xs">Honoring God with Wealth</Badge>
+          <h2 className="font-playfair font-medium italic text-3xl md:text-[48px] text-white uppercase leading-tight max-w-5xl mx-auto">
+            Your Support Fuels <br className="hidden md:block" /> <span className="text-secondary">Our Mission</span>
           </h2>
           <motion.p 
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-white/80 max-w-3xl mx-auto font-bitter font-light italic text-[20px] leading-relaxed"
+            className="text-white/80 max-w-3xl mx-auto font-bitter font-light italic text-base md:text-[20px] leading-relaxed px-4"
           >
             Your giving helps us spread the Gospel and serve the community excellence. Join us in building God's Kingdom.
-            <br /><br />
-            Kennaan keessan Wangeela babal’isuu fi hawaasa keenyaf tajaajila qulqullina qabuun tajaajiluuf nu gargaara. Mootummaa Waaqayyoo ijaaruu irratti nuun waliin hiriiraa.
-            <br /><br />
-            የእርስዎ ስጦታ ወንጌልን ለማስፋፋት እና ማህበረሰቡን በላቀ ሁኔታ ለማገልገል ይረዳናል። የእግዚአብሔርን መንግሥት ለመገንባት ከእኛ ጋር ይተባበሩ
           </motion.p>
-          <div className="flex flex-col sm:flex-row gap-6 justify-center pt-10">
-            <Button asChild size="lg" className="bg-primary text-white font-black uppercase tracking-widest px-14 h-20 rounded-full shadow-2xl hover:scale-105 transition-transform text-lg">
+          <div className="flex flex-col sm:flex-row gap-4 md:gap-6 justify-center pt-6 md:pt-10">
+            <Button asChild size="lg" className="w-full sm:w-auto bg-primary text-white font-black uppercase tracking-widest px-10 h-16 md:h-20 rounded-full shadow-2xl hover:scale-105 transition-transform text-base md:text-lg">
               <Link href="/donate">Give Donation</Link>
             </Button>
-            <Button asChild variant="outline" size="lg" className="border-white/40 text-white hover:bg-white/10 font-black uppercase tracking-widest px-14 h-20 rounded-full backdrop-blur-sm text-lg">
-              <Link href="/donate">Upload QR Receipt</Link>
+            <Button asChild variant="outline" size="lg" className="w-full sm:w-auto border-white/40 text-white hover:bg-white/10 font-black uppercase tracking-widest px-10 h-16 md:h-20 rounded-full backdrop-blur-sm text-base md:text-lg">
+              <Link href="/donate">Upload Receipt</Link>
             </Button>
           </div>
         </div>
       </section>
 
-      <section id="testimonies" className="py-24 md:py-40 bg-white">
+      <section id="testimonies" className="py-16 md:py-40 bg-white">
         <div className="container px-4 mx-auto">
-          <div className="text-center space-y-4 mb-24">
-            <Badge className="bg-secondary/20 text-primary font-black uppercase tracking-widest text-[10px] px-6 py-1.5">Transformed Lives</Badge>
-            <h2 className="font-playfair font-medium italic text-[48px] text-primary uppercase tracking-tighter">Testimonies</h2>
-            <p className="text-muted-foreground font-medium text-lg mb-8">Voices from our congregation sharing the goodness of God.</p>
+          <div className="text-center space-y-4 mb-12 md:mb-24">
+            <Badge className="bg-secondary/20 text-primary font-black uppercase tracking-widest text-[9px] md:text-[10px] px-6 py-1.5">Transformed Lives</Badge>
+            <h2 className="font-playfair font-medium italic text-3xl md:text-[48px] text-primary uppercase tracking-tighter">Testimonies</h2>
+            <p className="text-muted-foreground font-medium text-base md:text-lg mb-6 md:mb-8 px-4">Voices from our congregation sharing the goodness of God.</p>
             
             <Dialog open={isTestimonyOpen} onOpenChange={setIsTestimonyOpen}>
               <DialogTrigger asChild>
-                <Button variant="outline" className="border-primary text-primary font-black uppercase tracking-widest rounded-full px-10 h-14 border-2 hover:bg-primary/5 transition-all">
-                  <MessageSquare className="mr-2 h-5 w-5" /> Share Your Story / Idea
+                <Button variant="outline" className="w-full sm:w-auto border-primary text-primary font-black uppercase tracking-widest rounded-full px-8 md:px-10 h-12 md:h-14 border-2 hover:bg-primary/5 transition-all text-xs">
+                  <MessageSquare className="mr-2 h-4 w-4 md:h-5 md:w-5" /> Share Your Story
                 </Button>
               </DialogTrigger>
-              <DialogContent className="max-w-md rounded-[2rem] border-none shadow-2xl">
+              <DialogContent className="max-w-[95vw] sm:max-w-md rounded-[1.5rem] md:rounded-[2rem] border-none shadow-2xl">
                 <DialogHeader>
-                  <DialogTitle className="font-headline font-black text-primary uppercase text-xl">Submit Your Testimony</DialogTitle>
-                  <DialogDescription>Share your experience or ideas with the community. Your submission will be reviewed by our team.</DialogDescription>
+                  <DialogTitle className="font-headline font-black text-primary uppercase text-lg md:text-xl">Submit Your Testimony</DialogTitle>
+                  <DialogDescription className="text-xs">Share your experience or ideas with the community.</DialogDescription>
                 </DialogHeader>
-                <form onSubmit={handleTestimonySubmit} className="space-y-6 pt-4">
+                <form onSubmit={handleTestimonySubmit} className="space-y-4 md:space-y-6 pt-4">
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">Your Name</label>
+                    <label className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">Your Name</label>
                     <Input 
                       placeholder="Enter your name" 
-                      className="h-12 rounded-xl"
+                      className="h-10 md:h-12 rounded-xl text-sm"
                       value={testimonyName}
                       onChange={(e) => setTestimonyName(e.target.value)}
                       required
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">Your Story or Idea</label>
+                    <label className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">Your Story or Idea</label>
                     <Textarea 
-                      placeholder="What has God done in your life? Or share an idea for our community..." 
-                      className="min-h-[150px] rounded-[1.5rem]"
+                      placeholder="What has God done in your life?..." 
+                      className="min-h-[120px] md:min-h-[150px] rounded-[1rem] md:rounded-[1.5rem] text-sm"
                       value={testimonyContent}
                       onChange={(e) => setTestimonyContent(e.target.value)}
                       required
@@ -683,10 +647,10 @@ export default function Home() {
                   <DialogFooter>
                     <Button 
                       type="submit" 
-                      className="w-full h-14 bg-primary text-white font-black uppercase tracking-widest rounded-xl shadow-lg"
+                      className="w-full h-12 md:h-14 bg-primary text-white font-black uppercase tracking-widest rounded-xl shadow-lg text-xs"
                       disabled={isSubmittingTestimony}
                     >
-                      {isSubmittingTestimony ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <Send className="mr-2 h-5 w-5" />}
+                      {isSubmittingTestimony ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Send className="mr-2 h-4 w-4" />}
                       {isSubmittingTestimony ? "Submitting..." : "Send Testimony"}
                     </Button>
                   </DialogFooter>
@@ -695,7 +659,7 @@ export default function Home() {
             </Dialog>
           </div>
           
-          <div className="grid md:grid-cols-3 gap-10 max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10 max-w-7xl mx-auto">
             {dbTestimonies && dbTestimonies.length > 0 ? (
               dbTestimonies.map((t: any, i: number) => (
                 <motion.div 
@@ -703,44 +667,44 @@ export default function Home() {
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  className="bg-muted/30 p-12 rounded-[4rem] relative shadow-lg group hover:bg-white hover:shadow-2xl transition-all duration-500"
+                  className="bg-muted/30 p-8 md:p-12 rounded-[2rem] md:rounded-[4rem] relative shadow-lg group hover:bg-white hover:shadow-2xl transition-all duration-500"
                 >
-                  <div className="space-y-8">
-                    <p className="text-primary font-medium italic text-xl leading-relaxed">"{t.content}"</p>
-                    <div className="flex items-center gap-4 border-t border-primary/10 pt-8">
-                      <div className="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center font-black uppercase">
+                  <div className="space-y-6 md:space-y-8">
+                    <p className="text-primary font-medium italic text-lg md:text-xl leading-relaxed">"{t.content}"</p>
+                    <div className="flex items-center gap-3 md:gap-4 border-t border-primary/10 pt-6 md:pt-8">
+                      <div className="w-10 h-10 md:w-12 md:h-12 bg-primary text-white rounded-full flex items-center justify-center font-black uppercase text-sm">
                         {(t.name || 'C').charAt(0)}
                       </div>
                       <div className="flex flex-col">
-                        <span className="font-headline font-bold text-primary uppercase tracking-widest text-xs">{t.name}</span>
-                        <span className="text-[9px] font-bold uppercase text-muted-foreground tracking-widest">Church Member</span>
+                        <span className="font-headline font-bold text-primary uppercase tracking-widest text-[10px] md:text-xs">{t.name}</span>
+                        <span className="text-[8px] md:text-[9px] font-bold uppercase text-muted-foreground tracking-widest">Member</span>
                       </div>
                     </div>
                   </div>
                 </motion.div>
               ))
             ) : (
-              <div className="col-span-full py-20 text-center text-muted-foreground italic">
-                Our church family's stories are being reviewed. Come back soon!
+              <div className="col-span-full py-12 text-center text-muted-foreground italic text-sm">
+                Our church family's stories are being reviewed.
               </div>
             )}
           </div>
         </div>
       </section>
 
-      <section className="py-24 md:py-40 bg-white border-t border-primary/5 text-center">
+      <section className="py-20 md:py-40 bg-white border-t border-primary/5 text-center">
         <div className="container px-4 mx-auto">
-          <div className="text-center space-y-4 mb-24">
-            <h2 className="font-playfair font-medium italic text-[48px] text-primary uppercase tracking-tighter">Sacred Moments</h2>
-            <p className="text-muted-foreground font-medium text-lg">Capturing our journey of faith in Mugher Mokada.</p>
+          <div className="text-center space-y-4 mb-12 md:mb-24">
+            <h2 className="font-playfair font-medium italic text-3xl md:text-[48px] text-primary uppercase tracking-tighter">Sacred Moments</h2>
+            <p className="text-muted-foreground font-medium text-base md:text-lg">Capturing our journey of faith in Mugher Mokada.</p>
           </div>
           
-          <div className="columns-1 sm:columns-2 lg:columns-3 gap-8 space-y-8">
+          <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 md:gap-8 space-y-4 md:space-y-8">
             {[worshipImg, baptismImg, interiorImg, heroImg, worshipImg, baptismImg].map((img, i) => (
               <motion.div 
                 key={i} 
-                whileHover={{ scale: 1.03 }}
-                className="relative rounded-[2rem] overflow-hidden shadow-2xl group break-inside-avoid mb-8"
+                whileHover={{ scale: 1.02 }}
+                className="relative rounded-[1.5rem] md:rounded-[2rem] overflow-hidden shadow-2xl group break-inside-avoid mb-4 md:mb-8"
               >
                 {img && (
                   <Image 
@@ -748,7 +712,7 @@ export default function Home() {
                     alt={`Gallery Image ${i+1}`} 
                     width={600}
                     height={800}
-                    className="object-cover group-hover:scale-110 transition-transform duration-1000"
+                    className="object-cover group-hover:scale-105 transition-transform duration-1000"
                   />
                 )}
               </motion.div>
@@ -757,26 +721,11 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="py-40 md:py-60 bg-black text-white relative overflow-hidden text-center">
-        <div className="container relative z-10 px-4 space-y-10">
-          <Badge className="bg-primary text-white font-black uppercase tracking-[0.5em] px-14 py-3.5 rounded-full mb-6">Your Seat is Reserved</Badge>
-          <h2 className="font-playfair font-medium italic text-[48px] text-white uppercase leading-tight max-w-6xl mx-auto">
-            Experience <br /> <span className="text-secondary">Worship Together</span>
-          </h2>
-          <p className="text-white/60 text-lg md:text-2xl max-w-3xl mx-auto font-medium leading-relaxed">
-            We are waiting to welcome you this Sunday. Come experience the life-changing power of Christ with us.
-          </p>
-          <Button asChild size="lg" className="bg-primary text-white font-black uppercase tracking-widest px-20 h-24 rounded-full shadow-2xl hover:scale-110 transition-transform text-2xl">
-            <Link href="#events">Plan Your Visit</Link>
-          </Button>
-        </div>
-      </section>
-
-      <footer className="bg-white border-t border-primary/5 pt-32 pb-16">
-        <div className="container px-4 mx-auto grid md:grid-cols-2 lg:grid-cols-4 gap-16 mb-24">
-          <div className="space-y-8">
+      <footer className="bg-white border-t border-primary/5 pt-16 md:pt-32 pb-12 md:pb-16">
+        <div className="container px-4 mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 md:gap-16 mb-16 md:mb-24">
+          <div className="space-y-6 md:space-y-8 text-center sm:text-left flex flex-col items-center sm:items-start">
             <Link href="/" className="flex items-center gap-2">
-              <div className="relative h-10 w-10 rounded-full overflow-hidden border-2 border-primary/20 shadow-md bg-white">
+              <div className="relative h-8 w-8 md:h-10 md:w-10 rounded-full overflow-hidden border-2 border-primary/20 shadow-md bg-white">
                 <Image 
                   src="https://i.ibb.co/vxZd8ZzQ/photo-2026-03-06-15-19-1222.jpg" 
                   alt="Mugher Full Gospel Logo" 
@@ -784,59 +733,59 @@ export default function Home() {
                   className="object-cover"
                 />
               </div>
-              <span className="font-headline font-black text-2xl tracking-tighter uppercase text-primary">MUGHER <span className="text-secondary">FULL GOSPEL</span></span>
+              <span className="font-headline font-black text-lg md:text-2xl tracking-tighter uppercase text-primary">MUGHER <span className="text-secondary">FULL GOSPEL</span></span>
             </Link>
-            <p className="text-muted-foreground text-base leading-relaxed font-medium">
+            <p className="text-muted-foreground text-sm md:text-base leading-relaxed font-medium">
               Muger Mokada, Ethiopia.<br />
               A sanctuary of faith dedicated to the restoration of hearts.
             </p>
-            <div className="flex gap-4">
+            <div className="flex gap-3 md:gap-4">
               {[Facebook, Instagram, Youtube, Twitter].map((Icon, i) => (
-                <Link key={i} href="#" className="w-12 h-12 bg-primary/5 rounded-2xl flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all">
-                  <Icon className="h-5 w-5" />
+                <Link key={i} href="#" className="w-10 h-10 md:w-12 md:h-12 bg-primary/5 rounded-xl md:rounded-2xl flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all">
+                  <Icon className="h-4 w-4 md:h-5 md:w-5" />
                 </Link>
               ))}
             </div>
           </div>
           
-          <div className="space-y-8">
-            <h4 className="text-sm font-black uppercase tracking-[0.2em] text-primary">Service Schedule</h4>
+          <div className="space-y-6 md:space-y-8 text-center sm:text-left">
+            <h4 className="text-[10px] md:text-sm font-black uppercase tracking-[0.2em] text-primary">Service Schedule</h4>
             <div className="space-y-4">
               <div className="space-y-1">
-                <span className="text-[10px] font-black text-secondary uppercase tracking-widest">Sunday Worship</span>
-                <p className="text-sm font-bold text-primary uppercase">Main Service • 9:00 AM</p>
+                <span className="text-[8px] md:text-[10px] font-black text-secondary uppercase tracking-widest">Sunday Worship</span>
+                <p className="text-xs md:text-sm font-bold text-primary uppercase">Main Service • 9:00 AM</p>
               </div>
               <div className="space-y-1">
-                <span className="text-[10px] font-black text-secondary uppercase tracking-widest">Prayer Meeting</span>
-                <p className="text-sm font-bold text-primary uppercase">Wednesday • 6:00 PM</p>
+                <span className="text-[8px] md:text-[10px] font-black text-secondary uppercase tracking-widest">Prayer Meeting</span>
+                <p className="text-xs md:text-sm font-bold text-primary uppercase">Wednesday • 6:00 PM</p>
               </div>
             </div>
           </div>
           
-          <div className="space-y-8">
-            <h4 className="text-sm font-black uppercase tracking-[0.2em] text-primary">Quick Links</h4>
-            <nav className="flex flex-col gap-4">
+          <div className="space-y-6 md:space-y-8 text-center sm:text-left">
+            <h4 className="text-[10px] md:text-sm font-black uppercase tracking-[0.2em] text-primary">Quick Links</h4>
+            <nav className="flex flex-col gap-3 md:gap-4">
               {navLinks.map((link) => (
-                <Link key={link.name} href={link.href} className="text-sm font-bold text-muted-foreground hover:text-primary transition-colors uppercase tracking-tight">{link.name}</Link>
+                <Link key={link.name} href={link.href} className="text-xs md:text-sm font-bold text-muted-foreground hover:text-primary transition-colors uppercase tracking-tight">{link.name}</Link>
               ))}
             </nav>
           </div>
           
-          <div className="space-y-8">
-            <h4 className="text-sm font-black uppercase tracking-[0.2em] text-primary">Ministry Location</h4>
-            <div className="space-y-4">
-              <div className="flex items-center gap-4 text-muted-foreground font-medium text-sm">
-                <MapPin className="h-5 w-5 text-secondary" /> Muger Mokada, Ethiopia
+          <div className="space-y-6 md:space-y-8 text-center sm:text-left">
+            <h4 className="text-[10px] md:text-sm font-black uppercase tracking-[0.2em] text-primary">Ministry Location</h4>
+            <div className="space-y-4 flex flex-col items-center sm:items-start">
+              <div className="flex items-center gap-3 text-muted-foreground font-medium text-xs md:text-sm">
+                <MapPin className="h-4 w-4 md:h-5 md:w-5 text-secondary" /> Muger Mokada, Ethiopia
               </div>
-              <div className="flex items-center gap-4 text-muted-foreground font-medium text-sm">
-                <Clock className="h-5 w-5 text-secondary" /> Mon-Fri 9AM-5PM
+              <div className="flex items-center gap-3 text-muted-foreground font-medium text-xs md:text-sm">
+                <Clock className="h-4 w-4 md:h-5 md:w-5 text-secondary" /> Mon-Fri 9AM-5PM
               </div>
             </div>
           </div>
         </div>
         
-        <div className="container px-4 mx-auto pt-16 border-t border-primary/5 text-center">
-          <p className="text-[11px] font-black uppercase tracking-[0.5em] text-primary opacity-80">© 2024 Mugher Full Gospel Church • SanctuaryLink System</p>
+        <div className="container px-4 mx-auto pt-8 md:pt-16 border-t border-primary/5 text-center">
+          <p className="text-[9px] md:text-[11px] font-black uppercase tracking-[0.2em] md:tracking-[0.5em] text-primary opacity-80">© 2024 Mugher Full Gospel Church • SanctuaryLink System</p>
         </div>
       </footer>
     </div>
