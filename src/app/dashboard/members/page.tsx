@@ -228,14 +228,14 @@ export default function MembersPage() {
                 <Plus className="h-4 w-4" /> Register Member
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-[95vw] sm:max-w-4xl rounded-2xl border-none shadow-2xl">
+            <DialogContent className="max-w-[98vw] w-full sm:max-w-[95vw] h-[98vh] sm:h-[90vh] rounded-2xl border-none shadow-2xl flex flex-col">
               <DialogHeader>
                 <DialogTitle className="text-2xl font-headline font-bold text-primary uppercase tracking-tight">
                   {editingMember ? 'Update Member Profile' : 'New Member Registration'}
                 </DialogTitle>
               </DialogHeader>
               <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 pt-4 max-h-[80vh] overflow-y-auto px-2">
+                <form onSubmit={form.handleSubmit(onSubmit)} className="flex-1 space-y-6 pt-4 overflow-y-auto px-2">
                   <FormField
                     control={form.control}
                     name="name"
@@ -349,13 +349,13 @@ export default function MembersPage() {
                       )}
                     />
                   </div>
-                  <DialogFooter className="pt-6">
-                    <Button type="submit" className="w-full bg-primary font-bold uppercase text-xs tracking-widest h-14 shadow-xl">
-                      {editingMember ? 'Save Profile Changes' : 'Confirm Registration'}
-                    </Button>
-                  </DialogFooter>
                 </form>
               </Form>
+              <DialogFooter className="pt-6 border-t mt-auto">
+                <Button type="submit" className="w-full bg-primary font-bold uppercase text-xs tracking-widest h-14 shadow-xl" onClick={form.handleSubmit(onSubmit)}>
+                  {editingMember ? 'Save Profile Changes' : 'Confirm Registration'}
+                </Button>
+              </DialogFooter>
             </DialogContent>
           </Dialog>
         </div>

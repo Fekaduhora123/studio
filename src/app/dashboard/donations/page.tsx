@@ -233,7 +233,7 @@ export default function DonationsPage() {
                               <Eye className="h-4 w-4" />
                             </Button>
                           </DialogTrigger>
-                          <DialogContent className="max-w-[95vw] sm:max-w-md rounded-2xl">
+                          <DialogContent className="max-w-[98vw] w-full sm:max-w-[600px] rounded-2xl overflow-y-auto max-h-[98vh]">
                             <DialogHeader>
                               <DialogTitle className="text-xl font-headline font-bold text-primary uppercase">Audit Details</DialogTitle>
                             </DialogHeader>

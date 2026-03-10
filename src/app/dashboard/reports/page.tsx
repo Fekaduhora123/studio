@@ -507,7 +507,7 @@ export default function ReportsPage() {
       </div>
 
       <Dialog open={detailDialogOpen} onOpenChange={setDetailDialogOpen}>
-        <DialogContent className="max-w-[95vw] sm:max-w-4xl max-h-[90vh] overflow-hidden flex flex-col p-0 border-none shadow-2xl rounded-xl">
+        <DialogContent className="max-w-[98vw] w-full sm:max-w-[95vw] h-[98vh] sm:h-[90vh] overflow-hidden flex flex-col p-0 border-none shadow-2xl rounded-xl">
           <DialogHeader className="p-4 md:p-6 bg-primary/5 border-b flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div className="space-y-1">
               <div className="flex items-center gap-2">

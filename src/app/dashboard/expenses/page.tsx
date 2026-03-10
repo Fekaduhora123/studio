@@ -1,4 +1,3 @@
-
 "use client";
 
 import * as React from 'react';
@@ -226,7 +225,7 @@ export default function ExpensesPage() {
                 <Plus className="h-4 w-4" /> Record
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-[95vw] sm:max-w-md rounded-xl">
+            <DialogContent className="max-w-[98vw] w-full sm:max-w-[700px] rounded-xl overflow-y-auto max-h-[98vh]">
               <DialogHeader>
                 <DialogTitle className="text-xl font-headline font-bold text-primary uppercase tracking-tight">
                   {editingExpense ? 'Edit Expense' : 'Log Expenditure'}
@@ -344,7 +343,7 @@ export default function ExpensesPage() {
                 <TableHead className="text-[10px] font-bold uppercase tracking-wider">Description</TableHead>
                 <TableHead className="text-[10px] font-bold uppercase tracking-wider">Category</TableHead>
                 <TableHead className="text-[10px] font-bold uppercase tracking-wider">Auditor</TableHead>
-                <TableHead className="text-[10px] font-bold uppercase tracking-wider">Status</TableHead>
+                <TableHead className="text-[10px) font-bold uppercase tracking-wider">Status</TableHead>
                 <TableHead className="text-[10px] font-bold uppercase tracking-wider text-right">Amount</TableHead>
                 <TableHead className="text-[10px] font-bold uppercase tracking-wider text-right">Actions</TableHead>
               </TableRow>
