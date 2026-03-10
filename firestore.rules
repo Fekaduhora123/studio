@@ -42,6 +42,12 @@ service cloud.firestore {
       allow write: if isAuthenticated();
     }
 
+    // Sacred Moments: Public can read, Admins can manage
+    match /sacred_moments/{momentId} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+
     // Default deny for everything else unless explicitly allowed above
     match /{document=**} {
       allow read, write: if isAuthenticated();

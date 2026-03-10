@@ -115,6 +115,18 @@
         "createdAt": { "type": "string", "format": "date-time" }
       },
       "required": ["title", "speaker", "date", "videoUrl"]
+    },
+    "SacredMoment": {
+      "title": "Sacred Moment",
+      "description": "A capture of a church moment for the public gallery.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "imageUrl": { "type": "string" },
+        "description": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "imageUrl"]
     }
   },
   "auth": {
@@ -144,6 +156,10 @@
     "/sermons/{sermonId}": {
       "schema": "Sermon",
       "description": "Collection of sermons for the gallery."
+    },
+    "/sacred_moments/{momentId}": {
+      "schema": "SacredMoment",
+      "description": "Collection of sacred moments images for the gallery."
     }
   }
 }

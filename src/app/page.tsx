@@ -1,3 +1,4 @@
+
 'use client';
 
 import * as React from 'react';
@@ -12,7 +13,7 @@ import {
   Loader2, Play, BookOpen, Sunrise, Sunset, 
   Menu, X, Sparkles, Megaphone, Video, ChevronDown,
   Facebook, Instagram, Youtube, Twitter, UserCircle,
-  MessageSquare, Send
+  MessageSquare, Send, Camera
 } from 'lucide-react';
 import { useCollection, useFirestore, useUser } from '@/firebase';
 import { collection, query, orderBy, limit, addDoc, serverTimestamp, where } from 'firebase/firestore';
@@ -84,15 +85,18 @@ export default function Home() {
     return query(collection(firestore, 'sermons'), orderBy('createdAt', 'desc'), limit(3));
   }, [firestore]);
 
+  const momentsQuery = React.useMemo(() => {
+    if (!firestore) return null;
+    return query(collection(firestore, 'sacred_moments'), orderBy('createdAt', 'desc'), limit(4));
+  }, [firestore]);
+
   const { data: events, loading: eventsLoading } = useCollection(eventsQuery);
   const { data: dbTestimonies } = useCollection(testimoniesQuery);
   const { data: dbSermons } = useCollection(sermonsQuery);
+  const { data: dbMoments } = useCollection(momentsQuery);
 
   const heroImg = PlaceHolderImages.find(img => img.id === 'church-exterior');
   const interiorImg = PlaceHolderImages.find(img => img.id === 'hero-church');
-  const worshipImg = PlaceHolderImages.find(img => img.id === 'worship-hands');
-  const sermonImg = PlaceHolderImages.find(img => img.id === 'sermon-video');
-  const baptismImg = PlaceHolderImages.find(img => img.id === 'baptism');
 
   const navLinks = [
     { name: 'Home', href: '/' },
@@ -610,7 +614,46 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="testimonies" className="py-16 md:py-40 bg-white">
+      <section id="moments" className="py-16 md:py-40 bg-white">
+        <div className="container px-4 mx-auto">
+          <div className="text-center space-y-4 mb-12 md:mb-20">
+             <Badge className="bg-primary/10 text-primary font-black uppercase tracking-widest text-[9px] md:text-[10px] px-6 py-1.5 rounded-full">Visual Testimony</Badge>
+             <h2 className="font-playfair font-medium italic text-3xl md:text-[48px] text-primary uppercase tracking-tighter">Sacred Moments</h2>
+             <p className="text-muted-foreground font-medium text-base md:text-lg leading-relaxed px-4">Captured snapshots of God's presence in our congregation.</p>
+          </div>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+            {dbMoments && dbMoments.length > 0 ? (
+              dbMoments.map((moment: any, i: number) => (
+                <motion.div 
+                  key={moment.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  className="relative aspect-square rounded-[1.5rem] md:rounded-[2rem] overflow-hidden shadow-lg group"
+                >
+                  <Image 
+                    src={moment.imageUrl} 
+                    alt={moment.title} 
+                    fill 
+                    sizes="(max-width: 768px) 100vw, 25vw"
+                    className="object-cover group-hover:scale-110 transition-transform duration-700"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-6">
+                    <span className="text-white font-headline font-bold uppercase tracking-widest text-xs">{moment.title}</span>
+                  </div>
+                </motion.div>
+              ))
+            ) : (
+              <div className="col-span-full py-12 text-center text-muted-foreground italic text-sm">
+                No moments captured yet.
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+
+      <section id="testimonies" className="py-16 md:py-40 bg-muted/20">
         <div className="container px-4 mx-auto">
           <div className="text-center space-y-4 mb-12 md:mb-24">
             <Badge className="bg-secondary/20 text-primary font-black uppercase tracking-widest text-[9px] md:text-[10px] px-6 py-1.5">Transformed Lives</Badge>
@@ -672,7 +715,7 @@ export default function Home() {
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  className="bg-muted/30 p-8 md:p-12 rounded-[2rem] md:rounded-[4rem] relative shadow-lg group hover:bg-white hover:shadow-2xl transition-all duration-500"
+                  className="bg-white p-8 md:p-12 rounded-[2rem] md:rounded-[4rem] relative shadow-lg group hover:shadow-2xl transition-all duration-500"
                 >
                   <div className="space-y-6 md:space-y-8">
                     <p className="text-primary font-medium italic text-lg md:text-xl leading-relaxed">"{t.content}"</p>
