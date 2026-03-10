@@ -161,6 +161,7 @@ export default function Home() {
                 src="https://i.ibb.co/vxZd8ZzQ/photo-2026-03-06-15-19-1222.jpg" 
                 alt="Mugher Full Gospel Logo" 
                 fill 
+                sizes="48px"
                 className="object-cover"
               />
             </div>
@@ -245,6 +246,7 @@ export default function Home() {
               src={heroImg.imageUrl} 
               alt="Mugher Full Gospel Sanctuary" 
               fill 
+              sizes="100vw"
               className="object-cover object-left md:object-center brightness-[0.4]"
               priority
             />
@@ -350,6 +352,7 @@ export default function Home() {
                   src={interiorImg.imageUrl} 
                   alt="Church Sanctuary" 
                   fill 
+                  sizes="(max-width: 768px) 100vw, 50vw"
                   className="object-cover group-hover:scale-110 transition-transform duration-1000"
                 />
               )}
@@ -551,6 +554,7 @@ export default function Home() {
                         src={s.thumbnailUrl} 
                         alt={s.title} 
                         fill 
+                        sizes="(max-width: 768px) 100vw, 33vw"
                         className="object-cover group-hover:scale-110 transition-transform duration-700"
                       />
                     ) : (
@@ -586,14 +590,16 @@ export default function Home() {
           <h2 className="font-playfair font-medium italic text-3xl md:text-[48px] text-white uppercase leading-tight max-w-5xl mx-auto">
             Your Support Fuels <br className="hidden md:block" /> <span className="text-secondary">Our Mission</span>
           </h2>
-          <motion.p 
+          <motion.div 
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-white/80 max-w-3xl mx-auto font-bitter font-light italic text-base md:text-[20px] leading-relaxed px-4"
+            className="text-white/80 max-w-3xl mx-auto font-bitter font-light italic text-base md:text-[20px] leading-relaxed px-4 space-y-4"
           >
-            Your giving helps us spread the Gospel and serve the community excellence. Join us in building God's Kingdom.
-          </motion.p>
+            <p>Your giving helps us spread the Gospel and serve the community excellence. Join us in building God's Kingdom.</p>
+            <p>Kennaan keessann Wangeela babal’isuu fi hawaasa keenyaf tajaajila qulqullina qabuun tajaajiluuf nu gargaara. Mootummaa Waaqayyoo ijaaruu irratti nuun waliin hiriiraa.</p>
+            <p>የእርስዎ ስጦታ ወንጌልን ለማስፋፋት እና ማህበረሰቡን በላቀ ሁኔታ ለማገልገል ይረዳናል። የእግዚአብሔርን መንግሥት ለመገንባት ከእኛ ጋር ይተባበሩ</p>
+          </motion.div>
           <div className="flex flex-col sm:flex-row gap-4 md:gap-6 justify-center pt-6 md:pt-10">
             <Button asChild size="lg" className="w-full sm:w-auto bg-primary text-white font-black uppercase tracking-widest px-10 h-16 md:h-20 rounded-full shadow-2xl hover:scale-105 transition-transform text-base md:text-lg">
               <Link href="/donate">Give Donation</Link>
@@ -712,6 +718,7 @@ export default function Home() {
                     alt={`Gallery Image ${i+1}`} 
                     width={600}
                     height={800}
+                    sizes="(max-width: 768px) 100vw, 33vw"
                     className="object-cover group-hover:scale-105 transition-transform duration-1000"
                   />
                 )}
@@ -730,6 +737,7 @@ export default function Home() {
                   src="https://i.ibb.co/vxZd8ZzQ/photo-2026-03-06-15-19-1222.jpg" 
                   alt="Mugher Full Gospel Logo" 
                   fill 
+                  sizes="40px"
                   className="object-cover"
                 />
               </div>
