@@ -41,7 +41,6 @@ export default function Home() {
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
   const [dailyQuote, setDailyQuote] = React.useState<{ text: string, ref: string, time: 'morning' | 'evening' } | null>(null);
   
-  // Testimony form state
   const [testimonyName, setTestimonyName] = React.useState('');
   const [testimonyContent, setTestimonyContent] = React.useState('');
   const [isSubmittingTestimony, setIsSubmittingTestimony] = React.useState(false);
@@ -361,7 +360,7 @@ export default function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 1, delay: 0.3 }}
-                className="absolute top-20 md:top-32 left-6 right-6 md:left-10 md:right-10 z-20 border-2 border-blue-400/50 p-4 md:p-6 rounded-[1.5rem] md:rounded-[2rem] bg-white/10 backdrop-blur-sm animate-pulse"
+                className="absolute top-32 left-6 right-6 md:left-10 md:right-10 z-20 border-2 border-blue-600/50 p-4 md:p-6 rounded-[1.5rem] md:rounded-[2rem] bg-white/10 backdrop-blur-sm animate-pulse"
               >
                 <p className="text-blue-600 font-robotoSlab font-normal text-sm md:text-[20px] leading-relaxed drop-shadow-2xl text-center md:text-left">
                   kiristos lubbuu isaa nuuf kennuu isaatiin jaalalli maal akka ta'e hubanneerraa,egaa nus immoo lubbuu keenya obbolootaaf kennuun nuuf ta'a.yohaniis3:16
@@ -699,32 +698,22 @@ export default function Home() {
       </section>
 
       <section className="py-20 md:py-40 bg-white border-t border-primary/5 text-center">
-        <div className="container px-4 mx-auto">
-          <div className="text-center space-y-4 mb-12 md:mb-24">
-            <h2 className="font-playfair font-medium italic text-3xl md:text-[48px] text-primary uppercase tracking-tighter">Sacred Moments</h2>
-            <p className="text-muted-foreground font-medium text-base md:text-lg">Capturing our journey of faith in Mugher Mokada.</p>
-          </div>
-          
-          <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 md:gap-8 space-y-4 md:space-y-8">
-            {[worshipImg, baptismImg, interiorImg, heroImg, worshipImg, baptismImg].map((img, i) => (
-              <motion.div 
-                key={i} 
-                whileHover={{ scale: 1.02 }}
-                className="relative rounded-[1.5rem] md:rounded-[2rem] overflow-hidden shadow-2xl group break-inside-avoid mb-4 md:mb-8"
-              >
-                {img && (
-                  <Image 
-                    src={img.imageUrl} 
-                    alt={`Gallery Image ${i+1}`} 
-                    width={600}
-                    height={800}
-                    sizes="(max-width: 768px) 100vw, 33vw"
-                    className="object-cover group-hover:scale-105 transition-transform duration-1000"
-                  />
-                )}
-              </motion.div>
-            ))}
-          </div>
+        <div className="container px-4 mx-auto flex justify-center">
+          <motion.div 
+            whileHover={{ scale: 1.02 }}
+            className="relative rounded-[1.5rem] md:rounded-[2rem] overflow-hidden shadow-2xl group max-w-2xl"
+          >
+            {interiorImg && (
+              <Image 
+                src={interiorImg.imageUrl} 
+                alt="Bible and Faith" 
+                width={800}
+                height={600}
+                sizes="(max-width: 768px) 100vw, 50vw"
+                className="object-cover group-hover:scale-105 transition-transform duration-1000"
+              />
+            )}
+          </motion.div>
         </div>
       </section>
 
