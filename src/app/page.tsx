@@ -1,4 +1,3 @@
-
 'use client';
 
 import * as React from 'react';
@@ -364,7 +363,7 @@ export default function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 1, delay: 0.3 }}
-                className="absolute top-32 left-6 right-6 md:left-10 md:right-10 z-20 border-2 border-blue-600/50 p-4 md:p-6 rounded-[1.5rem] md:rounded-[2rem] bg-white/10 backdrop-blur-sm animate-pulse"
+                className="absolute top-32 left-6 right-6 md:left-10 md:right-10 z-20 border-2 border-blue-600 rounded-[1.5rem] md:rounded-[2rem] bg-white/10 backdrop-blur-sm animate-pulse shadow-[0_0_20px_rgba(37,99,235,0.5)]"
               >
                 <p className="text-blue-600 font-robotoSlab font-normal text-sm md:text-[20px] leading-relaxed drop-shadow-2xl text-center md:text-left">
                   kiristos lubbuu isaa nuuf kennuu isaatiin jaalalli maal akka ta'e hubanneerraa,egaa nus immoo lubbuu keenya obbolootaaf kennuun nuuf ta'a.yohaniis3:16
@@ -385,7 +384,7 @@ export default function Home() {
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="text-muted-foreground font-bitter font-light italic text-base md:text-[20px] leading-relaxed border-2 border-primary/20 p-6 md:p-8 rounded-[1.5rem] md:rounded-[2rem] bg-primary/5 shadow-inner"
+                className="text-muted-foreground font-robotoSlab font-normal text-base md:text-[20px] leading-relaxed border-2 border-primary/20 p-6 md:p-8 rounded-[1.5rem] md:rounded-[2rem] bg-primary/5 shadow-inner text-left"
               >
                 Mugher Full Gospel Church is a community of believers dedicated to worship, discipleship, and service. Our mission is to share the Gospel and build a strong faith community in Mugher Mokada.
               </motion.div>
@@ -600,7 +599,7 @@ export default function Home() {
             className="text-white/80 max-w-3xl mx-auto font-bitter font-light italic text-base md:text-[20px] leading-relaxed px-4 space-y-4"
           >
             <p>Your giving helps us spread the Gospel and serve the community excellence. Join us in building God's Kingdom.</p>
-            <p>Kennaan keessann Wangeela babal’isuu fi hawaasa keenyaf tajaajila qulqullina qabuun tajaajiluuf nu gargaara. Mootummaa Waaqayyoo ijaaruu irratti nuun waliin hiriiraa.</p>
+            <p>Kennaan keessan Wangeela babal’isuu fi hawaasa keenyaf tajaajila qulqullina qabuun tajaajiluuf nu gargaara. Mootummaa Waaqayyoo ijaaruu irratti nuun waliin hiriiraa.</p>
             <p>የእርስዎ ስጦታ ወንጌልን ለማስፋፋት እና ማህበረሰቡን በላቀ ሁኔታ ለማገልገል ይረዳናል። የእግዚአብሔርን መንግሥት ለመገንባት ከእኛ ጋር ይተባበሩ</p>
           </motion.div>
           <div className="flex flex-col sm:flex-row gap-4 md:gap-6 justify-center pt-6 md:pt-10">
