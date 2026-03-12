@@ -40,6 +40,7 @@ export default function Home() {
   const [isScrolled, setIsScrolled] = React.useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
   const [dailyQuote, setDailyQuote] = React.useState<{ text: string, ref: string, time: 'morning' | 'evening' } | null>(null);
+  const [showFullHistory, setShowFullHistory] = React.useState(false);
   
   const [testimonyName, setTestimonyName] = React.useState('');
   const [testimonyContent, setTestimonyContent] = React.useState('');
@@ -391,14 +392,18 @@ export default function Home() {
               
               <div className="space-y-4 text-left">
                 <h4 className="font-playfair font-medium italic text-xl md:text-2xl text-primary">Seenaa Boonsaa fi Milkaa’ina Mana Amantaa Guutuu Wangellaa Mugher</h4>
-                <motion.div 
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  className="text-muted-foreground font-bitter font-light italic text-base md:text-[20px] leading-relaxed whitespace-pre-wrap"
-                >
+                <div className="text-muted-foreground font-bitter font-light italic text-base md:text-[20px] leading-relaxed">
                   Mana Amantaa Guutuu Wangellaa Itoophiyaa (MAGWI) buufata Mugher, seenaa amantii cimaa, obsaa fi loltummaa hafuuraa waggoota dheeraa of keessaa qabdi. Manni amantaa kun naannoo sanaatti mul’ata wangeelaa jalqabaa qabattee kan kaate madda nagaa fi jireenya hafuuraa ta’uun tajaajilaa jirti.
-
+                  
+                  <AnimatePresence>
+                    {showFullHistory && (
+                      <motion.div 
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.5 }}
+                        className="overflow-hidden whitespace-pre-wrap mt-4"
+                      >
 1. Hundeeffama fi Jalqaba Mul’ataa
 Manni amantaa kun yeroo naannoon Mugher qophaatti ijaaramaa turtetti, obboloota muraasa murtoo qabaniin manatti tajaajila jalqabde. Akkuma kolfi fageenyatti mul’atu, isheenis "Ishee Jalqabaa" (pioneer) ta’uun namoota naannoo sanaa wangeelaan qaqqabuuf dhagaa bu’uuraa keesse.
 - Mul'ata Jalqabaa: Namoota muraasa kaayyoo tokkoof walitti dhufaniin, manaa manatti kadhannaa fi sagalee Waaqayyoo qoqqoodachuun jalqabame.
@@ -424,57 +429,63 @@ Manni amantaa kun seenaa boonsaa kana qabattee gara fuulduraatti:
 - Hawaasummaa keessatti gahee ishee bahuun hiyyeeyyii fi warra gargaarsa barbaadan gargaaruu irratti xiyyeeffatti.
 
 Xumura irratti: Mana Amantaa Guutuu Wangellaa Mugher ragaa jiraataa "Obsi fi amanamummaan bu'aa qaba" jedhuuti. Kaleessa dhiphuu keessa turte, har’a garuu tajaajila bal’aa fi miseensota kumaan lakkaa’aman qabattee ifa ta’ee mul’achaa jirti.
-                </motion.div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
               </div>
-
+              
               <div className="space-y-4 pt-4 border-t border-primary/5 text-left">
                 <h4 className="font-playfair font-medium italic text-xl md:text-2xl text-primary">የሙገር ሙሉ ወንጌል አማኞች ቤተክርስቲያን ኩራትና የድል ታሪክ</h4>
-                <motion.div 
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  className="text-muted-foreground font-bitter font-light italic text-base md:text-[20px] leading-relaxed whitespace-pre-wrap"
-                >
+                <div className="text-muted-foreground font-bitter font-light italic text-base md:text-[20px] leading-relaxed">
                   ቤተክርስቲያኗ በአካባቢው የወንጌል ብርሃን ቀዳሚ በመሆን፣ በብዙ ትግልና ጸሎት የተመሰረተች ሲሆን፤ ዛሬ ላይ የብዙ ሺህ አማኞች መገኛ ለመሆን በቅታለች።
+                  
+                  <AnimatePresence>
+                    {showFullHistory && (
+                      <motion.div 
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.5 }}
+                        className="overflow-hidden whitespace-pre-wrap mt-4"
+                      >
 1. መነሻና የቀዳሚነት ሚና
-
 ቤተክርስቲያኗ በአካባቢው "የመጀመሪያዋ" (Pioneer) ተብላ የምትታወቅ ሲሆን፣ ጥቂት አማኞች በቤታቸው ጸሎትና አምልኮ በመጀመር የጣሉት የወንጌል ዘር ነው። ሙገር እንደ ኢንዱስትሪ መንደር መመስረት ሲጀምር፣ ይህች ቤተክርስቲያን ለመንፈሳዊ ዕረፍትና ለተስፋ ምንጭነት መሰረት ሆናለች።
-
 - የመጀመሪያው ራዕይ: ጥቂት ወንድሞችና እህቶች ለወንጌል ባላቸው ፍቅር ተነሳስተው፣ በታማኝነትና በትጋት አገልግሎቱን ጀመሩ።
 - ተደራሽነት: የወንጌል ብርሃን ባልደረሰባቸው ስፍራዎች ሁሉ መዳረሻ በመሆን ለብዙዎች ድነት ምክንያት ሆናለች።
 
 2. ፈተናዎችን በጽናት ማለፍ
-
 ቤተክርስቲያኗ ዛሬ ለደረሰችበት ክብር የበቃችው በቀላሉ አልነበረም። በሂደቱ ውስጥ እጅግ አስቸጋሪ የሆኑ መከራዎችን አልፋለች፦
-
 - መንፈሳዊ ስደት: በወቅቱ የነበሩ የሃይማኖትና የማህበራዊ ተጽዕኖዎች አገልግሎቱን ለማደናቀፍ ሞክረው ነበር።
 - የአምልኮ ስፍራ ማጣት: ለረጅም ዓመታት ቋሚ የሆነ የመሰብሰቢያ ቦታ ባለመኖሩ፣ ከአንድ ቦታ ወደ ሌላ ቦታ በመዘዋወር (በመሰደድ) ብዙ ዋጋ ተከፍሏል።
 - የቁሳቁስና የገንዘብ እጥረት: የአባላቱ ቁጥር አነስተኛ በነበረበት ወቅት፣ ህንጻ ለመገንባትና አገልግሎቱን ለማስፋፋት ከፍተኛ የኢኮኖሚ ፈተናዎች ነበሩ።
-
 ቢሆንም ግን፣ "በዓለት ላይ የተመሰረተች ቤት አትናወጥም" እንደሚለው ቃል፣ በምዕመናን ጽናትና በጌታ ጸጋ ቆማ ቀርታለች።
 
 3. የአሁኑ ስኬትና እድገት
-
 የሙገር ሙሉ ወንጌል አማኞች ቤተክርስቲያን ትናንት በለቅሶ የዘራችውን ዛሬ በደስታ እያጨደች ትገኛለች።
-
 - በሺዎች የሚቆጠሩ አባላት: በጥቂት ሰዎች የተጀመረው አገልግሎት ዛሬ በሺዎች የሚቆጠሩ ምዕመናንን (ቋሚ አባላትና የተለያዩ የአገልግሎት ዘርፎችን) አፍርቷል።
 - የተሟላ አገልግሎት: ለህጻናት፣ ለወጣቶችና ለሴቶች የሚሰጡ አገልግሎቶችን በማስፋፋት የማህበረሰቡን መንፈሳዊና ስነ-ልቦናዊ ፍላጎት እያሟላች ትገኛለች።
 - ታላቅ የጸሎት ቤት: አማኞች በነጻነት የሚሰበሰቡበት፣ ዘመናዊና ሰፊ የሆነ የቤተክርስቲያን ህንጻ ባለቤት መሆን መቻሏ የእድገቷ ትልቅ ማሳያ ነው።
 
 4. የወደፊት ራዕይና ተልዕኮ
-
 ቤተክርስቲያኗ ካለፈችበት ታላቅ ታሪክ በመነሳት ወደፊት የሚከተሉትን ግቦች ሰንቃለች፦
-
 - ወንጌልን በሙገርና በአካባቢው ባሉ ስፍራዎች ይበልጥ በስፋት ማዳረስ።
 - በመንፈሳዊ ህይወታቸው የበሰሉና ለሀገር የሚጠቅሙ ዜጎችን ማፍራት።
 - ማህበራዊ ኃላፊነትን በመወጣት ረገድ ችግረኞችንና ድጋፍ የሚሹ ወገኖችን መርዳት።
 
 ለማጠቃለል፦ የሙገር ሙሉ ወንጌል አማኞች ቤተክርስቲያን "ጽናትና እምነት ፍሬ አለው" ለሚለው እውነት ህያው ምስክር ናት። ትናንት በፈተና ውስጥ የነበረችው ቤተክርስቲያን፣ ዛሬ በብዙ ሺህ አባላት ተከባ በክብር ትገኛለች።
-                </motion.div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
               </div>
             </div>
-            <Button asChild size="lg" className="w-full sm:w-auto bg-primary text-white font-black h-14 md:h-16 px-10 md:px-12 rounded-full uppercase tracking-widest shadow-xl">
-              <Link href="#about">Learn Our Story</Link>
+            <Button 
+              onClick={() => setShowFullHistory(!showFullHistory)}
+              size="lg" 
+              className="w-full sm:w-auto bg-primary text-white font-black h-14 md:h-16 px-10 md:px-12 rounded-full uppercase tracking-widest shadow-xl"
+            >
+              {showFullHistory ? 'Show Less' : 'Learn Our Story'}
             </Button>
           </div>
         </div>
