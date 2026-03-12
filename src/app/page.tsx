@@ -363,9 +363,9 @@ export default function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 1, delay: 0.3 }}
-                className="absolute top-32 left-6 right-6 md:left-10 md:right-10 z-20 border border-blue-400/50 rounded-[2rem] md:rounded-[2.5rem] bg-blue-900/10 backdrop-blur-xl p-6 md:p-8 shadow-[0_0_40px_-10px_rgba(59,130,246,0.5)] ring-1 ring-blue-400/20 animate-pulse"
+                className="absolute top-32 left-6 right-6 md:left-10 md:right-10 z-20 border-2 border-blue-400 rounded-[2rem] md:rounded-[2.5rem] bg-blue-900/20 backdrop-blur-xl p-6 md:p-8 shadow-[0_0_40px_-5px_rgba(59,130,246,0.6)] ring-4 ring-blue-400/20 animate-pulse"
               >
-                <p className="text-blue-500 font-robotoSlab font-normal text-sm md:text-[20px] leading-relaxed drop-shadow-2xl text-center">
+                <p className="text-blue-500 font-robotoSlab font-bold text-sm md:text-[20px] leading-relaxed drop-shadow-2xl text-center">
                   kiristos lubbuu isaa nuuf kennuu isaatiin jaalalli maal akka ta'e hubanneerraa,egaa nus immoo lubbuu keenya obbolootaaf kennuun nuuf ta'a.yohaniis3:16
                 </p>
               </motion.div>
@@ -390,14 +390,41 @@ export default function Home() {
               </motion.div>
               
               <div className="space-y-4 text-left">
-                <motion.p 
+                <h4 className="font-playfair font-medium italic text-xl md:text-2xl text-primary">Seenaa Boonsaa fi Milkaa’ina Mana Amantaa Guutuu Wangellaa Mugher</h4>
+                <motion.div 
                   initial={{ opacity: 0, y: 10 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  className="text-muted-foreground font-bitter font-light italic text-base md:text-[20px] leading-relaxed"
+                  className="text-muted-foreground font-bitter font-light italic text-base md:text-[20px] leading-relaxed whitespace-pre-wrap"
                 >
-                  Manni Amantaa Guutuu Wangellaa Muger bara 1978 (A.L.H.) yoo hundaa’u, aanaa Ada'a Bargaa keessatti mana amantaa ishee jalqabaa ta’uun seenaa boonsaa qabdi.
-                </motion.p>
+                  Mana Amantaa Guutuu Wangellaa Itoophiyaa (MAGWI) buufata Mugher, seenaa amantii cimaa, obsaa fi loltummaa hafuuraa waggoota dheeraa of keessaa qabdi. Manni amantaa kun naannoo sanaatti mul’ata wangeelaa jalqabaa qabattee kan kaate madda nagaa fi jireenya hafuuraa ta’uun tajaajilaa jirti.
+
+1. Hundeeffama fi Jalqaba Mul’ataa
+Manni amantaa kun yeroo naannoon Mugher qophaatti ijaaramaa turtetti, obboloota muraasa murtoo qabaniin manatti tajaajila jalqabde. Akkuma kolfi fageenyatti mul’atu, isheenis "Ishee Jalqabaa" (pioneer) ta’uun namoota naannoo sanaa wangeelaan qaqqabuuf dhagaa bu’uuraa keesse.
+- Mul'ata Jalqabaa: Namoota muraasa kaayyoo tokkoof walitti dhufaniin, manaa manatti kadhannaa fi sagalee Waaqayyoo qoqqoodachuun jalqabame.
+- Madda Jireenyaa: Mugher keessatti akka tajaajila hafuuraa qofaatti osoo hin taane, akka madda tasgabbii fi abdii ta’uun tajaajiluu jalqabde.
+
+2. Qorumsa fi Rakkoo Dandamachuu
+Manni amantaa kun jireenya har’a mul’atu bira gahuuf karaa dukkanaa fi dhiphuu baay’ee keessa dabarteetti. Seenaa ishee keessatti yeroo hedduu rakkoolee akkasii dandamattee jirti:
+- Ari’atama Hafuuraa: Yeroo sanatti akka amantaa haaraatti ilaalamuu isheetiin, mormii fi ari’atama dhuunfaa fi hawaasummaa garaa garaa keessa dabarteetti.
+- Bakka Tajaajilaa Dhabuu: Waggoota hedduuf bakka dhaabbataa itti waaqeffatan dhabuun, bakka tajaajilaa jijjiiruun (godaanuun) qorumsa guddaa ture.
+- Cinqii Dinagdee: Miseensota muraasa qabaachuu isheetiin, ijaarsa fi tajaajila babal’isuuf rakkoon maallaqaa fi meeshaa ishee quunnamee ture.
+Haa ta’u malee, akkuma Kitaabni Qulqulluun jedhu, "Manni dhagaa irratti ijaarame bubbee fi bishaan hin jignu," isheenis amanamummaa miseensota isheetiin jabaattee dhaabbatte.
+
+3. Guddina fi Firii Har’aa
+Har’a, Mana Amantaa Guutuu Wangellaa Mugher "tulluu guddachaa dhufe" ta’eetti. Rakkoon kaleessaa har’a gara seenaa fi galataatti jijjiirameera.
+- Miseensota Kumaan Lakkaa’aman: Miseensota muraasa irraa kaatee, har’a kumaan kan lakkaa’aman (Dhaabbataa fi Miseensota tajaajilaa) horachuu dandeessetti.
+- Tajaajila Babal'ate: Dubartoota, dargaggoota, fi ijoolleef tajaajila adda addaa diriirsuun jireenya hawaasichaa jijjiiraa jirti.
+- Ijaarsa Mana Qulqullummaa: Bakka amantoonni itti walitti dhufanii Waaqayyoon galateeffatan, ijaarsa guddaa fi bareedaa qabaachuun ishee ragaa guddina isheeti.
+
+4. Kaayyoo fi Mul’ata Gara Fuulduraa
+Manni amantaa kun seenaa boonsaa kana qabattee gara fuulduraatti:
+- Wangeela naannoo Mugher fi naannoo ishee jiranitti bal’inaan qaqqabsiisuu.
+- Amantoota hafuuraan bilchaatan fi biyyaaf bu’aa buusan horachuu.
+- Hawaasummaa keessatti gahee ishee bahuun hiyyeeyyii fi warra gargaarsa barbaadan gargaaruu irratti xiyyeeffatti.
+
+Xumura irratti: Mana Amantaa Guutuu Wangellaa Mugher ragaa jiraataa "Obsi fi amanamummaan bu'aa qaba" jedhuuti. Kaleessa dhiphuu keessa turte, har’a garuu tajaajila bal’aa fi miseensota kumaan lakkaa’aman qabattee ifa ta’ee mul’achaa jirti.
+                </motion.div>
               </div>
 
               <div className="space-y-4 pt-4 border-t border-primary/5 text-left">
