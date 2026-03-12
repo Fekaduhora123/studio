@@ -363,9 +363,9 @@ export default function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 1, delay: 0.3 }}
-                className="absolute top-32 left-6 right-6 md:left-10 md:right-10 z-20 border-2 border-blue-600 rounded-[1.5rem] md:rounded-[2rem] bg-white/10 backdrop-blur-sm animate-pulse shadow-[0_0_20px_rgba(37,99,235,0.5)]"
+                className="absolute top-32 left-6 right-6 md:left-10 md:right-10 z-20 border border-blue-400/50 rounded-[2rem] md:rounded-[2.5rem] bg-blue-900/10 backdrop-blur-xl p-6 md:p-8 shadow-[0_0_40px_-10px_rgba(59,130,246,0.5)] ring-1 ring-blue-400/20 animate-pulse"
               >
-                <p className="text-blue-600 font-robotoSlab font-normal text-sm md:text-[20px] leading-relaxed drop-shadow-2xl text-center md:text-left">
+                <p className="text-blue-500 font-robotoSlab font-normal text-sm md:text-[20px] leading-relaxed drop-shadow-2xl text-center">
                   kiristos lubbuu isaa nuuf kennuu isaatiin jaalalli maal akka ta'e hubanneerraa,egaa nus immoo lubbuu keenya obbolootaaf kennuun nuuf ta'a.yohaniis3:16
                 </p>
               </motion.div>
