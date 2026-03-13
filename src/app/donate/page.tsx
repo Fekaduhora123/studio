@@ -57,8 +57,9 @@ export default function PublicDonatePage() {
         img.src = event.target?.result as string;
         img.onload = () => {
           const canvas = document.createElement('canvas');
-          const MAX_WIDTH = 1024;
-          const MAX_HEIGHT = 1024;
+          // Increased resolution for better OCR accuracy on mobile screenshots
+          const MAX_WIDTH = 1600;
+          const MAX_HEIGHT = 1600;
           let width = img.width;
           let height = img.height;
 
@@ -78,7 +79,7 @@ export default function PublicDonatePage() {
           canvas.height = height;
           const ctx = canvas.getContext('2d');
           ctx?.drawImage(img, 0, 0, width, height);
-          resolve(canvas.toDataURL('image/jpeg', 0.8));
+          resolve(canvas.toDataURL('image/jpeg', 0.85));
         };
         img.onerror = reject;
       };
@@ -100,7 +101,7 @@ export default function PublicDonatePage() {
       const result = await scanReceipt({ receiptDataUri: compressedDataUri });
       
       if (!result.isCorrectAccount) {
-        setScanError("Verification Failed: Destination account mismatch.");
+        setScanError("Verification Failed: Destination account mismatch. Please ensure you sent to 1000221935978.");
       } else {
         if (result.donorName) form.setValue('donorName', result.donorName, { shouldValidate: true });
         if (result.amount > 0) form.setValue('amount', result.amount.toString(), { shouldValidate: true });
@@ -108,7 +109,7 @@ export default function PublicDonatePage() {
         setIsAiVerified(true);
       }
     } catch (err) {
-      setScanError("Unable to process the image. Please try again.");
+      setScanError("Unable to process the image. Please ensure the receipt is clear and try again.");
     } finally {
       setIsScanning(false);
       if (e.target) e.target.value = ''; 
@@ -218,13 +219,12 @@ export default function PublicDonatePage() {
                       <Input
                         type="file"
                         accept="image/*"
-                        capture="environment"
                         onChange={handleFileChange}
                         className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                       />
                       <div className="text-center">
                         <p className="text-[10px] md:text-sm font-bold text-muted-foreground">Upload Screenshot</p>
-                        <p className="text-[8px] md:text-[10px] text-muted-foreground">Telebirr / CBE Birr / QR</p>
+                        <p className="text-[8px] md:text-[10px] text-muted-foreground">Telebirr / CBE Birr / Gallery</p>
                       </div>
                       <div className="flex items-center gap-2 text-[8px] bg-primary text-white px-3 py-1 rounded-full font-bold uppercase tracking-widest">
                         <Sparkles className="h-2.5 w-2.5" /> AI AUTO-SCAN

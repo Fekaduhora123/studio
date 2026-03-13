@@ -1,4 +1,3 @@
-
 'use client';
 
 import * as React from 'react';
@@ -392,7 +391,7 @@ export default function Home() {
               
               <div className="space-y-4 text-left">
                 <h4 className="font-playfair font-medium italic text-xl md:text-2xl text-primary">Seenaa Boonsaa fi Milkaa’ina Mana Amantaa Guutuu Wangellaa Mugher</h4>
-                <div className="text-muted-foreground font-bitter font-light italic text-base md:text-[20px] leading-relaxed whitespace-pre-wrap">
+                <div className="text-muted-foreground font-bitter font-light italic text-base md:text-[20px] leading-relaxed">
                   Mana Amantaa Guutuu Wangellaa Itoophiyaa (MAGWI) buufata Mugher, seenaa amantii cimaa, obsaa fi loltummaa hafuuraa waggoota dheeraa of keessaa qabdi. Manni amantaa kun naannoo sanaatti mul’ata wangeelaa jalqabaa qabattee kan kaate madda nagaa fi jireenya hafuuraa ta’uun tajaajilaa jirti.
                   
                   <AnimatePresence>
@@ -438,7 +437,7 @@ export default function Home() {
               
               <div className="space-y-4 pt-4 border-t border-primary/5 text-left">
                 <h4 className="font-playfair font-medium italic text-xl md:text-2xl text-primary">የሙገር ሙሉ ወንጌል አማኞች ቤተክርስቲያን ኩራትና የድል ታሪክ</h4>
-                <div className="text-muted-foreground font-bitter font-light italic text-base md:text-[20px] leading-relaxed whitespace-pre-wrap">
+                <div className="text-muted-foreground font-bitter font-light italic text-base md:text-[20px] leading-relaxed">
                   ቤተክርስቲያኗ በአካባቢው የወንጌል ብርሃን ቀዳሚ በመሆን፣ በብዙ ትግልና ጸሎት የተመሰረተች ሲሆን፤ ዛሬ ላይ የብዙ ሺህ አማኞች መገኛ ለመሆን በቅታለች።
                   
                   <AnimatePresence>
@@ -451,13 +450,13 @@ export default function Home() {
                         className="overflow-hidden whitespace-pre-wrap mt-4 border-l-4 border-secondary/20 pl-4"
                       >
                         1. መነሻና የቀዳሚነት ሚና<br />
-                        ቤተክርስቲያኗ በአካባቢው "የመጀመሪያዋ" (Pioneer) ተብላ የምትታወቅ ሲሆን፣ ጥቂት አማኞች በቤታቸው ጸሎትና አምልኮ በመጀመር የጣሉት የወንጌል ዘር ነው። ሙገር እንደ ኢንዱስትሪ መንደር መመስረት ሲጀምር፣ ይህች ቤተክርስቲያን ለመንፈሳዊ ዕረፍትና ለተስፋ ምንጭነት መሰረት ሆናለች።<br />
+                        ቤተክርስቲያኗ በአካባቢው "የመጀመሪያዋ" (Pioneer) ተብላ የምትታወቅ ሲሆን፣ ጥቂት አማኞች በቤታቸው ጸሎትና አምልኮ በመጀመር የጣሉት የወንጌል ዘር ነው። ሙገር እንደ ኢንዱስትሪ መንደር መመስረት ሲጀምር، ይህች ቤተክርስቲያን ለመንፈሳዊ ዕረፍትና ለተስፋ ምንጭነት መሰረት ሆናለች።<br />
                         - የመጀመሪያው ራዕይ: ጥቂት ወንድሞችና እህቶች ለወንጌል ባላቸው ፍቅር ተነሳስተው፣ በታማኝነትና በትጋት አገልግሎቱን ጀመሩ።<br />
                         - ተደራሽነት: የወንጌል ብርሃን ባልደረሰባቸው ስፍራዎች ሁሉ መዳረሻ በመሆን ለብዙዎች ድነት ምክንያት ሆናለች።<br /><br />
                         2. ፈተናዎችን በጽናት ማለፍ<br />
                         ቤተክርስቲያኗ ዛሬ ለደረሰችበት ክብር የበቃችው በቀላሉ አልነበረም። በሂደቱ ውስጥ እጅግ አስቸጋሪ የሆኑ መከራዎችን አልፋለች፦<br />
                         - መንፈሳዊ ስደት: በወቅቱ የነበሩ የሃይማኖትና የማህበራዊ ተጽዕኖዎች አገልግሎቱን ለማደናቀፍ ሞክረው ነበር።<br />
-                        - የአምልኮ ስፍራ ማጣት: ለረጅም ዓመታት ቋሚ የሆነ የመሰብሰቢያ ቦታ ባለመኖሩ፣ ከአንድ ቦታ ወደ ሌላ ቦታ በመዘዋወር (በመሰደድ) ብዙ ዋጋ ተከፍሏል።<br />
+                        - የአምልኮ ስፍራ ማጣት: ለረጅም ዓመታት ቋሚ የሆነ የመሰብሰቢያ ቦታ ባለመኖሩ، ከአንድ ቦታ ወደ ሌላ ቦታ በመዘዋወር (በመሰደድ) ብዙ ዋጋ ተከፍሏል።<br />
                         - የቁሳቁስና የገንዘብ እጥረት: የአባላቱ ቁጥር አነስተኛ በነበረበት ወቅት፣ ህንጻ ለመገንባትና አገልግሎቱን ለማስፋፋት ከፍተኛ የኢኮኖሚ ፈተናዎች ነበሩ።<br />
                         ቢሆንም ግን፣ "በዓለት ላይ የተመሰረተች ቤት አትናወጥም" እንደሚለው ቃል፣ በምዕመናን ጽናትና በጌታ ጸጋ ቆማ ቀርታለች።<br /><br />
                         3. የአሁኑ ስኬትና እድገት<br />

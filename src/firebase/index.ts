@@ -1,8 +1,7 @@
-
 'use client';
 
 import { initializeApp, getApps, getApp, FirebaseApp } from 'firebase/app';
-import { getFirestore, initializeFirestore, Firestore } from 'firebase/firestore';
+import { getFirestore, initializeFirestore, Firestore, persistentLocalCache, persistentMultipleTabManager } from 'firebase/firestore';
 import { getAuth, Auth } from 'firebase/auth';
 import { firebaseConfig } from './config';
 
@@ -24,6 +23,7 @@ export function initializeFirebase() {
         // in proxied or restrictive network environments often found in cloud IDEs.
         firestore = initializeFirestore(app, {
           experimentalForceLongPolling: true,
+          localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() })
         });
       } catch (e) {
         // Fallback if firestore is already initialized

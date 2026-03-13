@@ -49,10 +49,10 @@ Please analyze the image carefully and extract:
 
 VERIFICATION RULES:
 Set 'isCorrectAccount' to true ONLY if the destination beneficiary matches:
-- Account: 1000221935978 (or ends in 5978)
-- Beneficiary: MUGHER FULL GOSPEL CHURCH (or variations like MUGHER FULL GOS, MUGHER BEL CHU)
+- Account: 1000221935978 (or variations that reasonably look like this number)
+- Beneficiary: MUGHER FULL GOSPEL CHURCH (or variations like MUGHER FULL GOS, MUGHER BEL CHU, MUGHER FGC)
 
-If you see multiple names, look for the 'From' or 'Sender' name for the donorName.
+Mobile screenshots often have small text. If you see multiple names, look for the 'From' or 'Sender' name for the donorName.
 
 Digital Receipt Image: {{media url=receiptDataUri}}`,
 });
