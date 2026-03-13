@@ -1,3 +1,4 @@
+
 'use client';
 
 import * as React from 'react';
@@ -396,7 +397,7 @@ export default function Home() {
               
               <div className="space-y-4 text-left">
                 <h4 className="font-playfair font-medium italic text-xl md:text-2xl text-primary">Seenaa Boonsaa fi Milkaa’ina Mana Amantaa Guutuu Wangellaa Mugher</h4>
-                <div className="text-muted-foreground font-bitter font-light italic text-base md:text-[20px] leading-relaxed">
+                <div className="text-muted-foreground font-bitter font-light italic text-base md:text-[20px] leading-relaxed whitespace-pre-wrap">
                   Mana Amantaa Guutuu Wangellaa Itoophiyaa (MAGWI) buufata Mugher, seenaa amantii cimaa, obsaa fi loltummaa hafuuraa waggoota dheeraa of keessaa qabdi. Manni amantaa kun naannoo sanaatti mul’ata wangeelaa jalqabaa qabattee kan kaate madda nagaa fi jireenya hafuuraa ta’uun tajaajilaa jirti.
                   
                   <AnimatePresence>
@@ -406,7 +407,7 @@ export default function Home() {
                         animate={{ height: 'auto', opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
                         transition={{ duration: 0.5 }}
-                        className="overflow-hidden whitespace-pre-wrap mt-4"
+                        className="overflow-hidden whitespace-pre-wrap mt-4 border-l-4 border-primary/20 pl-4"
                       >
 1. Hundeeffama fi Jalqaba Mul’ataa
 Manni amantaa kun yeroo naannoon Mugher qophaatti ijaaramaa turtetti, obboloota muraasa murtoo qabaniin manatti tajaajila jalqabde. Akkuma kolfi fageenyatti mul’atu, isheenis "Ishee Jalqabaa" (pioneer) ta’uun namoota naannoo sanaa wangeelaan qaqqabuuf dhagaa bu’uuraa keesse.
@@ -417,16 +418,17 @@ Manni amantaa kun yeroo naannoon Mugher qophaatti ijaaramaa turtetti, obboloota 
 Manni amantaa kun jireenya har’a mul’atu bira gahuuf karaa dukkanaa fi dhiphuu baay’ee keessa dabarteetti. Seenaa ishee keessatti yeroo hedduu rakkoolee akkasii dandamattee jirti:
 - Ari’atama Hafuuraa: Yeroo sanatti akka amantaa haaraatti ilaalamuu isheetiin, mormii fi ari’atama dhuunfaa fi hawaasummaa garaa garaa keessa dabarteetti.
 - Bakka Tajaajilaa Dhabuu: Waggoota hedduuf bakka dhaabbataa itti waaqeffatan dhabuun, bakka tajaajilaa jijjiiruun (godaanuun) qorumsa guddaa ture.
-- Cinqii Dinagdee: Miseensota muraasa qabaachuu isheetiin, ijaarsa fi tajaajila babal’isuuf rakkoon maallaqaa fi meeshaa ishee quunnamee ture.
-Haa ta’u malee, akkuma Kitaabni Qulqulluun jedhu, "Manni dhagaa irratti ijaarame bubbee fi bishaan hin jignu," isheenis amanamummaa miseensota isheetiin jabaattee dhaabbatte.
 
-3. Guddina fi Firii Har’aa
+3. Cinqii Dinagdee
+Miseensota muraasa qabaachuu isheetiin, ijaarsa fi tajaajila babal’isuuf rakkoon maallaqaa fi meeshaa ishee quunnamee ture. Haa ta’u malee, akkuma Kitaabni Qulqulluun jedhu, "Manni dhagaa irratti ijaarame bubbee fi bishaan hin jignu," isheenis amanamummaa miseensota isheetiin jabaattee dhaabbatte.
+
+4. Guddina fi Firii Har’aa
 Har’a, Mana Amantaa Guutuu Wangellaa Mugher "tulluu guddachaa dhufe" ta’eetti. Rakkoon kaleessaa har’a gara seenaa fi galataatti jijjiirameera.
 - Miseensota Kumaan Lakkaa’aman: Miseensota muraasa irraa kaatee, har’a kumaan kan lakkaa’aman (Dhaabbataa fi Miseensota tajaajilaa) horachuu dandeessetti.
 - Tajaajila Babal'ate: Dubartoota, dargaggoota, fi ijoolleef tajaajila adda addaa diriirsuun jireenya hawaasichaa jijjiiraa jirti.
 - Ijaarsa Mana Qulqullummaa: Bakka amantoonni itti walitti dhufanii Waaqayyoon galateeffatan, ijaarsa guddaa fi bareedaa qabaachuun ishee ragaa guddina isheeti.
 
-4. Kaayyoo fi Mul’ata Gara Fuulduraa
+5. Kaayyoo fi Mul’ata Gara Fuulduraa
 Manni amantaa kun seenaa boonsaa kana qabattee gara fuulduraatti:
 - Wangeela naannoo Mugher fi naannoo ishee jiranitti bal’inaan qaqqabsiisuu.
 - Amantoota hafuuraan bilchaatan fi biyyaaf bu’aa buusan horachuu.
@@ -441,7 +443,7 @@ Xumura irratti: Mana Amantaa Guutuu Wangellaa Mugher ragaa jiraataa "Obsi fi ama
               
               <div className="space-y-4 pt-4 border-t border-primary/5 text-left">
                 <h4 className="font-playfair font-medium italic text-xl md:text-2xl text-primary">የሙገር ሙሉ ወንጌል አማኞች ቤተክርስቲያን ኩራትና የድል ታሪክ</h4>
-                <div className="text-muted-foreground font-bitter font-light italic text-base md:text-[20px] leading-relaxed">
+                <div className="text-muted-foreground font-bitter font-light italic text-base md:text-[20px] leading-relaxed whitespace-pre-wrap">
                   ቤተክርስቲያኗ በአካባቢው የወንጌል ብርሃን ቀዳሚ በመሆን፣ በብዙ ትግልና ጸሎት የተመሰረተች ሲሆን፤ ዛሬ ላይ የብዙ ሺህ አማኞች መገኛ ለመሆን በቅታለች።
                   
                   <AnimatePresence>
@@ -451,7 +453,7 @@ Xumura irratti: Mana Amantaa Guutuu Wangellaa Mugher ragaa jiraataa "Obsi fi ama
                         animate={{ height: 'auto', opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
                         transition={{ duration: 0.5 }}
-                        className="overflow-hidden whitespace-pre-wrap mt-4"
+                        className="overflow-hidden whitespace-pre-wrap mt-4 border-l-4 border-secondary/20 pl-4"
                       >
 1. መነሻና የቀዳሚነት ሚና
 ቤተክርስቲያኗ በአካባቢው "የመጀመሪያዋ" (Pioneer) ተብላ የምትታወቅ ሲሆን፣ ጥቂት አማኞች በቤታቸው ጸሎትና አምልኮ በመጀመር የጣሉት የወንጌል ዘር ነው። ሙገር እንደ ኢንዱስትሪ መንደር መመስረት ሲጀምር፣ ይህች ቤተክርስቲያን ለመንፈሳዊ ዕረፍትና ለተስፋ ምንጭነት መሰረት ሆናለች።
