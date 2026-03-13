@@ -21,8 +21,6 @@ import {
   Search, 
   Loader2, 
   Trash2, 
-  Camera,
-  Image as ImageIcon,
   Upload,
   CheckCircle2
 } from 'lucide-react';
@@ -75,6 +73,8 @@ export default function SacredMomentsPage() {
       description: "",
     },
   });
+
+  const imageUrl = form.watch('imageUrl');
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -178,11 +178,11 @@ export default function SacredMomentsPage() {
                   <div className="relative">
                     <div className={cn(
                       "border-2 border-dashed rounded-xl p-8 flex flex-col items-center justify-center gap-3 transition-all",
-                      form.getValues('imageUrl') ? "bg-emerald-50 border-emerald-200" : "bg-muted/30 border-muted-foreground/20"
+                      imageUrl ? "bg-emerald-50 border-emerald-200" : "bg-muted/30 border-muted-foreground/20"
                     )}>
                       {isProcessingFile ? (
                         <Loader2 className="h-8 w-8 animate-spin text-primary" />
-                      ) : form.getValues('imageUrl') ? (
+                      ) : imageUrl ? (
                         <>
                           <CheckCircle2 className="h-8 w-8 text-emerald-600" />
                           <p className="text-[10px] font-bold uppercase text-emerald-700">Image Selected</p>
@@ -207,11 +207,11 @@ export default function SacredMomentsPage() {
                       )}
                     </div>
                   </div>
-                  <FormMessage>{form.formState.errors.imageUrl?.message}</FormMessage>
+                  {form.formState.errors.imageUrl && <p className="text-xs text-destructive">{form.formState.errors.imageUrl.message}</p>}
                 </div>
 
                 <DialogFooter className="pt-4">
-                  <Button type="submit" className="w-full bg-primary font-bold uppercase text-xs h-12" disabled={isProcessingFile}>Post to Gallery</Button>
+                  <Button type="submit" className="w-full bg-primary font-bold uppercase text-xs h-12" disabled={isProcessingFile || !imageUrl}>Post to Gallery</Button>
                 </DialogFooter>
               </form>
             </Form>

@@ -21,14 +21,12 @@ import {
   Plus, 
   Search, 
   Download,
-  Calendar,
   Trash2,
   Loader2,
   Edit,
   MoreVertical,
   CheckCircle2,
-  XCircle,
-  Filter
+  XCircle
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { useCollection, useFirestore } from '@/firebase';
@@ -225,33 +223,33 @@ export default function ExpensesPage() {
                 <Plus className="h-4 w-4" /> Record
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-[98vw] w-full sm:max-w-[95vw] h-[98vh] sm:h-[90vh] rounded-2xl flex flex-col overflow-hidden">
-              <DialogHeader className="p-6 border-b">
+            <DialogContent className="max-w-[98vw] w-full sm:max-w-[95vw] h-[98vh] sm:h-[90vh] rounded-2xl flex flex-col overflow-hidden border-none shadow-2xl">
+              <DialogHeader className="p-6 border-b bg-primary/5">
                 <DialogTitle className="text-2xl font-headline font-bold text-primary uppercase tracking-tight">
                   {editingExpense ? 'Update Expenditure Profile' : 'New Expenditure Registry'}
                 </DialogTitle>
               </DialogHeader>
               <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="flex-1 space-y-8 pt-6 overflow-y-auto px-6">
+                <form onSubmit={form.handleSubmit(onSubmit)} className="flex-1 space-y-10 pt-10 overflow-y-auto px-6 md:px-12">
                   <FormField
                     control={form.control}
                     name="description"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-[10px] font-bold uppercase tracking-widest">Expense Description / Purpose</FormLabel>
-                        <FormControl><Input placeholder="e.g. Monthly Electricity Settlement" className="h-14 text-base" {...field} /></FormControl>
+                        <FormLabel className="text-[10px] font-bold uppercase tracking-widest opacity-60">Expense Description / Purpose</FormLabel>
+                        <FormControl><Input placeholder="e.g. Monthly Electricity Settlement" className="h-16 text-xl font-bold border-primary/10 rounded-xl" {...field} /></FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-10">
                     <FormField
                       control={form.control}
                       name="category"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-[10px] font-bold uppercase tracking-widest">Financial Category</FormLabel>
-                          <FormControl><Input placeholder="Utility, Rent, Salary, etc." className="h-14 text-base" {...field} /></FormControl>
+                          <FormLabel className="text-[10px] font-bold uppercase tracking-widest opacity-60">Financial Category</FormLabel>
+                          <FormControl><Input placeholder="Utility, Rent, Salary, etc." className="h-16 text-xl border-primary/10 rounded-xl" {...field} /></FormControl>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -261,21 +259,21 @@ export default function ExpensesPage() {
                       name="amount"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-[10px] font-bold uppercase tracking-widest">Total Amount (ETB)</FormLabel>
-                          <FormControl><Input placeholder="0.00" className="h-14 text-lg font-black text-rose-600" {...field} /></FormControl>
+                          <FormLabel className="text-[10px] font-bold uppercase tracking-widest opacity-60">Total Amount (ETB)</FormLabel>
+                          <FormControl><Input placeholder="0.00" className="h-16 text-2xl font-black text-rose-600 border-primary/10 rounded-xl" {...field} /></FormControl>
                           <FormMessage />
                         </FormItem>
                       )}
                     />
                   </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-10">
                     <FormField
                       control={form.control}
                       name="approvedBy"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-[10px] font-bold uppercase tracking-widest">Approving Auditor</FormLabel>
-                          <FormControl><Input placeholder="Enter auditor name" className="h-14 text-base" {...field} /></FormControl>
+                          <FormLabel className="text-[10px] font-bold uppercase tracking-widest opacity-60">Approving Auditor</FormLabel>
+                          <FormControl><Input placeholder="Enter auditor name" className="h-16 text-xl border-primary/10 rounded-xl" {...field} /></FormControl>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -285,10 +283,10 @@ export default function ExpensesPage() {
                       name="status"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-[10px] font-bold uppercase tracking-widest">Approval Status</FormLabel>
+                          <FormLabel className="text-[10px] font-bold uppercase tracking-widest opacity-60">Approval Status</FormLabel>
                           <Select onValueChange={field.onChange} defaultValue={field.value}>
                             <FormControl>
-                              <SelectTrigger className="h-14 text-base">
+                              <SelectTrigger className="h-16 text-xl border-primary/10 rounded-xl">
                                 <SelectValue placeholder="Current Status" />
                               </SelectTrigger>
                             </FormControl>
@@ -305,8 +303,8 @@ export default function ExpensesPage() {
                   </div>
                 </form>
               </Form>
-              <DialogFooter className="p-6 border-t mt-auto">
-                <Button type="submit" className="w-full bg-primary font-black uppercase text-sm tracking-widest h-16 shadow-xl" onClick={form.handleSubmit(onSubmit)}>
+              <DialogFooter className="p-6 border-t bg-muted/5 mt-auto">
+                <Button type="submit" className="w-full bg-primary font-black uppercase text-sm tracking-widest h-20 shadow-xl rounded-xl" onClick={form.handleSubmit(onSubmit)}>
                   {editingExpense ? 'Confirm Record Update' : 'Commit to Ledger'}
                 </Button>
               </DialogFooter>

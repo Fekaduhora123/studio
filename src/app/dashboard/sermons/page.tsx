@@ -1,4 +1,3 @@
-
 "use client";
 
 import * as React from 'react';
@@ -94,6 +93,8 @@ export default function SermonsManagementPage() {
       thumbnailUrl: "",
     },
   });
+
+  const thumbnailUrl = form.watch('thumbnailUrl');
 
   React.useEffect(() => {
     if (editingSermon) {
@@ -273,11 +274,11 @@ export default function SermonsManagementPage() {
                   <div className="relative">
                     <div className={cn(
                       "border-2 border-dashed rounded-xl p-8 flex flex-col items-center justify-center gap-3 transition-all",
-                      form.getValues('thumbnailUrl') ? "bg-emerald-50 border-emerald-200" : "bg-muted/30 border-muted-foreground/20"
+                      thumbnailUrl ? "bg-emerald-50 border-emerald-200" : "bg-muted/30 border-muted-foreground/20"
                     )}>
                       {isProcessingFile ? (
                         <Loader2 className="h-8 w-8 animate-spin text-primary" />
-                      ) : form.getValues('thumbnailUrl') ? (
+                      ) : thumbnailUrl ? (
                         <>
                           <CheckCircle2 className="h-8 w-8 text-emerald-600" />
                           <p className="text-[10px] font-bold uppercase text-emerald-700">Thumbnail Ready</p>
@@ -302,11 +303,11 @@ export default function SermonsManagementPage() {
                       )}
                     </div>
                   </div>
-                  <FormMessage>{form.formState.errors.thumbnailUrl?.message}</FormMessage>
+                  {form.formState.errors.thumbnailUrl && <p className="text-xs text-destructive">{form.formState.errors.thumbnailUrl.message}</p>}
                 </div>
 
                 <DialogFooter className="pt-4">
-                  <Button type="submit" className="w-full bg-primary font-bold uppercase text-xs h-12" disabled={isProcessingFile}>
+                  <Button type="submit" className="w-full bg-primary font-bold uppercase text-xs h-12" disabled={isProcessingFile || !thumbnailUrl}>
                     {editingSermon ? 'Update Sermon' : 'Post to Gallery'}
                   </Button>
                 </DialogFooter>

@@ -16,25 +16,18 @@ import {
   TableHead, 
   TableHeader, 
   TableRow,
-  TableFooter
 } from '@/components/ui/table';
 import { 
   Search, 
   Download,
   Eye,
-  Check,
-  X,
-  Filter,
   Loader2,
   ShieldCheck,
-  Trash2,
-  MoreVertical,
-  TrendingDown,
-  QrCode
+  MoreVertical
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { useCollection, useFirestore } from '@/firebase';
-import { collection, query, orderBy, doc, updateDoc, deleteDoc, where } from 'firebase/firestore';
+import { collection, query, orderBy, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { 
   DropdownMenu, 
@@ -227,24 +220,24 @@ export default function DonationsPage() {
                               <Eye className="h-4 w-4" />
                             </Button>
                           </DialogTrigger>
-                          <DialogContent className="max-w-[98vw] w-full sm:max-w-[95vw] h-[98vh] sm:h-[90vh] rounded-2xl overflow-hidden flex flex-col p-0">
-                            <DialogHeader className="p-6 border-b bg-muted/10">
+                          <DialogContent className="max-w-[98vw] w-full sm:max-w-[95vw] h-[98vh] sm:h-[90vh] rounded-2xl overflow-hidden flex flex-col p-0 border-none shadow-2xl">
+                            <DialogHeader className="p-6 border-b bg-primary/5">
                               <DialogTitle className="text-2xl font-headline font-bold text-primary uppercase">Audit Record: {donation.donorName}</DialogTitle>
                             </DialogHeader>
-                            <div className="flex-1 overflow-y-auto p-6 space-y-8">
-                              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <Card className="p-6 bg-muted/20 border-none">
-                                  <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-4">Transaction Identity</p>
-                                  <div className="space-y-4">
-                                    <div><p className="text-xs font-bold opacity-60">Donor Name</p><p className="text-lg font-bold">{donation.donorName}</p></div>
-                                    <div><p className="text-xs font-bold opacity-60">Reference / QR Number</p><p className="font-mono text-primary font-bold">{donation.referenceNumber}</p></div>
+                            <div className="flex-1 overflow-y-auto p-6 md:p-10 space-y-8">
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <Card className="p-8 bg-muted/20 border-none shadow-inner">
+                                  <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-6">Transaction Identity</p>
+                                  <div className="space-y-6">
+                                    <div><p className="text-xs font-bold opacity-60 uppercase tracking-tighter">Donor Name</p><p className="text-2xl font-bold text-primary">{donation.donorName}</p></div>
+                                    <div><p className="text-xs font-bold opacity-60 uppercase tracking-tighter">Reference / QR Number</p><p className="text-xl font-mono text-primary font-bold tracking-widest">{donation.referenceNumber}</p></div>
                                   </div>
                                 </Card>
-                                <Card className="p-6 bg-emerald-50 border-none">
-                                  <p className="text-[10px] font-bold uppercase tracking-widest text-emerald-700 mb-4">Financial Metadata</p>
-                                  <div className="space-y-4">
-                                    <div><p className="text-xs font-bold text-emerald-800 opacity-60">Contribution Amount</p><p className="text-2xl font-black text-emerald-600">ETB {donation.amount.toLocaleString()}</p></div>
-                                    <div><Badge className="bg-emerald-600 uppercase font-black text-[10px]">{donation.type}</Badge></div>
+                                <Card className="p-8 bg-emerald-50 border-none shadow-inner">
+                                  <p className="text-[10px] font-bold uppercase tracking-widest text-emerald-700 mb-6">Financial Metadata</p>
+                                  <div className="space-y-6">
+                                    <div><p className="text-xs font-bold text-emerald-800 opacity-60 uppercase tracking-tighter">Contribution Amount</p><p className="text-4xl font-black text-emerald-600">ETB {donation.amount.toLocaleString()}</p></div>
+                                    <div><Badge className="bg-emerald-600 uppercase font-black text-[12px] px-4 py-1">{donation.type}</Badge></div>
                                   </div>
                                 </Card>
                               </div>
@@ -252,18 +245,18 @@ export default function DonationsPage() {
                               <div className="space-y-4">
                                 <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Verification Audit</p>
                                 {donation.isAiVerified ? (
-                                  <Alert className="bg-emerald-100 border-emerald-200 py-6">
-                                    <ShieldCheck className="h-6 w-6 text-emerald-600" />
-                                    <div className="ml-4">
-                                      <AlertTitle className="text-sm font-black text-emerald-800 uppercase">AI Verification: SUCCESS</AlertTitle>
-                                      <AlertDescription className="text-xs text-emerald-700 font-medium">The digital receipt was scanned and confirmed to match account 1000221935978.</AlertDescription>
+                                  <Alert className="bg-emerald-100 border-emerald-200 py-8">
+                                    <ShieldCheck className="h-8 w-8 text-emerald-600" />
+                                    <div className="ml-6">
+                                      <AlertTitle className="text-lg font-black text-emerald-800 uppercase">AI Verification: SUCCESS</AlertTitle>
+                                      <AlertDescription className="text-sm text-emerald-700 font-medium">The digital receipt was scanned and confirmed to match account 1000221935978.</AlertDescription>
                                     </div>
                                   </Alert>
                                 ) : (
-                                  <Alert className="bg-amber-50 border-amber-200">
-                                    <div className="ml-4">
-                                      <AlertTitle className="text-sm font-black text-amber-800 uppercase">Manual Verification Required</AlertTitle>
-                                      <AlertDescription className="text-xs text-amber-700">This record was entered manually or skipped AI scan. Please verify via bank statement.</AlertDescription>
+                                  <Alert className="bg-amber-50 border-amber-200 py-8">
+                                    <div className="ml-6">
+                                      <AlertTitle className="text-lg font-black text-amber-800 uppercase">Manual Verification Required</AlertTitle>
+                                      <AlertDescription className="text-sm text-amber-700">This record was entered manually or skipped AI scan. Please verify via bank statement.</AlertDescription>
                                     </div>
                                   </Alert>
                                 )}
@@ -272,11 +265,11 @@ export default function DonationsPage() {
                             <div className="p-6 border-t bg-muted/5 flex gap-4 mt-auto">
                               {donation.status === 'pending' && (
                                 <>
-                                  <Button className="flex-1 bg-emerald-600 font-black uppercase text-xs h-14 shadow-lg" onClick={() => handleUpdateStatus(donation.id, 'approved')}>Confirm & Approve</Button>
-                                  <Button variant="destructive" className="flex-1 font-black uppercase text-xs h-14 shadow-lg" onClick={() => handleUpdateStatus(donation.id, 'rejected')}>Reject Record</Button>
+                                  <Button className="flex-1 bg-emerald-600 hover:bg-emerald-700 font-black uppercase text-sm h-16 shadow-lg rounded-xl" onClick={() => handleUpdateStatus(donation.id, 'approved')}>Confirm & Approve</Button>
+                                  <Button variant="destructive" className="flex-1 font-black uppercase text-sm h-16 shadow-lg rounded-xl" onClick={() => handleUpdateStatus(donation.id, 'rejected')}>Reject Record</Button>
                                 </>
                               )}
-                              <Button variant="outline" className="text-rose-600 font-bold uppercase text-[10px] h-14 px-8" onClick={() => handleDeleteDonation(donation.id)}>Delete Permanently</Button>
+                              <Button variant="outline" className="text-rose-600 border-rose-200 font-bold uppercase text-xs h-16 px-10 rounded-xl" onClick={() => handleDeleteDonation(donation.id)}>Delete Permanently</Button>
                             </div>
                           </DialogContent>
                         </Dialog>
