@@ -267,7 +267,7 @@ export default function Home() {
             </div>
             
             <h1 className="font-roboto font-bold text-secondary text-4xl md:text-6xl lg:text-7xl leading-tight uppercase tracking-tight mb-6 md:mb-8 max-w-5xl mx-auto drop-shadow-2xl">
-              Welcome to <br /> Mugher Full Gospel
+              Welcome to <br /> Welcome to Mugher Full Gospel
             </h1>
             
             <div className="space-y-4 max-w-3xl mx-auto mb-8 md:mb-10">
@@ -357,9 +357,10 @@ export default function Home() {
                 />
               )}
               <motion.div 
-                initial={{ opacity: 0, scale: 0.95 }}
+                initial={{ opacity: 0, y: 40, scale: 0.95 }}
                 whileInView={{ 
                   opacity: 1, 
+                  y: 0,
                   scale: 1,
                   boxShadow: '0 0 40px rgba(59,130,246,0.3)' 
                 }}
@@ -368,7 +369,7 @@ export default function Home() {
                 className="absolute top-1/2 left-6 right-6 md:left-10 md:right-10 -translate-y-1/2 z-20 border-[3px] rounded-[2.5rem] bg-blue-900/40 backdrop-blur-2xl p-8 md:p-10 ring-1 ring-white/20"
               >
                 <p className="text-blue-100 font-robotoSlab font-bold text-base md:text-[22px] leading-relaxed text-center drop-shadow-md">
-                  kiristos lubbuu isaa nuuf kennuu isaatiin jaalalli maal akka ta'e hubanneerraa,egaa nus immoo lubbuu keenya obbolootaaf kennuun nuuf ta'a. <br /> <span className="text-blue-300 text-sm md:text-base mt-2 block">yohaniis 3:16</span>
+                  kiristos lubbuu isaa nuuf kennuu isaatiin jaalalli maal akka ta'e hubanneerraa,egaa nus immoo lubbuu keenya obbolootaaf kennuun nuuf ta'a. <br /> <span className="text-blue-300 text-sm md:text-base mt-2 block">yohaniis 3:1</span>
                 </p>
               </motion.div>
             </div>
@@ -401,25 +402,30 @@ export default function Home() {
                         className="overflow-hidden whitespace-pre-wrap mt-4 border-l-4 border-primary/20 pl-4 text-sm md:text-base"
                       >
                         1. Hundeeffama fi Jalqaba Mul’ataa<br/>
-                        Manni amantaa kun yeroo naannoon Mugher qophaatti ijaaramaa turtetti, obboloota muraasa murtoo qabaniin manatti tajaajila jalqabde.<br/>
+                        Manni amantaa kun yeroo naannoon Mugher qophaatti ijaaramaa turtetti, obboloota muraasa murtoo qabaniin manatti tajaajila jalqabde. Akkuma kolfi fageenyatti mul’atu, isheenis "Ishee Jalqabaa" (pioneer) ta’uun namoota naannoo sanaa wangeelaan qaqqabuuf dhagaa bu’uuraa keesse.<br/>
                         - Mul'ata Jalqabaa: Namoota muraasa kaayyoo tokkoof walitti dhufaniin, manaa manatti kadhannaa fi sagalee Waaqayyoo qoqqoodachuun jalqabame.<br/>
                         - Madda Jireenyaa: Mugher keessatti akka tajaajila hafuuraa qofaatti osoo hin taane, akka madda tasgabbii fi abdii ta’uun tajaajiluu jalqabde.<br/><br/>
                         
                         2. Qorumsa fi Rakkoo Dandamachuu<br/>
-                        Manni amantaa kun jireenya har’a mul’atu bira gahuuf karaa dukkanaa fi dhiphuu baay’ee keessa dabarteetti.<br/>
-                        - Ari’atama Hafuuraa: Mormii fi ari’atama dhuunfaa fi hawaasummaa garaa garaa keessa dabarteetti.<br/>
-                        - Bakka Tajaajilaa Dhabuu: Waggoota hedduuf bakka dhaabbataa itti waaqeffatan dhabuun qorumsa guddaa ture.<br/>
-                        - Cinqii Dinagdee: Ijaarsa fi tajaajila babal’isuuf rakkoon maallaqaa fi meeshaa ishee quunnamee ture.<br/><br/>
+                        Manni amantaa kun jireenya har’a mul’atu bira gahuuf karaa dukkanaa fi dhiphuu baay’ee keessa dabarteetti. Seenaa ishee keessatti yeroo hedduu rakkoolee akkasii dandamattee jirti:<br/>
+                        - Ari’atama Hafuuraa: Yeroo sanatti akka amantaa haaraatti ilaalamuu isheetiin, mormii fi ari’atama dhuunfaa fi hawaasummaa garaa garaa keessa dabarteetti.<br/>
+                        - Bakka Tajaajilaa Dhabuu: Waggoota hedduuf bakka dhaabbataa itti waaqeffatan dhabuun, bakka tajaajilaa jijjiiruun (godaanuun) qorumsa guddaa ture.<br/><br/>
                         
-                        3. Guddina fi Firii Har’aa<br/>
-                        Har’a, Mana Amantaa Guutuu Wangellaa Mugher "tulluu guddachaa dhufe" ta’eetti.<br/>
-                        - Miseensota Kumaan Lakkaa’aman: Har’a kumaan kan lakkaa’aman horachuu dandeessetti.<br/>
-                        - Tajaajila Babal'ate: Dubartoota, dargaggoota, fi ijoolleef tajaajila adda addaa diriirsuun jireenya hawaasichaa jijjiiraa jirti.<br/><br/>
+                        3. Cinqii Dinagdee<br/>
+                        Miseensota muraasa qabaachuu isheetiin, ijaarsa fi tajaajila babal’isuuf rakkoon maallaqaa fi meeshaa ishee quunnamee ture. Haa ta’u malee, akkuma Kitaabni Qulqulluun jedhu, "Manni dhagaa irratti ijaarame bubbee fi bishaan hin jignu," isheenis amanamummaa miseensota isheetiin jabaattee dhaabbatte.<br/><br/>
                         
-                        4. Kaayyoo fi Mul’ata Gara Fuulduraa<br/>
+                        4. Guddina fi Firii Har’aa<br/>
+                        Har’a, Mana Amantaa Guutuu Wangellaa Mugher "tulluu guddachaa dhufe" ta’eetti. Rakkoon kaleessaa har’a gara seenaa fi galataatti jijjiirameera.<br/>
+                        - Miseensota Kumaan Lakkaa’aman: Miseensota muraasa irraa kaatee, har’a kumaan kan lakkaa’aman (Dhaabbataa fi Miseensota tajaajilaa) horachuu dandeessetti.<br/>
+                        - Tajaajila Babal'ate: Dubartoota, dargaggoota, fi ijoolleef tajaajila adda addaa diriirsuun jireenya hawaasichaa jijjiiraa jirti.<br/>
+                        - Ijaarsa Mana Qulqullummaa: Bakka amantoonni itti walitti dhufanii Waaqayyoon galateeffatan, ijaarsa guddaa fi bareedaa qabaachuun ishee ragaa guddina isheeti.<br/><br/>
+                        
+                        5. Kaayyoo fi Mul’ata Gara Fuulduraa<br/>
+                        Manni amantaa kun seenaa boonsaa kana qabattee gara fuulduraatti:<br/>
                         - Wangeela naannoo Mugher fi naannoo ishee jiranitti bal’inaan qaqqabsiisuu.<br/>
-                        - Amantoota hafuuraan bilchaatan fi biyyaaf bu’aa buusan horachuu.<br/><br/>
-                        Xumura irratti: Kaleessa dhiphuu keessa turte, har’a garuu tajaajila bal’aa fi miseensota kumaan lakkaa’aman qabattee ifa ta’ee mul’achaa jirti.
+                        - Amantoota hafuuraan bilchaatan fi biyyaaf bu’aa buusan horachuu.<br/>
+                        - Hawaasummaa keessatti gahee ishee bahuun hiyyeeyyii fi warra gargaarsa barbaadan gargaaruu irratti xiyyeeffatti.<br/><br/>
+                        Xumura irratti: Mana Amantaa Guutuu Wangellaa Mugher ragaa jiraataa "Obsi fi amanamummaan bu'aa qaba" jedhuuti. Kaleessa dhiphuu keessa turte, har’a garuu tajaajila bal’aa fi miseensota kumaan lakkaa’aman qabattee ifa ta’ee mul’achaa jirti.
                       </motion.div>
                     )}
                   </AnimatePresence>
@@ -441,21 +447,29 @@ export default function Home() {
                         className="overflow-hidden whitespace-pre-wrap mt-4 border-l-4 border-secondary/20 pl-4 text-sm md:text-base"
                       >
                         1. መነሻና የቀዳሚነት ሚና<br/>
-                        ቤተክርስቲያኗ በአካባቢው "የመጀመሪያዋ" (Pioneer) ተብላ የምትታወቅ ሲሆን፣ ጥቂት አማኞች በቤታቸው ጸሎትና አምልኮ በመጀመር የጣሉት የወንጌል ዘር ነው።<br/><br/>
+                        ቤተክርስቲያኗ በአካባቢው "የመጀመሪያዋ" (Pioneer) ተብላ የምትታወቅ ሲሆን፣ ጥቂት አማኞች በቤታቸው ጸሎትና አምልኮ በመጀመር የጣሉት የወንጌል ዘር ነው። ሙገር እንደ ኢንዱስትሪ መንደር መመስረት ሲጀምር፣ ይህች ቤተክርስቲያን ለመንፈሳዊ ዕረፍትና ለተስፋ ምንጭነት መሰረት ሆናለች።<br/>
+                        - የመጀመሪያው ራዕይ: ጥቂት ወንድሞችና እህቶች ለወንጌል ባላቸው ፍቅር ተነሳስተው፣ በታማኝነትና በትጋት አገልግሎቱን ጀመሩ።<br/>
+                        - ተደራሽነት: የወንጌል ብርሃን ባልደረሰባቸው ስፍራዎች ሁሉ መዳረሻ በመሆን ለብዙዎች ድነት ምክንያት ሆናለች።<br/><br/>
                         
                         2. ፈተናዎችን በጽናት ማለፍ<br/>
                         ቤተክርስቲያኗ ዛሬ ለደረሰችበት ክብር የበቃችው በቀላሉ አልነበረም። በሂደቱ ውስጥ እጅግ አስቸጋሪ የሆኑ መከራዎችን አልፋለች፦<br/>
                         - መንፈሳዊ ስደት: በወቅቱ የነበሩ የሃይማኖትና የማህበራዊ ተጽዕኖዎች አገልግሎቱን ለማደናቀፍ ሞክረው ነበር።<br/>
-                        - የአምልኮ ስፍራ ማጣት: ለረጅም ዓመታት ቋሚ የሆነ የመሰብሰቢያ ቦታ ባለመኖሩ ብዙ ዋጋ ተከፍሏል።<br/><br/>
+                        - የአምልኮ ስፍራ ማጣት: ለረጅም ዓመታት ቋሚ የሆነ የመሰብሰቢያ ቦታ ባለመኖሩ፣ ከአንድ ቦታ ወደ ሌላ ቦታ በመዘዋወር (በመሰደድ) ብዙ ዋጋ ተከፍሏል።<br/>
+                        - የቁሳቁስና የገንዘብ እጥረት: የአባላቱ ቁጥር አነስተኛ በነበረበት ወቅት፣ ህንጻ ለመገንባትና አገልግሎቱን ለማስፋፋት ከፍተኛ የኢኮኖሚ ፈተናዎች ነበሩ።<br/>
+                        - ቢሆንም ግን፣ "በዓለት ላይ የተመሰረተች ቤት አትናወጥም" እንደሚለው ቃል፣ በምዕመናን ጽናትና በጌታ ጸጋ ቆማ ቀርታለች።<br/><br/>
                         
                         3. የአሁኑ ስኬትና እድገት<br/>
-                        ትናንት በለቅሶ የዘራችውን ዛሬ በደስታ እያጨደች ትገኛለች።<br/>
-                        - በሺዎች የሚቆጠሩ አባላት: አገልግሎቱ ዛሬ በሺዎች የሚቆጠሩ ምዕመናንን አፍርቷል።<br/>
-                        - ታላቅ የጸሎት ቤት: ዘመናዊና ሰፊ የሆነ የቤተክርስቲያን ህንጻ ባለቤት መሆን መቻሏ የእድገቷ ትልቅ ማሳያ ነው።<br/><br/>
+                        የሙገር ሙሉ ወንጌል አማኞች ቤተክርስቲያን ትናንት በለቅሶ የዘራችውን ዛሬ በደስታ እያጨደች ትገኛለች።<br/>
+                        - በሺዎች የሚቆጠሩ አባላት: በጥቂት ሰዎች የተጀመረው አገልግሎት ዛሬ በሺዎች የሚቆጠሩ ምዕመናንን (ቋሚ አባላትና የተለያዩ የአገልግሎት ዘርፎችን) አፍርቷል።<br/>
+                        - የተሟላ አገልግሎት: ለህጻናት፣ ለወጣቶችና ለሴቶች የሚሰጡ አገልግሎቶችን በማስፋፋት የማህበረሰቡን መንፈሳዊና ስነ-ልቦናዊ ፍላጎት እያሟላች ትገኛለች።<br/>
+                        - ታላቅ የጸሎት ቤት: አማኞች በነጻነት የሚሰበሰቡበት፣ ዘመናዊና ሰፊ የሆነ የቤተክርስቲያን ህንጻ ባለቤት መሆን መቻሏ የእድገቷ ትልቅ ማሳያ ነው።<br/><br/>
                         
                         4. የወደፊት ራዕይና ተልዕኮ<br/>
-                        - ወንጌልን በሙገርና በአካባቢው ይበልጥ በስፋት ማዳረስ።<br/>
-                        - በመንፈሳዊ ህይወታቸው የበሰሉና ለሀገር የሚጠቅሙ ዜጎችን ማፍራት።
+                        ቤተክርስቲያኗ ካለፈችበት ታላቅ ታሪክ በመነሳት ወደፊት የሚከተሉትን ግቦች ሰንቃለች፦<br/>
+                        - ወንጌልን በሙገርና በአካባቢው ባሉ ስፍራዎች ይበልጥ በስፋት ማዳረስ።<br/>
+                        - በመንፈሳዊ ህይወታቸው የበሰሉና ለሀገር የሚጠቅሙ ዜጎችን ማፍራት።<br/>
+                        - ማህበራዊ ኃላፊነትን በመወጣት ረገድ ችግረኞችንና ድጋፍ የሚሹ ወገኖችን መርዳት።<br/><br/>
+                        ለማጠቃለል፦ የሙገር ሙሉ ወንጌል አማኞች ቤተክርስቲያን "ጽናትና እምነት ፍሬ አለው" ለሚለው እውነት ህያው ምስክር ናት። ትናንት በፈተና ውስጥ የነበረችው ቤተክርስቲያን፣ ዛሬ በብዙ ሺህ አባላት ተከባ በክብር ትገኛለች።
                       </motion.div>
                     )}
                   </AnimatePresence>
@@ -565,7 +579,7 @@ export default function Home() {
                     <Badge className="bg-secondary/20 text-primary font-black uppercase tracking-widest text-[8px] md:text-[9px] px-4 py-1.5 rounded-full">{event.category || 'Worship'}</Badge>
                   </div>
                   <h3 className="text-xl md:text-2xl font-headline font-black text-primary uppercase leading-tight mb-4 md:mb-6 group-hover:text-secondary transition-colors">{event.title}</h3>
-                  <p className="text-slate-600 text-xs md:text-sm leading-relaxed mb-6 md:mb-8">{event.description}</p>
+                  <p className="text-slate-600 text-xs md:sm leading-relaxed mb-6 md:mb-8">{event.description}</p>
                   <div className="space-y-2">
                     <div className="flex items-center gap-2 text-[10px] md:text-xs font-bold text-muted-foreground"><Sunrise className="h-4 w-4" /> {event.date}</div>
                     <div className="flex items-center gap-2 text-[10px] md:text-xs font-bold text-muted-foreground"><Clock className="h-4 w-4" /> {event.time}</div>
