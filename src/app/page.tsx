@@ -341,7 +341,7 @@ export default function Home() {
               <info.icon className="text-white h-5 w-5 md:h-7 md:w-7" />
             </div>
             <h3 className="font-bitter font-light italic text-xl md:text-[24px] text-primary uppercase tracking-tighter mb-2">{info.title}</h3>
-            <p className="text-muted-foreground text-xs md:text-sm leading-relaxed font-medium">{info.desc}</p>
+            <p className="text-muted-foreground text-xs md:sm leading-relaxed font-medium">{info.desc}</p>
           </motion.div>
         ))}
       </section>
@@ -360,13 +360,17 @@ export default function Home() {
                 />
               )}
               <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, scale: 0.95 }}
+                whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
-                transition={{ duration: 1, delay: 0.3 }}
-                className="absolute top-32 left-6 right-6 md:left-10 md:right-10 z-20 border-2 border-blue-400 rounded-[2rem] md:rounded-[2.5rem] bg-blue-900/20 backdrop-blur-xl p-6 md:p-8 shadow-[0_0_40px_-5px_rgba(59,130,246,0.6)] ring-4 ring-blue-400/20 animate-pulse"
+                animate={{ 
+                  borderColor: ['rgba(59,130,246,0.2)', 'rgba(59,130,246,0.6)', 'rgba(59,130,246,0.2)'],
+                  boxShadow: ['0 0 20px rgba(59,130,246,0.1)', '0 0 40px rgba(59,130,246,0.3)', '0 0 20px rgba(59,130,246,0.1)']
+                }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute top-1/2 left-6 right-6 md:left-10 md:right-10 -translate-y-1/2 z-20 border-2 border-blue-400/40 rounded-[2rem] md:rounded-[2.5rem] bg-blue-900/30 backdrop-blur-xl p-6 md:p-8 shadow-2xl ring-1 ring-white/10"
               >
-                <p className="text-blue-500 font-robotoSlab font-bold text-sm md:text-[20px] leading-relaxed drop-shadow-2xl text-center">
+                <p className="text-blue-400 font-robotoSlab font-bold text-sm md:text-[20px] leading-relaxed text-center drop-shadow-sm">
                   kiristos lubbuu isaa nuuf kennuu isaatiin jaalalli maal akka ta'e hubanneerraa,egaa nus immoo lubbuu keenya obbolootaaf kennuun nuuf ta'a.yohaniis3:16
                 </p>
               </motion.div>
@@ -544,7 +548,7 @@ Xumura irratti: Mana Amantaa Guutuu Wangellaa Mugher ragaa jiraataa "Obsi fi ama
                   <m.icon className="text-primary h-8 w-8 md:h-10 md:w-10 group-hover:text-white transition-colors" />
                 </div>
                 <h4 className="font-headline font-bold text-xl md:text-2xl text-primary uppercase tracking-tighter mb-4">{m.title}</h4>
-                <p className="text-muted-foreground text-xs md:text-sm leading-relaxed font-medium">{m.desc}</p>
+                <p className="text-muted-foreground text-xs md:sm leading-relaxed font-medium">{m.desc}</p>
               </motion.div>
             ))}
           </div>
