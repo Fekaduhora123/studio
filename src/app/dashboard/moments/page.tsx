@@ -74,6 +74,7 @@ export default function SacredMomentsPage() {
     },
   });
 
+  // Watch imageUrl to trigger re-renders when a file is selected
   const imageUrl = form.watch('imageUrl');
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -149,7 +150,10 @@ export default function SacredMomentsPage() {
           <h1 className="text-3xl font-headline font-bold text-primary uppercase tracking-tight">Sacred Moments Gallery</h1>
           <p className="text-muted-foreground text-sm font-medium">Manage the visual history of our congregation.</p>
         </div>
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <Dialog open={isDialogOpen} onOpenChange={(open) => {
+          setIsDialogOpen(open);
+          if (!open) form.reset();
+        }}>
           <DialogTrigger asChild>
             <Button className="gap-2 bg-primary font-bold uppercase text-[10px] tracking-widest h-10 shadow-lg">
               <Plus className="h-4 w-4" /> Add Photo

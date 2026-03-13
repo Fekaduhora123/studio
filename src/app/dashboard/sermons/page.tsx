@@ -94,6 +94,7 @@ export default function SermonsManagementPage() {
     },
   });
 
+  // Watch thumbnailUrl to trigger re-renders when a file is selected
   const thumbnailUrl = form.watch('thumbnailUrl');
 
   React.useEffect(() => {
@@ -207,7 +208,10 @@ export default function SermonsManagementPage() {
         </div>
         <Dialog open={isDialogOpen} onOpenChange={(open) => {
           setIsDialogOpen(open);
-          if (!open) setEditingSermon(null);
+          if (!open) {
+            setEditingSermon(null);
+            form.reset();
+          }
         }}>
           <DialogTrigger asChild>
             <Button className="gap-2 bg-primary font-bold uppercase text-[10px] tracking-widest h-10 shadow-lg">
