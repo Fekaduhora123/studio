@@ -286,13 +286,14 @@ export default function SermonsManagementPage() {
                             variant="ghost" 
                             size="sm" 
                             className="text-[9px] uppercase font-bold"
+                            type="button"
                             onClick={() => form.setValue('thumbnailUrl', '')}
                           >Change Image</Button>
                         </>
                       ) : (
                         <>
                           <Upload className="h-8 w-8 text-muted-foreground/40" />
-                          <p className="text-[10px] font-bold uppercase text-muted-foreground">Upload thumbnail from computer</p>
+                          <p className="text-[10px] font-bold uppercase text-muted-foreground text-center">Click to upload thumbnail from computer</p>
                           <Input 
                             type="file" 
                             accept="image/*" 

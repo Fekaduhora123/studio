@@ -190,13 +190,14 @@ export default function SacredMomentsPage() {
                             variant="ghost" 
                             size="sm" 
                             className="text-[9px] uppercase font-bold"
+                            type="button"
                             onClick={() => form.setValue('imageUrl', '')}
                           >Change Image</Button>
                         </>
                       ) : (
                         <>
                           <Upload className="h-8 w-8 text-muted-foreground/40" />
-                          <p className="text-[10px] font-bold uppercase text-muted-foreground">Click to upload from computer</p>
+                          <p className="text-[10px] font-bold uppercase text-muted-foreground text-center">Click or drag image to upload from your computer</p>
                           <Input 
                             type="file" 
                             accept="image/*" 
@@ -269,7 +270,9 @@ export default function SacredMomentsPage() {
                 <TableRow key={m.id} className="hover:bg-primary/5 transition-colors border-b border-primary/5">
                   <TableCell className="pl-6 py-4">
                     <div className="relative h-12 w-20 bg-muted rounded overflow-hidden">
-                      <Image src={m.imageUrl} alt={m.title} fill className="object-cover" sizes="80px" />
+                      {m.imageUrl && (
+                        <Image src={m.imageUrl} alt={m.title} fill className="object-cover" sizes="80px" />
+                      )}
                     </div>
                   </TableCell>
                   <TableCell className="font-bold text-sm text-primary">{m.title}</TableCell>
