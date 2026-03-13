@@ -368,10 +368,10 @@ export default function Home() {
                   boxShadow: ['0 0 20px rgba(59,130,246,0.1)', '0 0 40px rgba(59,130,246,0.3)', '0 0 20px rgba(59,130,246,0.1)']
                 }}
                 transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute top-1/2 left-6 right-6 md:left-10 md:right-10 -translate-y-1/2 z-20 border-2 border-blue-400/40 rounded-[2rem] md:rounded-[2.5rem] bg-blue-900/30 backdrop-blur-xl p-6 md:p-8 shadow-2xl ring-1 ring-white/10"
+                className="absolute top-1/2 left-6 right-6 md:left-10 md:right-10 -translate-y-1/2 z-20 border-[3px] border-blue-400/60 rounded-[2.5rem] bg-blue-900/40 backdrop-blur-2xl p-8 md:p-10 shadow-[0_0_50px_rgba(59,130,246,0.4)] ring-1 ring-white/20"
               >
-                <p className="text-blue-400 font-robotoSlab font-bold text-sm md:text-[20px] leading-relaxed text-center drop-shadow-sm">
-                  kiristos lubbuu isaa nuuf kennuu isaatiin jaalalli maal akka ta'e hubanneerraa,egaa nus immoo lubbuu keenya obbolootaaf kennuun nuuf ta'a.yohaniis3:16
+                <p className="text-blue-100 font-robotoSlab font-bold text-base md:text-[22px] leading-relaxed text-center drop-shadow-md">
+                  kiristos lubbuu isaa nuuf kennuu isaatiin jaalalli maal akka ta'e hubanneerraa,egaa nus immoo lubbuu keenya obbolootaaf kennuun nuuf ta'a. <br /> <span className="text-blue-300 text-sm md:text-base mt-2 block">yohaniis 3:16</span>
                 </p>
               </motion.div>
             </div>
