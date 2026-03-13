@@ -7,16 +7,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { 
-  Church, ShieldCheck, PieChart, Users, Heart, 
-  Calendar as CalendarIcon, MapPin, Clock, ArrowRight, 
+  Church, MapPin, Clock, ArrowRight, 
   Loader2, Play, BookOpen, Sunrise, Sunset, 
   Menu, X, Sparkles, Megaphone, Video, ChevronDown,
   Facebook, Instagram, Youtube, Twitter, UserCircle,
-  MessageSquare, Send, Camera
+  MessageSquare, Send
 } from 'lucide-react';
 import { useCollection, useFirestore, useUser } from '@/firebase';
 import { collection, query, orderBy, limit, addDoc, serverTimestamp, where } from 'firebase/firestore';
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import {
   Dialog,
@@ -77,7 +75,8 @@ export default function Home() {
 
   const testimoniesQuery = React.useMemo(() => {
     if (!firestore) return null;
-    return query(collection(firestore, 'testimonies'), where('status', '==', 'approved'), orderBy('timestamp', 'desc'), limit(3));
+    // Removed limit(3) so testimonies stay on screen until admin deletes them
+    return query(collection(firestore, 'testimonies'), where('status', '==', 'approved'), orderBy('timestamp', 'desc'));
   }, [firestore]);
 
   const sermonsQuery = React.useMemo(() => {
@@ -364,10 +363,10 @@ export default function Home() {
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 animate={{ 
-                  borderColor: ['rgba(59,130,246,0.2)', 'rgba(59,130,246,0.6)', 'rgba(59,130,246,0.2)'],
-                  boxShadow: ['0 0 20px rgba(59,130,246,0.1)', '0 0 40px rgba(59,130,246,0.3)', '0 0 20px rgba(59,130,246,0.1)']
+                  borderColor: 'rgba(59,130,246,0.6)',
+                  boxShadow: '0 0 40px rgba(59,130,246,0.3)'
                 }}
-                transition={{ duration: 4, ease: "easeInOut" }}
+                transition={{ duration: 3, ease: "easeOut" }}
                 className="absolute top-1/2 left-6 right-6 md:left-10 md:right-10 -translate-y-1/2 z-20 border-[3px] border-blue-400/60 rounded-[2.5rem] bg-blue-900/40 backdrop-blur-2xl p-8 md:p-10 shadow-[0_0_50px_rgba(59,130,246,0.4)] ring-1 ring-white/20"
               >
                 <p className="text-blue-100 font-robotoSlab font-bold text-base md:text-[22px] leading-relaxed text-center drop-shadow-md">
@@ -403,31 +402,26 @@ export default function Home() {
                         transition={{ duration: 0.5 }}
                         className="overflow-hidden whitespace-pre-wrap mt-4 border-l-4 border-primary/20 pl-4"
                       >
-                        1. Hundeeffama fi Jalqaba Mul’ataa<br />
-                        Manni amantaa kun yeroo naannoon Mugher qophaatti ijaaramaa turtetti, obboloota muraasa murtoo qabaniin manatti tajaajila jalqabde. Akkuma kolfi fageenyatti mul’atu, isheenis "Ishee Jalqabaa" (pioneer) ta’uun namoota naannoo sanaa wangeelaan qaqqabuuf dhagaa bu’uuraa keesse.<br />
+                        1. Hundeeffama fi Jalqaba Mul’ataa<br /><br />
+                        Manni amantaa kun yeroo naannoon Mugher qophaatti ijaaramaa turtetti, obboloota muraasa murtoo qabaniin manatti tajaajila jalqabde. Akkuma kolfi fageenyatti mul’atu, isheenis "Ishee Jalqabaa" (pioneer) ta’uun namoota naannoo sanaa wangeelaan qaqqabuuf dhagaa bu’uuraa keesse.<br /><br />
                         - Mul'ata Jalqabaa: Namoota muraasa kaayyoo tokkoof walitti dhufaniin, manaa manatti kadhannaa fi sagalee Waaqayyoo qoqqoodachuun jalqabame.<br />
-                        - Madda Jireenyaa: Mugher keessatti akka tajaajila hafuuraa qofaatti osoo hin taane, akka madda tasgabbii fi abdii ta’uun tajaajiluu jalqabde.<br />
-                        <br />
-                        2. Qorumsa fi Rakkoo Dandamachuu<br />
-                        Manni amantaa kun jireenya har’a mul’atu bira gahuuf karaa dukkanaa fi dhiphuu baay’ee keessa dabarteetti. Seenaa ishee keessatti yeroo hedduu rakkoolee akkasii dandamattee jirti:<br />
+                        - Madda Jireenyaa: Mugher keessatti akka tajaajila hafuuraa qofaatti osoo hin taane, akka madda tasgabbii fi abdii ta’uun tajaajiluu jalqabde.<br /><br />
+                        2. Qorumsa fi Rakkoo Dandamachuu<br /><br />
+                        Manni amantaa kun jireenya har’a mul’atu bira gahuuf karaa dukkanaa fi dhiphuu baay’ee keessa dabarteetti. Seenaa ishee keessatti yeroo hedduu rakkoolee akkasii dandamattee jirti:<br /><br />
                         - Ari’atama Hafuuraa: Yeroo sanatti akka amantaa haaraatti ilaalamuu isheetiin, mormii fi ari’atama dhuunfaa fi hawaasummaa garaa garaa keessa dabarteetti.<br />
-                        - Bakka Tajaajilaa Dhabuu: Waggoota hedduuf bakka dhaabbataa itti waaqeffatan dhabuun, bakka tajaajilaa jijjiiruun (godaanuun) qorumsa guddaa ture.<br />
-                        <br />
-                        3. Cinqii Dinagdee<br />
-                        Miseensota muraasa qabaachuu isheetiin, ijaarsa fi tajaajila babal’isuuf rakkoon maallaqaa fi meeshaa ishee quunnamee ture. Haa ta’u malee, akkuma Kitaabni Qulqulluun jedhu, "Manni dhagaa irratti ijaarame bubbee fi bishaan hin jignu," isheenis amanamummaa miseensota isheetiin jabaattee dhaabbatte.<br />
-                        <br />
-                        3. Guddina fi Firii Har’aa<br />
-                        Har’a, Mana Amantaa Guutuu Wangellaa Mugher "tulluu guddachaa dhufe" ta’eetti. Rakkoon kaleessaa har’a gara seenaa fi galataatti jijjiirameera.<br />
+                        - Bakka Tajaajilaa Dhabuu: Waggoota hedduuf bakka dhaabbataa itti waaqeffatan dhabuun, bakka tajaajilaa jijjiiruun (godaanuun) qorumsa guddaa ture.<br /><br />
+                        3. Cinqii Dinagdee<br /><br />
+                        Miseensota muraasa qabaachuu isheetiin, ijaarsa fi tajaajila babal’isuuf rakkoon maallaqaa fi meeshaa ishee quunnamee ture. Haa ta’u malee, akkuma Kitaabni Qulqulluun jedhu, "Manni dhagaa irratti ijaarame bubbee fi bishaan hin jignu," isheenis amanamummaa miseensota isheetiin jabaattee dhaabbatte.<br /><br />
+                        3. Guddina fi Firii Har’aa<br /><br />
+                        Har’a, Mana Amantaa Guutuu Wangellaa Mugher "tulluu guddachaa dhufe" ta’eetti. Rakkoon kaleessaa har’a gara seenaa fi galataatti jijjiirameera.<br /><br />
                         - Miseensota Kumaan Lakkaa’aman: Miseensota muraasa irraa kaatee, har’a kumaan kan lakkaa’aman (Dhaabbataa fi Miseensota tajaajilaa) horachuu dandeessetti.<br />
                         - Tajaajila Babal'ate: Dubartoota, dargaggoota, fi ijoolleef tajaajila adda addaa diriirsuun jireenya hawaasichaa jijjiiraa jirti.<br />
-                        - Ijaarsa Mana Qulqullummaa: Bakka amantoonni itti walitti dhufanii Waaqayyoon galateeffatan, ijaarsa guddaa fi bareedaa qabaachuun ishee ragaa guddina isheeti.<br />
-                        <br />
-                        4. Kaayyoo fi Mul’ata Gara Fuulduraa<br />
-                        Manni amantaa kun seenaa boonsaa kana qabattee gara fuulduraatti:<br />
+                        - Ijaarsa Mana Qulqullummaa: Bakka amantoonni itti walitti dhufanii Waaqayyoon galateeffatan, ijaarsa guddaa fi bareedaa qabaachuun ishee ragaa guddina isheeti.<br /><br />
+                        4. Kaayyoo fi Mul’ata Gara Fuulduraa<br /><br />
+                        Manni amantaa kun seenaa boonsaa kana qabattee gara fuulduraatti:<br /><br />
                         - Wangeela naannoo Mugher fi naannoo ishee jiranitti bal’inaan qaqqabsiisuu.<br />
                         - Amantoota hafuuraan bilchaatan fi biyyaaf bu’aa buusan horachuu.<br />
-                        - Hawaasummaa keessatti gahee ishee bahuun hiyyeeyyii fi warra gargaarsa barbaadan gargaaruu irratti xiyyeeffatti.<br />
-                        <br />
+                        - Hawaasummaa keessatti gahee ishee bahuun hiyyeeyyii fi warra gargaarsa barbaadan gargaaruu irratti xiyyeeffatti.<br /><br />
                         Xumura irratti: Mana Amantaa Guutuu Wangellaa Mugher ragaa jiraataa "Obsi fi amanamummaan bu'aa qaba" jedhuuti. Kaleessa dhiphuu keessa turte, har’a garuu tajaajila bal’aa fi miseensota kumaan lakkaa’aman qabattee ifa ta’ee mul’achaa jirti.
                       </motion.div>
                     )}
@@ -523,9 +517,9 @@ export default function Home() {
           
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
             {[
-              { icon: Users, title: "Youth Ministry", desc: "Empowering young leaders to influence their generation for the Kingdom." },
-              { icon: Heart, title: "Women Fellowship", desc: "A vibrant community of sisters building their homes on prayer and faith." },
-              { icon: Sparkles, title: "Prayer Ministry", desc: "The strategic engine room where we stand in the gap for our church." },
+              { icon: MessageSquare, title: "Youth Ministry", desc: "Empowering young leaders to influence their generation for the Kingdom." },
+              { icon: Sparkles, title: "Women Fellowship", desc: "A vibrant community of sisters building their homes on prayer and faith." },
+              { icon: Church, title: "Prayer Ministry", desc: "The strategic engine room where we stand in the gap for our church." },
               { icon: Megaphone, title: "Outreach", desc: "Taking God's love beyond the sanctuary walls into the community." }
             ].map((m, i) => (
               <motion.div 
@@ -581,7 +575,7 @@ export default function Home() {
                   <h3 className="text-xl md:text-2xl font-headline font-black text-primary uppercase leading-tight mb-4 md:mb-6 group-hover:text-secondary transition-colors">{event.title}</h3>
                   <p className="text-slate-600 text-xs md:text-sm leading-relaxed mb-6 md:mb-8">{event.description}</p>
                   <div className="space-y-2">
-                    <div className="flex items-center gap-2 text-[10px] md:text-xs font-bold text-muted-foreground"><CalendarIcon className="h-4 w-4" /> {event.date}</div>
+                    <div className="flex items-center gap-2 text-[10px] md:text-xs font-bold text-muted-foreground"><Sunrise className="h-4 w-4" /> {event.date}</div>
                     <div className="flex items-center gap-2 text-[10px] md:text-xs font-bold text-muted-foreground"><Clock className="h-4 w-4" /> {event.time}</div>
                   </div>
                 </motion.div>
@@ -875,7 +869,7 @@ export default function Home() {
                 <MapPin className="h-4 w-4 md:h-5 md:w-5 text-secondary" /> Muger Mokada, Ethiopia
               </div>
               <div className="flex items-center gap-3 text-muted-foreground font-medium text-xs md:sm">
-                <Clock className="h-4 w-4 md:h-5 md:w-5 text-secondary" /> Mon-Fri 9AM-5PM
+                <Sunrise className="h-4 w-4 md:h-5 md:w-5 text-secondary" /> Mon-Fri 9AM-5PM
               </div>
             </div>
           </div>
