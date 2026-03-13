@@ -23,7 +23,9 @@ import {
   Loader2, 
   Trash2, 
   Camera,
-  Image as ImageIcon
+  Image as ImageIcon,
+  Upload,
+  CheckCircle2
 } from 'lucide-react';
 import { useCollection, useFirestore } from '@/firebase';
 import { collection, query, orderBy, doc, deleteDoc, addDoc, serverTimestamp } from 'firebase/firestore';
@@ -40,7 +42,7 @@ import Image from 'next/image';
 
 const momentSchema = z.object({
   title: z.string().min(2, "Title is required"),
-  imageUrl: z.string().url("Invalid image URL"),
+  imageUrl: z.string().min(1, "Image is required"),
   description: z.string().optional(),
 });
 
@@ -52,6 +54,7 @@ export default function SacredMomentsPage() {
   const [mounted, setMounted] = React.useState(false);
   const [searchTerm, setSearchTerm] = React.useState('');
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
+  const [isProcessingFile, setIsProcessingFile] = React.useState(false);
 
   React.useEffect(() => {
     setMounted(true);
@@ -72,6 +75,25 @@ export default function SacredMomentsPage() {
       description: "",
     },
   });
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsProcessingFile(true);
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const result = event.target?.result as string;
+      // Basic compression via canvas if needed, but for MVP we use base64
+      form.setValue('imageUrl', result, { shouldValidate: true });
+      setIsProcessingFile(false);
+    };
+    reader.onerror = () => {
+      toast({ variant: "destructive", title: "Error processing image" });
+      setIsProcessingFile(false);
+    };
+    reader.readAsDataURL(file);
+  };
 
   const onSubmit = async (values: MomentFormValues) => {
     if (!firestore) return;
@@ -151,19 +173,46 @@ export default function SacredMomentsPage() {
                     </FormItem>
                   )}
                 />
-                <FormField
-                  control={form.control}
-                  name="imageUrl"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-[10px] font-bold uppercase tracking-wider">Image URL</FormLabel>
-                      <FormControl><Input placeholder="https://example.com/photo.jpg" {...field} /></FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                
+                <div className="space-y-3">
+                  <label className="text-[10px] font-bold uppercase tracking-wider">Image File</label>
+                  <div className="relative">
+                    <div className={cn(
+                      "border-2 border-dashed rounded-xl p-8 flex flex-col items-center justify-center gap-3 transition-all",
+                      form.getValues('imageUrl') ? "bg-emerald-50 border-emerald-200" : "bg-muted/30 border-muted-foreground/20"
+                    )}>
+                      {isProcessingFile ? (
+                        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                      ) : form.getValues('imageUrl') ? (
+                        <>
+                          <CheckCircle2 className="h-8 w-8 text-emerald-600" />
+                          <p className="text-[10px] font-bold uppercase text-emerald-700">Image Selected</p>
+                          <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            className="text-[9px] uppercase font-bold"
+                            onClick={() => form.setValue('imageUrl', '')}
+                          >Change Image</Button>
+                        </>
+                      ) : (
+                        <>
+                          <Upload className="h-8 w-8 text-muted-foreground/40" />
+                          <p className="text-[10px] font-bold uppercase text-muted-foreground">Click to upload from computer</p>
+                          <Input 
+                            type="file" 
+                            accept="image/*" 
+                            className="absolute inset-0 opacity-0 cursor-pointer" 
+                            onChange={handleFileChange}
+                          />
+                        </>
+                      )}
+                    </div>
+                  </div>
+                  <FormMessage>{form.formState.errors.imageUrl?.message}</FormMessage>
+                </div>
+
                 <DialogFooter className="pt-4">
-                  <Button type="submit" className="w-full bg-primary font-bold uppercase text-xs h-12">Post to Gallery</Button>
+                  <Button type="submit" className="w-full bg-primary font-bold uppercase text-xs h-12" disabled={isProcessingFile}>Post to Gallery</Button>
                 </DialogFooter>
               </form>
             </Form>
@@ -221,7 +270,7 @@ export default function SacredMomentsPage() {
                 <TableRow key={m.id} className="hover:bg-primary/5 transition-colors border-b border-primary/5">
                   <TableCell className="pl-6 py-4">
                     <div className="relative h-12 w-20 bg-muted rounded overflow-hidden">
-                      <Image src={m.imageUrl} alt={m.title} fill className="object-cover" />
+                      <Image src={m.imageUrl} alt={m.title} fill className="object-cover" sizes="80px" />
                     </div>
                   </TableCell>
                   <TableCell className="font-bold text-sm text-primary">{m.title}</TableCell>

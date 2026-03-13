@@ -34,7 +34,9 @@ import {
   Edit,
   Video,
   Play,
-  Calendar
+  Calendar,
+  Upload,
+  CheckCircle2
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { useCollection, useFirestore } from '@/firebase';
@@ -50,13 +52,14 @@ import * as z from 'zod';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
 import Image from 'next/image';
+import { cn } from '@/lib/utils';
 
 const sermonSchema = z.object({
   title: z.string().min(2, "Title is required"),
   speaker: z.string().min(2, "Speaker name is required"),
   date: z.string().min(1, "Date is required"),
   videoUrl: z.string().url("Invalid video URL"),
-  thumbnailUrl: z.string().url("Invalid thumbnail URL").optional().or(z.literal('')),
+  thumbnailUrl: z.string().min(1, "Thumbnail is required"),
 });
 
 type SermonFormValues = z.infer<typeof sermonSchema>;
@@ -68,6 +71,7 @@ export default function SermonsManagementPage() {
   const [searchTerm, setSearchTerm] = React.useState('');
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
   const [editingSermon, setEditingSermon] = React.useState<any>(null);
+  const [isProcessingFile, setIsProcessingFile] = React.useState(false);
 
   React.useEffect(() => {
     setMounted(true);
@@ -110,6 +114,24 @@ export default function SermonsManagementPage() {
       });
     }
   }, [editingSermon, form]);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsProcessingFile(true);
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const result = event.target?.result as string;
+      form.setValue('thumbnailUrl', result, { shouldValidate: true });
+      setIsProcessingFile(false);
+    };
+    reader.onerror = () => {
+      toast({ variant: "destructive", title: "Error processing image" });
+      setIsProcessingFile(false);
+    };
+    reader.readAsDataURL(file);
+  };
 
   const onSubmit = async (values: SermonFormValues) => {
     if (!firestore) return;
@@ -245,19 +267,46 @@ export default function SermonsManagementPage() {
                     </FormItem>
                   )}
                 />
-                <FormField
-                  control={form.control}
-                  name="thumbnailUrl"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-[10px] font-bold uppercase tracking-wider">Thumbnail Image URL</FormLabel>
-                      <FormControl><Input placeholder="https://example.com/image.jpg" {...field} /></FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                
+                <div className="space-y-3">
+                  <label className="text-[10px] font-bold uppercase tracking-wider">Thumbnail Image</label>
+                  <div className="relative">
+                    <div className={cn(
+                      "border-2 border-dashed rounded-xl p-8 flex flex-col items-center justify-center gap-3 transition-all",
+                      form.getValues('thumbnailUrl') ? "bg-emerald-50 border-emerald-200" : "bg-muted/30 border-muted-foreground/20"
+                    )}>
+                      {isProcessingFile ? (
+                        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                      ) : form.getValues('thumbnailUrl') ? (
+                        <>
+                          <CheckCircle2 className="h-8 w-8 text-emerald-600" />
+                          <p className="text-[10px] font-bold uppercase text-emerald-700">Thumbnail Ready</p>
+                          <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            className="text-[9px] uppercase font-bold"
+                            onClick={() => form.setValue('thumbnailUrl', '')}
+                          >Change Image</Button>
+                        </>
+                      ) : (
+                        <>
+                          <Upload className="h-8 w-8 text-muted-foreground/40" />
+                          <p className="text-[10px] font-bold uppercase text-muted-foreground">Upload thumbnail from computer</p>
+                          <Input 
+                            type="file" 
+                            accept="image/*" 
+                            className="absolute inset-0 opacity-0 cursor-pointer" 
+                            onChange={handleFileChange}
+                          />
+                        </>
+                      )}
+                    </div>
+                  </div>
+                  <FormMessage>{form.formState.errors.thumbnailUrl?.message}</FormMessage>
+                </div>
+
                 <DialogFooter className="pt-4">
-                  <Button type="submit" className="w-full bg-primary font-bold uppercase text-xs h-12">
+                  <Button type="submit" className="w-full bg-primary font-bold uppercase text-xs h-12" disabled={isProcessingFile}>
                     {editingSermon ? 'Update Sermon' : 'Post to Gallery'}
                   </Button>
                 </DialogFooter>
@@ -321,7 +370,7 @@ export default function SermonsManagementPage() {
                     <div className="flex items-center gap-3">
                       <div className="relative h-12 w-20 bg-muted rounded overflow-hidden flex items-center justify-center">
                         {s.thumbnailUrl ? (
-                          <Image src={s.thumbnailUrl} alt={s.title} fill className="object-cover" />
+                          <Image src={s.thumbnailUrl} alt={s.title} fill className="object-cover" sizes="80px" />
                         ) : (
                           <Video className="h-6 w-6 text-muted-foreground/30" />
                         )}
