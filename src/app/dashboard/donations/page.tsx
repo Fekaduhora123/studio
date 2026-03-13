@@ -73,13 +73,7 @@ export default function DonationsPage() {
     return query(collection(firestore, 'donations'), orderBy('timestamp', 'desc'));
   }, [firestore]);
 
-  const expensesQuery = React.useMemo(() => {
-    if (!firestore) return null;
-    return query(collection(firestore, 'expenses'), where('status', '==', 'Approved'));
-  }, [firestore]);
-
   const { data: donations, loading: donationsLoading } = useCollection(donationsQuery);
-  const { data: expenses } = useCollection(expensesQuery);
 
   const handleUpdateStatus = (id: string, status: 'approved' | 'rejected') => {
     if (!firestore) return;
@@ -233,32 +227,56 @@ export default function DonationsPage() {
                               <Eye className="h-4 w-4" />
                             </Button>
                           </DialogTrigger>
-                          <DialogContent className="max-w-[98vw] w-full sm:max-w-[600px] rounded-2xl overflow-y-auto max-h-[98vh]">
-                            <DialogHeader>
-                              <DialogTitle className="text-xl font-headline font-bold text-primary uppercase">Audit Details</DialogTitle>
+                          <DialogContent className="max-w-[98vw] w-full sm:max-w-[95vw] h-[98vh] sm:h-[90vh] rounded-2xl overflow-hidden flex flex-col p-0">
+                            <DialogHeader className="p-6 border-b bg-muted/10">
+                              <DialogTitle className="text-2xl font-headline font-bold text-primary uppercase">Audit Record: {donation.donorName}</DialogTitle>
                             </DialogHeader>
-                            <div className="space-y-6 pt-4">
-                              <div className="grid grid-cols-2 gap-4 text-xs bg-muted/20 p-4 rounded-lg">
-                                <div><p className="font-bold opacity-60">Donor</p><p className="font-bold">{donation.donorName}</p></div>
-                                <div><p className="font-bold opacity-60">Amount</p><p className="font-bold text-emerald-600">${donation.amount.toLocaleString()}</p></div>
-                                <div><p className="font-bold opacity-60">QR/Ref</p><p className="font-mono">{donation.referenceNumber}</p></div>
-                                <div><p className="font-bold opacity-60">Status</p><p className="font-bold uppercase text-primary">{donation.status}</p></div>
-                              </div>
-                              {donation.isAiVerified && (
-                                <Alert className="bg-emerald-50 border-emerald-200">
-                                  <ShieldCheck className="h-4 w-4 text-emerald-600" />
-                                  <AlertTitle className="text-[10px] font-bold text-emerald-800 uppercase">AI Verified Match</AlertTitle>
-                                </Alert>
-                              )}
-                              <div className="flex flex-col gap-2">
-                                {donation.status === 'pending' && (
-                                  <div className="flex gap-2">
-                                    <Button className="flex-1 bg-emerald-600 font-bold uppercase text-[10px]" onClick={() => handleUpdateStatus(donation.id, 'approved')}>Approve</Button>
-                                    <Button variant="destructive" className="flex-1 font-bold uppercase text-[10px]" onClick={() => handleUpdateStatus(donation.id, 'rejected')}>Reject</Button>
+                            <div className="flex-1 overflow-y-auto p-6 space-y-8">
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <Card className="p-6 bg-muted/20 border-none">
+                                  <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-4">Transaction Identity</p>
+                                  <div className="space-y-4">
+                                    <div><p className="text-xs font-bold opacity-60">Donor Name</p><p className="text-lg font-bold">{donation.donorName}</p></div>
+                                    <div><p className="text-xs font-bold opacity-60">Reference / QR Number</p><p className="font-mono text-primary font-bold">{donation.referenceNumber}</p></div>
                                   </div>
-                                )}
-                                <Button variant="outline" className="text-rose-600 font-bold uppercase text-[10px]" onClick={() => handleDeleteDonation(donation.id)}>Delete Record</Button>
+                                </Card>
+                                <Card className="p-6 bg-emerald-50 border-none">
+                                  <p className="text-[10px] font-bold uppercase tracking-widest text-emerald-700 mb-4">Financial Metadata</p>
+                                  <div className="space-y-4">
+                                    <div><p className="text-xs font-bold text-emerald-800 opacity-60">Contribution Amount</p><p className="text-2xl font-black text-emerald-600">ETB {donation.amount.toLocaleString()}</p></div>
+                                    <div><Badge className="bg-emerald-600 uppercase font-black text-[10px]">{donation.type}</Badge></div>
+                                  </div>
+                                </Card>
                               </div>
+
+                              <div className="space-y-4">
+                                <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Verification Audit</p>
+                                {donation.isAiVerified ? (
+                                  <Alert className="bg-emerald-100 border-emerald-200 py-6">
+                                    <ShieldCheck className="h-6 w-6 text-emerald-600" />
+                                    <div className="ml-4">
+                                      <AlertTitle className="text-sm font-black text-emerald-800 uppercase">AI Verification: SUCCESS</AlertTitle>
+                                      <AlertDescription className="text-xs text-emerald-700 font-medium">The digital receipt was scanned and confirmed to match account 1000221935978.</AlertDescription>
+                                    </div>
+                                  </Alert>
+                                ) : (
+                                  <Alert className="bg-amber-50 border-amber-200">
+                                    <div className="ml-4">
+                                      <AlertTitle className="text-sm font-black text-amber-800 uppercase">Manual Verification Required</AlertTitle>
+                                      <AlertDescription className="text-xs text-amber-700">This record was entered manually or skipped AI scan. Please verify via bank statement.</AlertDescription>
+                                    </div>
+                                  </Alert>
+                                )}
+                              </div>
+                            </div>
+                            <div className="p-6 border-t bg-muted/5 flex gap-4 mt-auto">
+                              {donation.status === 'pending' && (
+                                <>
+                                  <Button className="flex-1 bg-emerald-600 font-black uppercase text-xs h-14 shadow-lg" onClick={() => handleUpdateStatus(donation.id, 'approved')}>Confirm & Approve</Button>
+                                  <Button variant="destructive" className="flex-1 font-black uppercase text-xs h-14 shadow-lg" onClick={() => handleUpdateStatus(donation.id, 'rejected')}>Reject Record</Button>
+                                </>
+                              )}
+                              <Button variant="outline" className="text-rose-600 font-bold uppercase text-[10px] h-14 px-8" onClick={() => handleDeleteDonation(donation.id)}>Delete Permanently</Button>
                             </div>
                           </DialogContent>
                         </Dialog>

@@ -75,7 +75,6 @@ export default function Home() {
 
   const testimoniesQuery = React.useMemo(() => {
     if (!firestore) return null;
-    // Removed limit(3) so testimonies stay on screen until admin deletes them
     return query(collection(firestore, 'testimonies'), where('status', '==', 'approved'), orderBy('timestamp', 'desc'));
   }, [firestore]);
 
@@ -360,14 +359,10 @@ export default function Home() {
               )}
               <motion.div 
                 initial={{ opacity: 0, scale: 0.95 }}
-                whileInView={{ opacity: 1, scale: 1 }}
+                whileInView={{ opacity: 1, scale: 1, borderColor: 'rgba(59,130,246,0.6)', boxShadow: '0 0 40px rgba(59,130,246,0.3)' }}
                 viewport={{ once: true }}
-                animate={{ 
-                  borderColor: 'rgba(59,130,246,0.6)',
-                  boxShadow: '0 0 40px rgba(59,130,246,0.3)'
-                }}
-                transition={{ duration: 3, ease: "easeOut" }}
-                className="absolute top-1/2 left-6 right-6 md:left-10 md:right-10 -translate-y-1/2 z-20 border-[3px] border-blue-400/60 rounded-[2.5rem] bg-blue-900/40 backdrop-blur-2xl p-8 md:p-10 shadow-[0_0_50px_rgba(59,130,246,0.4)] ring-1 ring-white/20"
+                transition={{ duration: 2, ease: "easeOut" }}
+                className="absolute top-1/2 left-6 right-6 md:left-10 md:right-10 -translate-y-1/2 z-20 border-[3px] border-blue-400/30 rounded-[2.5rem] bg-blue-900/40 backdrop-blur-2xl p-8 md:p-10 ring-1 ring-white/20"
               >
                 <p className="text-blue-100 font-robotoSlab font-bold text-base md:text-[22px] leading-relaxed text-center drop-shadow-md">
                   kiristos lubbuu isaa nuuf kennuu isaatiin jaalalli maal akka ta'e hubanneerraa,egaa nus immoo lubbuu keenya obbolootaaf kennuun nuuf ta'a. <br /> <span className="text-blue-300 text-sm md:text-base mt-2 block">yohaniis 3:16</span>
@@ -402,27 +397,7 @@ export default function Home() {
                         transition={{ duration: 0.5 }}
                         className="overflow-hidden whitespace-pre-wrap mt-4 border-l-4 border-primary/20 pl-4"
                       >
-                        1. Hundeeffama fi Jalqaba Mul’ataa<br /><br />
-                        Manni amantaa kun yeroo naannoon Mugher qophaatti ijaaramaa turtetti, obboloota muraasa murtoo qabaniin manatti tajaajila jalqabde. Akkuma kolfi fageenyatti mul’atu, isheenis "Ishee Jalqabaa" (pioneer) ta’uun namoota naannoo sanaa wangeelaan qaqqabuuf dhagaa bu’uuraa keesse.<br /><br />
-                        - Mul'ata Jalqabaa: Namoota muraasa kaayyoo tokkoof walitti dhufaniin, manaa manatti kadhannaa fi sagalee Waaqayyoo qoqqoodachuun jalqabame.<br />
-                        - Madda Jireenyaa: Mugher keessatti akka tajaajila hafuuraa qofaatti osoo hin taane, akka madda tasgabbii fi abdii ta’uun tajaajiluu jalqabde.<br /><br />
-                        2. Qorumsa fi Rakkoo Dandamachuu<br /><br />
-                        Manni amantaa kun jireenya har’a mul’atu bira gahuuf karaa dukkanaa fi dhiphuu baay’ee keessa dabarteetti. Seenaa ishee keessatti yeroo hedduu rakkoolee akkasii dandamattee jirti:<br /><br />
-                        - Ari’atama Hafuuraa: Yeroo sanatti akka amantaa haaraatti ilaalamuu isheetiin, mormii fi ari’atama dhuunfaa fi hawaasummaa garaa garaa keessa dabarteetti.<br />
-                        - Bakka Tajaajilaa Dhabuu: Waggoota hedduuf bakka dhaabbataa itti waaqeffatan dhabuun, bakka tajaajilaa jijjiiruun (godaanuun) qorumsa guddaa ture.<br /><br />
-                        3. Cinqii Dinagdee<br /><br />
-                        Miseensota muraasa qabaachuu isheetiin, ijaarsa fi tajaajila babal’isuuf rakkoon maallaqaa fi meeshaa ishee quunnamee ture. Haa ta’u malee, akkuma Kitaabni Qulqulluun jedhu, "Manni dhagaa irratti ijaarame bubbee fi bishaan hin jignu," isheenis amanamummaa miseensota isheetiin jabaattee dhaabbatte.<br /><br />
-                        3. Guddina fi Firii Har’aa<br /><br />
-                        Har’a, Mana Amantaa Guutuu Wangellaa Mugher "tulluu guddachaa dhufe" ta’eetti. Rakkoon kaleessaa har’a gara seenaa fi galataatti jijjiirameera.<br /><br />
-                        - Miseensota Kumaan Lakkaa’aman: Miseensota muraasa irraa kaatee, har’a kumaan kan lakkaa’aman (Dhaabbataa fi Miseensota tajaajilaa) horachuu dandeessetti.<br />
-                        - Tajaajila Babal'ate: Dubartoota, dargaggoota, fi ijoolleef tajaajila adda addaa diriirsuun jireenya hawaasichaa jijjiiraa jirti.<br />
-                        - Ijaarsa Mana Qulqullummaa: Bakka amantoonni itti walitti dhufanii Waaqayyoon galateeffatan, ijaarsa guddaa fi bareedaa qabaachuun ishee ragaa guddina isheeti.<br /><br />
-                        4. Kaayyoo fi Mul’ata Gara Fuulduraa<br /><br />
-                        Manni amantaa kun seenaa boonsaa kana qabattee gara fuulduraatti:<br /><br />
-                        - Wangeela naannoo Mugher fi naannoo ishee jiranitti bal’inaan qaqqabsiisuu.<br />
-                        - Amantoota hafuuraan bilchaatan fi biyyaaf bu’aa buusan horachuu.<br />
-                        - Hawaasummaa keessatti gahee ishee bahuun hiyyeeyyii fi warra gargaarsa barbaadan gargaaruu irratti xiyyeeffatti.<br /><br />
-                        Xumura irratti: Mana Amantaa Guutuu Wangellaa Mugher ragaa jiraataa "Obsi fi amanamummaan bu'aa qaba" jedhuuti. Kaleessa dhiphuu keessa turte, har’a garuu tajaajila bal’aa fi miseensota kumaan lakkaa’aman qabattee ifa ta’ee mul’achaa jirti.
+                        1. Hundeeffama fi Jalqaba Mul’ataa<br />Manni amantaa kun yeroo naannoon Mugher qophaatti ijaaramaa turtetti, obboloota muraasa murtoo qabaniin manatti tajaajila jalqabde. Akkuma kolfi fageenyatti mul’atu, isheenis "Ishee Jalqabaa" (pioneer) ta’uun namoota naannoo sanaa wangeelaan qaqqabuuf dhagaa bu’uuraa keesse.<br />- Mul'ata Jalqabaa: Namoota muraasa kaayyoo tokkoof walitti dhufaniin, manaa manatti kadhannaa fi sagalee Waaqayyoo qoqqoodachuun jalqabame.<br />- Madda Jireenyaa: Mugher keessatti akka tajaajila hafuuraa qofaatti osoo hin taane, akka madda tasgabbii fi abdii ta’uun tajaajiluu jalqabde.<br /><br />2. Qorumsa fi Rakkoo Dandamachuu<br />Manni amantaa kun jireenya har’a mul’atu bira gahuuf karaa dukkanaa fi dhiphuu baay’ee keessa dabarteetti. Seenaa ishee keessatti yeroo hedduu rakkoolee akkasii dandamattee jirti:<br />- Ari’atama Hafuuraa: Yeroo sanatti akka amantaa haaraatti ilaalamuu isheetiin, mormii fi ari’atama dhuunfaa fi hawaasummaa garaa garaa keessa dabarteetti.<br />- Bakka Tajaajilaa Dhabuu: Waggoota hedduuf bakka dhaabbataa itti waaqeffatan dhabuun, bakka tajaajilaa jijjiiruun (godaanuun) qorumsa guddaa ture.<br /><br />3. Cinqii Dinagdee<br />Miseensota muraasa qabaachuu isheetiin, ijaarsa fi tajaajila babal’isuuf rakkoon maallaqaa fi meeshaa ishee quunnamee ture. Haa ta’u malee, akkuma Kitaabni Qulqulluun jedhu, "Manni dhagaa irratti ijaarame bubbee fi bishaan hin jignu," isheenis amanamummaa miseensota isheetiin jabaattee dhaabbatte.<br /><br />3. Guddina fi Firii Har’aa<br />Har’a, Mana Amantaa Guutuu Wangellaa Mugher "tulluu guddachaa dhufe" ta’eetti. Rakkoon kaleessaa har’a gara seenaa fi galataatti jijjiirameera.<br />- Miseensota Kumaan Lakkaa’aman: Miseensota muraasa irraa kaatee, har’a kumaan kan lakkaa’aman (Dhaabbataa fi Miseensota tajaajilaa) horachuu dandeessetti.<br />- Tajaajila Babal'ate: Dubartoota, dargaggoota, fi ijoolleef tajaajila adda addaa diriirsuun jireenya hawaasichaa jijjiiraa jirti.<br />- Ijaarsa Mana Qulqullummaa: Bakka amantoonni itti walitti dhufanii Waaqayyoon galateeffatan, ijaarsa guddaa fi bareedaa qabaachuun ishee ragaa guddina isheeti.<br /><br />4. Kaayyoo fi Mul’ata Gara Fuulduraa<br />Manni amantaa kun seenaa boonsaa kana qabattee gara fuulduraatti:<br />- Wangeela naannoo Mugher fi naannoo ishee jiranitti bal’inaan qaqqabsiisuu.<br />- Amantoota hafuuraan bilchaatan fi biyyaaf bu’aa buusan horachuu.<br />- Hawaasummaa keessatti gahee ishee bahuun hiyyeeyyii fi warra gargaarsa barbaadan gargaaruu irratti xiyyeeffatti.<br /><br />Xumura irratti: Mana Amantaa Guutuu Wangellaa Mugher ragaa jiraataa "Obsi fi amanamummaan bu'aa qaba" jedhuuti. Kaleessa dhiphuu keessa turte, har’a garuu tajaajila bal’aa fi miseensota kumaan lakkaa’aman qabattee ifa ta’ee mul’achaa jirti.
                       </motion.div>
                     )}
                   </AnimatePresence>
@@ -443,27 +418,7 @@ export default function Home() {
                         transition={{ duration: 0.5 }}
                         className="overflow-hidden whitespace-pre-wrap mt-4 border-l-4 border-secondary/20 pl-4"
                       >
-                        1. መነሻና የቀዳሚነት ሚና<br />
-                        ቤተክርስቲያኗ በአካባቢው "የመጀመሪያዋ" (Pioneer) ተብላ የምትታወቅ ሲሆን፣ ጥቂት አማኞች በቤታቸው ጸሎትና አምልኮ በመጀመር የጣሉት የወንጌል ዘር ነው። ሙገር እንደ ኢንዱስትሪ መንደር መመስረት ሲጀምር፣ ይህች ቤተክርስቲያን ለመንፈሳዊ ዕረፍትና ለተስፋ ምንጭነት መሰረት ሆናለች።<br />
-                        - የመጀመሪያው ራዕይ: ጥቂት ወንድሞችና እህቶች ለወንጌል ባላቸው ፍቅር ተነሳስተው፣ በታማኝነትና በትጋት አገልግሎቱን ጀመሩ።<br />
-                        - ተደራሽነት: የወንጌል ብርሃን ባልደረሰባቸው ስፍራዎች ሁሉ መዳረሻ በመሆን ለብዙዎች ድነት ምክንያት ሆናለች።<br /><br />
-                        2. ፈተናዎችን በጽናት ማለፍ<br />
-                        ቤተክርስቲያኗ ዛሬ ለደረሰችበት ክብር የበቃችው በቀላሉ አልነበረም። በሂደቱ ውስጥ እጅግ አስቸጋሪ የሆኑ መከራዎችን አልፋለች፦<br />
-                        - መንፈሳዊ ስደት: በወቅቱ የነበሩ የሃይማኖትና የማህበራዊ ተጽዕኖዎች አገልግሎቱን ለማደናቀፍ ሞክረው ነበር።<br />
-                        - የአምልኮ ስፍራ ማጣት: ለረጅም ዓመታት ቋሚ የሆነ የመሰብሰቢያ ቦታ ባለመኖሩ፣ ከአንድ ቦታ ወደ ሌላ ቦታ በመዘዋወር (በመሰደድ) ብዙ ዋጋ ተከፍሏል።<br />
-                        - የቁሳቁስና የገንዘብ እጥረት: የአባላቱ ቁጥር አነስተኛ በነበረበት ወቅት፣ ህንጻ ለመገንባትና አገልግሎቱን ለማስፋፋት ከፍተኛ የኢኮኖሚ ፈተናዎች ነበሩ።<br />
-                        ቢሆንም ግን፣ "በዓለት ላይ የተመሰረተች ቤት አትናወጥም" እንደሚለው ቃል፣ በምዕመናን ጽናትና በጌታ ጸጋ ቆማ ቀርታለች።<br /><br />
-                        3. የአሁኑ ስኬትና እድገት<br />
-                        የሙገር ሙሉ ወንጌል አማኞች ቤተክርስቲያን ትናንት በለቅሶ የዘራችውን ዛሬ በደስታ እያጨደች ትገኛለች።<br />
-                        - በሺዎች የሚቆጠሩ አባላት: በጥቂት ሰዎች የተጀመረው አገልግሎት ዛሬ በሺዎች የሚቆጠሩ ምዕመናንን (ቋሚ አባላትና የተለያዩ የአገልግሎት ዘርፎችን) አፍርቷል።<br />
-                        - የተሟላ አገልግሎት: ለህጻናት፣ ለወጣቶችና ለሴቶች የሚሰጡ አገልግሎቶችን በማስፋፋት የማህበረሰቡን መንፈሳዊና ስነ-ልቦናዊ ፍላጎት እያሟላች ትገኛለች።<br />
-                        - ታላቅ የጸሎት ቤት: አማኞች በነጻነት የሚሰበሰቡበት፣ ዘመናዊና ሰፊ የሆነ የቤተክርስቲያን ህንጻ ባለቤት መሆን መቻሏ የእድገቷ ትልቅ ማሳያ ነው።<br /><br />
-                        4. የወደፊት ራዕይና ተልዕኮ<br />
-                        ቤተክርስቲያኗ ካለፈችበት ታላቅ ታሪክ በመነሳት ወደፊት የሚከተሉትን ግቦች ሰንቃለች፦<br />
-                        - ወንጌልን በሙገርና በአካባቢው ባሉ ስፍራዎች ይበልጥ በስፋት ማዳረስ።<br />
-                        - በመንፈሳዊ ህይወታቸው የበሰሉና ለሀገር የሚጠቅሙ ዜጎችን ማፍራት።<br />
-                        - ማህበራዊ ኃላፊነትን በመወጣት ረገድ ችግረኞችንና ድጋፍ የሚሹ ወገኖችን መርዳት።<br /><br />
-                        ለማጠቃለል፦ የሙገር ሙሉ ወንጌል አማኞች ቤተክርስቲያን "ጽናትና እምነት ፍሬ አለው" ለሚለው እውነት ህያው ምስክር ናት። ትናንት በፈተና ውስጥ የነበረችው ቤተክርስቲያን፣ ዛሬ በብዙ ሺህ አባላት ተከባ በክብር ትገኛለች።
+                        1. መነሻና የቀዳሚነት ሚና<br />ቤተክርስቲያኗ በአካባቢው "የመጀመሪያዋ" (Pioneer) ተብላ የምትታወቅ ሲሆን፣ ጥቂት አማኞች በቤታቸው ጸሎትና አምልኮ በመጀመር የጣሉት የወንጌል ዘር ነው። ሙገር እንደ ኢንዱስትሪ መንደር መመስረት ሲጀምር፣ ይህች ቤተክርስቲያን ለመንፈሳዊ ዕረፍትና ለተስፋ ምንጭነት መሰረት ሆናለች።<br />- የመጀመሪያው ራዕይ: ጥቂት ወንድሞችና እህቶች ለወንጌል ባላቸው ፍቅር ተነሳስተው፣ በታማኝነትና በትጋት አገልግሎቱን ጀመሩ።<br />- ተደራሽነት: የወንጌል ብርሃን ባልደረሰባቸው ስፍራዎች ሁሉ መዳረሻ በመሆን ለብዙዎች ድነት ምክንያት ሆናለች።<br /><br />2. ፈተናዎችን በጽናት ማለፍ<br />ቤተክርስቲያኗ ዛሬ ለደረሰችበት ክብር የበቃችው በቀላሉ አልነበረም። በሂደቱ ውስጥ እጅግ አስቸጋሪ የሆኑ መከራዎችን አልፋለች፦<br />- መንፈሳዊ ስደት: በወቅቱ የነበሩ የሃይማኖትና የማህበራዊ ተጽዕኖዎች አገልግሎቱን ለማደናቀፍ ሞክረው ነበር።<br />- የአምልኮ ስፍራ ማጣት: ለረጅም ዓመታት ቋሚ የሆነ የመሰብሰቢያ ቦታ ባለመኖሩ፣ ከአንድ ቦታ ወደ ሌላ ቦታ በመዘዋወር (በመሰደድ) ብዙ ዋጋ ተከፍሏል።<br />- የቁሳቁስና የገንዘብ እጥረት: የአባላቱ ቁጥር አነስተኛ በነበረበት ወቅት፣ ህንጻ ለመገንባትና አገልግሎቱን ለማስፋፋት ከፍተኛ የኢኮኖሚ ፈተናዎች ነበሩ።<br />ቢሆንም ግን፣ "በዓለት ላይ የተመሰረተች ቤት አትናወጥም" እንደሚለው ቃል፣ በምዕመናን ጽናትና በጌታ ጸጋ ቆማ ቀርታለች።<br /><br />3. የአሁኑ ስኬትና እድገት<br />የሙገር ሙሉ ወንጌል አማኞች ቤተክርስቲያን ትናንት በለቅሶ የዘራችውን ዛሬ በደስታ እያጨደች ትገኛለች።<br />- በሺዎች የሚቆጠሩ አባላት: በጥቂት ሰዎች የተጀመረው አገልግሎት ዛሬ በሺዎች የሚቆጠሩ ምዕመናንን (ቋሚ አባላትና የተለያዩ የአገልግሎት ዘርፎችን) አፍርቷል።<br />- የተሟላ አገልግሎት: ለህጻናት፣ ለወጣቶችና ለሴቶች የሚሰጡ አገልግሎቶችን በማስፋፋት የማህበረሰቡን መንፈሳዊና ስነ-ልቦናዊ ፍላጎት እያሟላች ትገኛለች።<br />- ታላቅ የጸሎት ቤት: አማኞች በነጻነት የሚሰበሰቡበት፣ ዘመናዊና ሰፊ የሆነ የቤተክርስቲያን ህንጻ ባለቤት መሆን መቻሏ የእድገቷ ትልቅ ማሳያ ነው።<br /><br />4. የወደፊት ራዕይና ተልዕኮ<br />ቤተክርስቲያኗ ካለፈችበት ታላቅ ታሪክ በመነሳት ወደፊት የሚከተሉትን ግቦች ሰንቃለች፦<br />- ወንጌልን በሙገርና በአካባቢው ባሉ ስፍራዎች ይበልጥ በስፋት ማዳረስ።<br />- በመንፈሳዊ ህይወታቸው የበሰሉና ለሀገር የሚጠቅሙ ዜጎችን ማፍራት።<br />- ማህበራዊ ኃላፊነትን በመወጣት ረገድ ችግረኞችንና ድጋፍ የሚሹ ወገኖችን መርዳት።<br /><br />ለማጠቃለል፦ የሙገር ሙሉ ወንጌል አማኞች ቤተክርስቲያን "ጽናትና እምነት ፍሬ አለው" ለሚለው እውነት ህያው ምስክር ናት። ትናንት በፈተና ውስጥ የነበረችው ቤተክርስቲያን፣ ዛሬ በብዙ ሺህ አባላት ተከባ በክብር ትገኛለች።
                       </motion.div>
                     )}
                   </AnimatePresence>

@@ -1,4 +1,3 @@
-
 "use client";
 
 import * as React from 'react';
@@ -39,6 +38,7 @@ import * as z from 'zod';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
 import Image from 'next/image';
+import { cn } from '@/lib/utils';
 
 const momentSchema = z.object({
   title: z.string().min(2, "Title is required"),
@@ -84,7 +84,6 @@ export default function SacredMomentsPage() {
     const reader = new FileReader();
     reader.onload = (event) => {
       const result = event.target?.result as string;
-      // Basic compression via canvas if needed, but for MVP we use base64
       form.setValue('imageUrl', result, { shouldValidate: true });
       setIsProcessingFile(false);
     };

@@ -225,33 +225,33 @@ export default function ExpensesPage() {
                 <Plus className="h-4 w-4" /> Record
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-[98vw] w-full sm:max-w-[700px] rounded-xl overflow-y-auto max-h-[98vh]">
-              <DialogHeader>
-                <DialogTitle className="text-xl font-headline font-bold text-primary uppercase tracking-tight">
-                  {editingExpense ? 'Edit Expense' : 'Log Expenditure'}
+            <DialogContent className="max-w-[98vw] w-full sm:max-w-[95vw] h-[98vh] sm:h-[90vh] rounded-2xl flex flex-col overflow-hidden">
+              <DialogHeader className="p-6 border-b">
+                <DialogTitle className="text-2xl font-headline font-bold text-primary uppercase tracking-tight">
+                  {editingExpense ? 'Update Expenditure Profile' : 'New Expenditure Registry'}
                 </DialogTitle>
               </DialogHeader>
               <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 pt-4 max-h-[70vh] overflow-y-auto px-1">
+                <form onSubmit={form.handleSubmit(onSubmit)} className="flex-1 space-y-8 pt-6 overflow-y-auto px-6">
                   <FormField
                     control={form.control}
                     name="description"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-[10px] font-bold uppercase tracking-wider">Description</FormLabel>
-                        <FormControl><Input placeholder="e.g. Electricity" {...field} /></FormControl>
+                        <FormLabel className="text-[10px] font-bold uppercase tracking-widest">Expense Description / Purpose</FormLabel>
+                        <FormControl><Input placeholder="e.g. Monthly Electricity Settlement" className="h-14 text-base" {...field} /></FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                     <FormField
                       control={form.control}
                       name="category"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-[10px] font-bold uppercase tracking-wider">Category</FormLabel>
-                          <FormControl><Input placeholder="Utility, etc." {...field} /></FormControl>
+                          <FormLabel className="text-[10px] font-bold uppercase tracking-widest">Financial Category</FormLabel>
+                          <FormControl><Input placeholder="Utility, Rent, Salary, etc." className="h-14 text-base" {...field} /></FormControl>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -261,31 +261,55 @@ export default function ExpensesPage() {
                       name="amount"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-[10px] font-bold uppercase tracking-wider">Amount (ETB)</FormLabel>
-                          <FormControl><Input placeholder="0.00" {...field} /></FormControl>
+                          <FormLabel className="text-[10px] font-bold uppercase tracking-widest">Total Amount (ETB)</FormLabel>
+                          <FormControl><Input placeholder="0.00" className="h-14 text-lg font-black text-rose-600" {...field} /></FormControl>
                           <FormMessage />
                         </FormItem>
                       )}
                     />
                   </div>
-                  <FormField
-                    control={form.control}
-                    name="approvedBy"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-[10px] font-bold uppercase tracking-wider">Approved By</FormLabel>
-                        <FormControl><Input placeholder="Auditor Name" {...field} /></FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <DialogFooter className="pt-4 pb-4">
-                    <Button type="submit" className="w-full bg-primary font-bold uppercase text-[10px] tracking-widest h-11">
-                      {editingExpense ? 'Update Record' : 'Save Expenditure'}
-                    </Button>
-                  </DialogFooter>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                    <FormField
+                      control={form.control}
+                      name="approvedBy"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-[10px] font-bold uppercase tracking-widest">Approving Auditor</FormLabel>
+                          <FormControl><Input placeholder="Enter auditor name" className="h-14 text-base" {...field} /></FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="status"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-[10px] font-bold uppercase tracking-widest">Approval Status</FormLabel>
+                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger className="h-14 text-base">
+                                <SelectValue placeholder="Current Status" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="Pending">Pending Audit</SelectItem>
+                              <SelectItem value="Approved">Approved</SelectItem>
+                              <SelectItem value="Rejected">Rejected</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
                 </form>
               </Form>
+              <DialogFooter className="p-6 border-t mt-auto">
+                <Button type="submit" className="w-full bg-primary font-black uppercase text-sm tracking-widest h-16 shadow-xl" onClick={form.handleSubmit(onSubmit)}>
+                  {editingExpense ? 'Confirm Record Update' : 'Commit to Ledger'}
+                </Button>
+              </DialogFooter>
             </DialogContent>
           </Dialog>
         </div>
@@ -343,7 +367,7 @@ export default function ExpensesPage() {
                 <TableHead className="text-[10px] font-bold uppercase tracking-wider">Description</TableHead>
                 <TableHead className="text-[10px] font-bold uppercase tracking-wider">Category</TableHead>
                 <TableHead className="text-[10px] font-bold uppercase tracking-wider">Auditor</TableHead>
-                <TableHead className="text-[10px) font-bold uppercase tracking-wider">Status</TableHead>
+                <TableHead className="text-[10px] font-bold uppercase tracking-wider">Status</TableHead>
                 <TableHead className="text-[10px] font-bold uppercase tracking-wider text-right">Amount</TableHead>
                 <TableHead className="text-[10px] font-bold uppercase tracking-wider text-right">Actions</TableHead>
               </TableRow>
