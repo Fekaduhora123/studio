@@ -386,14 +386,9 @@ export default function Home() {
               A Legacy of <br /> <span className="text-secondary">Spirit & Truth</span>
             </h2>
             <div className="space-y-6">
-              <motion.div 
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                className="text-muted-foreground font-robotoSlab font-normal text-base md:text-[20px] leading-relaxed border-2 border-primary/20 p-6 md:p-8 rounded-[1.5rem] md:rounded-[2rem] bg-primary/5 shadow-inner text-left"
-              >
+              <div className="text-muted-foreground font-robotoSlab font-normal text-base md:text-[20px] leading-relaxed border-2 border-primary/20 p-6 md:p-8 rounded-[1.5rem] md:rounded-[2rem] bg-primary/5 shadow-inner text-left">
                 Mugher Full Gospel Church is a community of believers dedicated to worship, discipleship, and service. Our mission is to share the Gospel and build a strong faith community in Mugher Mokada.
-              </motion.div>
+              </div>
               
               <div className="space-y-4 text-left">
                 <h4 className="font-playfair font-medium italic text-xl md:text-2xl text-primary">Seenaa Boonsaa fi Milkaa’ina Mana Amantaa Guutuu Wangellaa Mugher</h4>
@@ -409,32 +404,32 @@ export default function Home() {
                         transition={{ duration: 0.5 }}
                         className="overflow-hidden whitespace-pre-wrap mt-4 border-l-4 border-primary/20 pl-4"
                       >
-1. Hundeeffama fi Jalqaba Mul’ataa
-Manni amantaa kun yeroo naannoon Mugher qophaatti ijaaramaa turtetti, obboloota muraasa murtoo qabaniin manatti tajaajila jalqabde. Akkuma kolfi fageenyatti mul’atu, isheenis "Ishee Jalqabaa" (pioneer) ta’uun namoota naannoo sanaa wangeelaan qaqqabuuf dhagaa bu’uuraa keesse.
-- Mul'ata Jalqabaa: Namoota muraasa kaayyoo tokkoof walitti dhufaniin, manaa manatti kadhannaa fi sagalee Waaqayyoo qoqqoodachuun jalqabame.
-- Madda Jireenyaa: Mugher keessatti akka tajaajila hafuuraa qofaatti osoo hin taane, akka madda tasgabbii fi abdii ta’uun tajaajiluu jalqabde.
-
-2. Qorumsa fi Rakkoo Dandamachuu
-Manni amantaa kun jireenya har’a mul’atu bira gahuuf karaa dukkanaa fi dhiphuu baay’ee keessa dabarteetti. Seenaa ishee keessatti yeroo hedduu rakkoolee akkasii dandamattee jirti:
-- Ari’atama Hafuuraa: Yeroo sanatti akka amantaa haaraatti ilaalamuu isheetiin, mormii fi ari’atama dhuunfaa fi hawaasummaa garaa garaa keessa dabarteetti.
-- Bakka Tajaajilaa Dhabuu: Waggoota hedduuf bakka dhaabbataa itti waaqeffatan dhabuun, bakka tajaajilaa jijjiiruun (godaanuun) qorumsa guddaa ture.
-
-3. Cinqii Dinagdee
-Miseensota muraasa qabaachuu isheetiin, ijaarsa fi tajaajila babal’isuuf rakkoon maallaqaa fi meeshaa ishee quunnamee ture. Haa ta’u malee, akkuma Kitaabni Qulqulluun jedhu, "Manni dhagaa irratti ijaarame bubbee fi bishaan hin jignu," isheenis amanamummaa miseensota isheetiin jabaattee dhaabbatte.
-
-4. Guddina fi Firii Har’aa
-Har’a, Mana Amantaa Guutuu Wangellaa Mugher "tulluu guddachaa dhufe" ta’eetti. Rakkoon kaleessaa har’a gara seenaa fi galataatti jijjiirameera.
-- Miseensota Kumaan Lakkaa’aman: Miseensota muraasa irraa kaatee, har’a kumaan kan lakkaa’aman (Dhaabbataa fi Miseensota tajaajilaa) horachuu dandeessetti.
-- Tajaajila Babal'ate: Dubartoota, dargaggoota, fi ijoolleef tajaajila adda addaa diriirsuun jireenya hawaasichaa jijjiiraa jirti.
-- Ijaarsa Mana Qulqullummaa: Bakka amantoonni itti walitti dhufanii Waaqayyoon galateeffatan, ijaarsa guddaa fi bareedaa qabaachuun ishee ragaa guddina isheeti.
-
-5. Kaayyoo fi Mul’ata Gara Fuulduraa
-Manni amantaa kun seenaa boonsaa kana qabattee gara fuulduraatti:
-- Wangeela naannoo Mugher fi naannoo ishee jiranitti bal’inaan qaqqabsiisuu.
-- Amantoota hafuuraan bilchaatan fi biyyaaf bu’aa buusan horachuu.
-- Hawaasummaa keessatti gahee ishee bahuun hiyyeeyyii fi warra gargaarsa barbaadan gargaaruu irratti xiyyeeffatti.
-
-Xumura irratti: Mana Amantaa Guutuu Wangellaa Mugher ragaa jiraataa "Obsi fi amanamummaan bu'aa qaba" jedhuuti. Kaleessa dhiphuu keessa turte, har’a garuu tajaajila bal’aa fi miseensota kumaan lakkaa’aman qabattee ifa ta’ee mul’achaa jirti.
+                        1. Hundeeffama fi Jalqaba Mul’ataa<br />
+                        Manni amantaa kun yeroo naannoon Mugher qophaatti ijaaramaa turtetti, obboloota muraasa murtoo qabaniin manatti tajaajila jalqabde. Akkuma kolfi fageenyatti mul’atu, isheenis "Ishee Jalqabaa" (pioneer) ta’uun namoota naannoo sanaa wangeelaan qaqqabuuf dhagaa bu’uuraa keesse.<br />
+                        - Mul'ata Jalqabaa: Namoota muraasa kaayyoo tokkoof walitti dhufaniin, manaa manatti kadhannaa fi sagalee Waaqayyoo qoqqoodachuun jalqabame.<br />
+                        - Madda Jireenyaa: Mugher keessatti akka tajaajila hafuuraa qofaatti osoo hin taane, akka madda tasgabbii fi abdii ta’uun tajaajiluu jalqabde.<br />
+                        <br />
+                        2. Qorumsa fi Rakkoo Dandamachuu<br />
+                        Manni amantaa kun jireenya har’a mul’atu bira gahuuf karaa dukkanaa fi dhiphuu baay’ee keessa dabarteetti. Seenaa ishee keessatti yeroo hedduu rakkoolee akkasii dandamattee jirti:<br />
+                        - Ari’atama Hafuuraa: Yeroo sanatti akka amantaa haaraatti ilaalamuu isheetiin, mormii fi ari’atama dhuunfaa fi hawaasummaa garaa garaa keessa dabarteetti.<br />
+                        - Bakka Tajaajilaa Dhabuu: Waggoota hedduuf bakka dhaabbataa itti waaqeffatan dhabuun, bakka tajaajilaa jijjiiruun (godaanuun) qorumsa guddaa ture.<br />
+                        <br />
+                        3. Cinqii Dinagdee<br />
+                        Miseensota muraasa qabaachuu isheetiin, ijaarsa fi tajaajila babal’isuuf rakkoon maallaqaa fi meeshaa ishee quunnamee ture. Haa ta’u malee, akkuma Kitaabni Qulqulluun jedhu, "Manni dhagaa irratti ijaarame bubbee fi bishaan hin jignu," isheenis amanamummaa miseensota isheetiin jabaattee dhaabbatte.<br />
+                        <br />
+                        3. Guddina fi Firii Har’aa<br />
+                        Har’a, Mana Amantaa Guutuu Wangellaa Mugher "tulluu guddachaa dhufe" ta’eetti. Rakkoon kaleessaa har’a gara seenaa fi galataatti jijjiirameera.<br />
+                        - Miseensota Kumaan Lakkaa’aman: Miseensota muraasa irraa kaatee, har’a kumaan kan lakkaa’aman (Dhaabbataa fi Miseensota tajaajilaa) horachuu dandeessetti.<br />
+                        - Tajaajila Babal'ate: Dubartoota, dargaggoota, fi ijoolleef tajaajila adda addaa diriirsuun jireenya hawaasichaa jijjiiraa jirti.<br />
+                        - Ijaarsa Mana Qulqullummaa: Bakka amantoonni itti walitti dhufanii Waaqayyoon galateeffatan, ijaarsa guddaa fi bareedaa qabaachuun ishee ragaa guddina isheeti.<br />
+                        <br />
+                        4. Kaayyoo fi Mul’ata Gara Fuulduraa<br />
+                        Manni amantaa kun seenaa boonsaa kana qabattee gara fuulduraatti:<br />
+                        - Wangeela naannoo Mugher fi naannoo ishee jiranitti bal’inaan qaqqabsiisuu.<br />
+                        - Amantoota hafuuraan bilchaatan fi biyyaaf bu’aa buusan horachuu.<br />
+                        - Hawaasummaa keessatti gahee ishee bahuun hiyyeeyyii fi warra gargaarsa barbaadan gargaaruu irratti xiyyeeffatti.<br />
+                        <br />
+                        Xumura irratti: Mana Amantaa Guutuu Wangellaa Mugher ragaa jiraataa "Obsi fi amanamummaan bu'aa qaba" jedhuuti. Kaleessa dhiphuu keessa turte, har’a garuu tajaajila bal’aa fi miseensota kumaan lakkaa’aman qabattee ifa ta’ee mul’achaa jirti.
                       </motion.div>
                     )}
                   </AnimatePresence>
@@ -455,31 +450,27 @@ Xumura irratti: Mana Amantaa Guutuu Wangellaa Mugher ragaa jiraataa "Obsi fi ama
                         transition={{ duration: 0.5 }}
                         className="overflow-hidden whitespace-pre-wrap mt-4 border-l-4 border-secondary/20 pl-4"
                       >
-1. መነሻና የቀዳሚነት ሚና
-ቤተክርስቲያኗ በአካባቢው "የመጀመሪያዋ" (Pioneer) ተብላ የምትታወቅ ሲሆን፣ ጥቂት አማኞች በቤታቸው ጸሎትና አምልኮ በመጀመር የጣሉት የወንጌል ዘር ነው። ሙገር እንደ ኢንዱስትሪ መንደር መመስረት ሲጀምር፣ ይህች ቤተክርስቲያን ለመንፈሳዊ ዕረፍትና ለተስፋ ምንጭነት መሰረት ሆናለች።
-- የመጀመሪያው ራዕይ: ጥቂት ወንድሞችና እህቶች ለወንጌል ባላቸው ፍቅር ተነሳስተው፣ በታማኝነትና በትጋት አገልግሎቱን ጀመሩ።
-- ተደራሽነት: የወንጌል ብርሃን ባልደረሰባቸው ስፍራዎች ሁሉ መዳረሻ በመሆን ለብዙዎች ድነት ምክንያት ሆናለች።
-
-2. ፈተናዎችን በጽናት ማለፍ
-ቤተክርስቲያኗ ዛሬ ለደረሰችበት ክብር የበቃችው በቀላሉ አልነበረም። በሂደቱ ውስጥ እጅግ አስቸጋሪ የሆኑ መከራዎችን አልፋለች፦
-- መንፈሳዊ ስደት: በወቅቱ የነበሩ የሃይማኖትና የማህበራዊ ተጽዕኖዎች አገልግሎቱን ለማደናቀፍ ሞክረው ነበር።
-- የአምልኮ ስፍራ ማጣት: ለረጅም ዓመታት ቋሚ የሆነ የመሰብሰቢያ ቦታ ባለመኖሩ፣ ከአንድ ቦታ ወደ ሌላ ቦታ በመዘዋወር (በመሰደድ) ብዙ ዋጋ ተከፍሏል።
-- የቁሳቁስና የገንዘብ እጥረት: የአባላቱ ቁጥር አነስተኛ በነበረበት ወቅት፣ ህንጻ ለመገንባትና አገልግሎቱን ለማስፋፋት ከፍተኛ የኢኮኖሚ ፈተናዎች ነበሩ።
-ቢሆንም ግን፣ "በዓለት ላይ የተመሰረተች ቤት አትናወጥም" እንደሚለው ቃል፣ በምዕመናን ጽናትና በጌታ ጸጋ ቆማ ቀርታለች።
-
-3. የአሁኑ ስኬትና እድገት
-የሙገር ሙሉ ወንጌል አማኞች ቤተክርስቲያን ትናንት በለቅሶ የዘራችውን ዛሬ በደስታ እያጨደች ትገኛለች።
-- በሺዎች የሚቆጠሩ አባላት: በጥቂት ሰዎች የተጀመረው አገልግሎት ዛሬ በሺዎች የሚቆጠሩ ምዕመናንን (ቋሚ አባላትና የተለያዩ የአገልግሎት ዘርፎችን) አፍርቷል።
-- የተሟላ አገልግሎት: ለህጻናት፣ ለወጣቶችና ለሴቶች የሚሰጡ አገልግሎቶችን በማስፋፋት የማህበረሰቡን መንፈሳዊና ስነ-ልቦናዊ ፍላጎት እያሟላች ትገኛለች።
-- ታላቅ የጸሎት ቤት: አማኞች በነጻነት የሚሰበሰቡበት፣ ዘመናዊና ሰፊ የሆነ የቤተክርስቲያን ህንጻ ባለቤት መሆን መቻሏ የእድገቷ ትልቅ ማሳያ ነው።
-
-4. የወደፊት ራዕይና ተልዕኮ
-ቤተክርስቲያኗ ካለፈችበት ታላቅ ታሪክ በመነሳት ወደፊት የሚከተሉትን ግቦች ሰንቃለች፦
-- ወንጌልን በሙገርና በአካባቢው ባሉ ስፍራዎች ይበልጥ በስፋት ማዳረስ።
-- በመንፈሳዊ ህይወታቸው የበሰሉና ለሀገር የሚጠቅሙ ዜጎችን ማፍራት።
-- ማህበራዊ ኃላፊነትን በመወጣት ረገድ ችግረኞችንና ድጋፍ የሚሹ ወገኖችን መርዳት።
-
-ለማጠቃለል፦ የሙገር ሙሉ ወንጌል አማኞች ቤተክርስቲያን "ጽናትና እምነት ፍሬ አለው" ለሚለው እውነት ህያው ምስክር ናት። ትናንት በፈተና ውስጥ የነበረችው ቤተክርስቲያን፣ ዛሬ በብዙ ሺህ አባላት ተከባ በክብር ትገኛለች።
+                        1. መነሻና የቀዳሚነት ሚና<br />
+                        ቤተክርስቲያኗ በአካባቢው "የመጀመሪያዋ" (Pioneer) ተብላ የምትታወቅ ሲሆን፣ ጥቂት አማኞች በቤታቸው ጸሎትና አምልኮ በመጀመር የጣሉት የወንጌል ዘር ነው። ሙገር እንደ ኢንዱስትሪ መንደር መመስረት ሲጀምር፣ ይህች ቤተክርስቲያን ለመንፈሳዊ ዕረፍትና ለተስፋ ምንጭነት መሰረት ሆናለች።<br />
+                        - የመጀመሪያው ራዕይ: ጥቂት ወንድሞችና እህቶች ለወንጌል ባላቸው ፍቅር ተነሳስተው፣ በታማኝነትና በትጋት አገልግሎቱን ጀመሩ።<br />
+                        - ተደራሽነት: የወንጌል ብርሃን ባልደረሰባቸው ስፍራዎች ሁሉ መዳረሻ በመሆን ለብዙዎች ድነት ምክንያት ሆናለች።<br /><br />
+                        2. ፈተናዎችን በጽናት ማለፍ<br />
+                        ቤተክርስቲያኗ ዛሬ ለደረሰችበት ክብር የበቃችው በቀላሉ አልነበረም። በሂደቱ ውስጥ እጅግ አስቸጋሪ የሆኑ መከራዎችን አልፋለች፦<br />
+                        - መንፈሳዊ ስደት: በወቅቱ የነበሩ የሃይማኖትና የማህበራዊ ተጽዕኖዎች አገልግሎቱን ለማደናቀፍ ሞክረው ነበር።<br />
+                        - የአምልኮ ስፍራ ማጣት: ለረጅም ዓመታት ቋሚ የሆነ የመሰብሰቢያ ቦታ ባለመኖሩ፣ ከአንድ ቦታ ወደ ሌላ ቦታ በመዘዋወር (በመሰደድ) ብዙ ዋጋ ተከፍሏል።<br />
+                        - የቁሳቁስና የገንዘብ እጥረት: የአባላቱ ቁጥር አነስተኛ በነበረበት ወቅት፣ ህንጻ ለመገንባትና አገልግሎቱን ለማስፋፋት ከፍተኛ የኢኮኖሚ ፈተናዎች ነበሩ።<br />
+                        ቢሆንም ግን፣ "በዓለት ላይ የተመሰረተች ቤት አትናወጥም" እንደሚለው ቃል፣ በምዕመናን ጽናትና በጌታ ጸጋ ቆማ ቀርታለች።<br /><br />
+                        3. የአሁኑ ስኬትና እድገት<br />
+                        የሙገር ሙሉ ወንጌል አማኞች ቤተክርስቲያን ትናንት በለቅሶ የዘራችውን ዛሬ በደስታ እያጨደች ትገኛለች።<br />
+                        - በሺዎች የሚቆጠሩ አባላት: በጥቂት ሰዎች የተጀመረው አገልግሎት ዛሬ በሺዎች የሚቆጠሩ ምዕመናንን (ቋሚ አባላትና የተለያዩ የአገልግሎት ዘርፎችን) አፍርቷል።<br />
+                        - የተሟላ አገልግሎት: ለህጻናት፣ ለወጣቶችና ለሴቶች የሚሰጡ አገልግሎቶችን በማስፋፋት የማህበረሰቡን መንፈሳዊና ስነ-ልቦናዊ ፍላጎት እያሟላች ትገኛለች።<br />
+                        - ታላቅ የጸሎት ቤት: አማኞች በነጻነት የሚሰበሰቡበት፣ ዘመናዊና ሰፊ የሆነ የቤተክርስቲያን ህንጻ ባለቤት መሆን መቻሏ የእድገቷ ትልቅ ማሳያ ነው።<br /><br />
+                        4. የወደፊት ራዕይና ተልዕኮ<br />
+                        ቤተክርስቲያኗ ካለፈችበት ታላቅ ታሪክ በመነሳት ወደፊት የሚከተሉትን ግቦች ሰንቃለች፦<br />
+                        - ወንጌልን በሙገርና በአካባቢው ባሉ ስፍራዎች ይበልጥ በስፋት ማዳረስ።<br />
+                        - በመንፈሳዊ ህይወታቸው የበሰሉና ለሀገር የሚጠቅሙ ዜጎችን ማፍራት።<br />
+                        - ማህበራዊ ኃላፊነትን በመወጣት ረገድ ችግረኞችንና ድጋፍ የሚሹ ወገኖችን መርዳት።<br /><br />
+                        ለማጠቃለል፦ የሙገር ሙሉ ወንጌል አማኞች ቤተክርስቲያን "ጽናትና እምነት ፍሬ አለው" ለሚለው እውነት ህያው ምስክር ናት። ትናንት በፈተና ውስጥ የነበረችው ቤተክርስቲያን፣ ዛሬ በብዙ ሺህ አባላት ተከባ በክብር ትገኛለች።
                       </motion.div>
                     )}
                   </AnimatePresence>
@@ -609,14 +600,9 @@ Xumura irratti: Mana Amantaa Guutuu Wangellaa Mugher ragaa jiraataa "Obsi fi ama
         <div className="text-center space-y-4 mb-12 md:mb-20">
           <Badge className="bg-primary/10 text-primary font-black uppercase tracking-widest text-[9px] md:text-[10px] px-6 py-1.5">Spiritual Nourishment</Badge>
           <h2 className="text-3xl md:text-6xl font-headline font-black text-primary uppercase tracking-tighter">Sermon Gallery</h2>
-          <motion.p 
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-muted-foreground max-w-xl mx-auto font-bitter font-light italic text-base md:text-[20px] px-4"
-          >
+          <div className="text-muted-foreground max-w-xl mx-auto font-bitter font-light italic text-base md:text-[20px] px-4">
             Watch latest messages and deep teachings from our pulpit.
-          </motion.p>
+          </div>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10">
@@ -670,16 +656,11 @@ Xumura irratti: Mana Amantaa Guutuu Wangellaa Mugher ragaa jiraataa "Obsi fi ama
           <h2 className="font-playfair font-medium italic text-3xl md:text-[48px] text-white uppercase leading-tight max-w-5xl mx-auto">
             Your Support Fuels <br className="hidden md:block" /> <span className="text-secondary">Our Mission</span>
           </h2>
-          <motion.div 
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-white/80 max-w-3xl mx-auto font-bitter font-light italic text-base md:text-[20px] leading-relaxed px-4 space-y-4"
-          >
+          <div className="text-white/80 max-w-3xl mx-auto font-bitter font-light italic text-base md:text-[20px] leading-relaxed px-4 space-y-4">
             <p>Your giving helps us spread the Gospel and serve the community excellence. Join us in building God's Kingdom.</p>
             <p>Kennaan keessan Wangeela babal’isuu fi hawaasa keenyaf tajaajila qulqullina qabuun tajaajiluuf nu gargaara. Mootummaa Waaqayyoo ijaaruu irratti nuun waliin hiriiraa.</p>
             <p>የእርስዎ ስጦታ ወንጌልን ለማስፋፋት እና ማህበረሰቡን በላቀ ሁኔታ ለማገልገል ይረዳናል። የእግዚአብሔርን መንግሥት ለመገንባት ከእኛ ጋር ይተባበሩ</p>
-          </motion.div>
+          </div>
           <div className="flex flex-col sm:flex-row gap-4 md:gap-6 justify-center pt-6 md:pt-10">
             <Button asChild size="lg" className="w-full sm:w-auto bg-primary text-white font-black uppercase tracking-widest px-10 h-16 md:h-20 rounded-full shadow-2xl hover:scale-105 transition-transform text-base md:text-lg">
               <Link href="/donate">Give Donation</Link>
@@ -870,11 +851,11 @@ Xumura irratti: Mana Amantaa Guutuu Wangellaa Mugher ragaa jiraataa "Obsi fi ama
             <div className="space-y-4">
               <div className="space-y-1">
                 <span className="text-[8px] md:text-[10px] font-black text-secondary uppercase tracking-widest">Sunday Worship</span>
-                <p className="text-xs md:text-sm font-bold text-primary uppercase">Main Service • 9:00 AM</p>
+                <p className="text-xs md:sm font-bold text-primary uppercase">Main Service • 9:00 AM</p>
               </div>
               <div className="space-y-1">
                 <span className="text-[8px] md:text-[10px] font-black text-secondary uppercase tracking-widest">Prayer Meeting</span>
-                <p className="text-xs md:text-sm font-bold text-primary uppercase">Wednesday • 6:00 PM</p>
+                <p className="text-xs md:sm font-bold text-primary uppercase">Wednesday • 6:00 PM</p>
               </div>
             </div>
           </div>
@@ -883,7 +864,7 @@ Xumura irratti: Mana Amantaa Guutuu Wangellaa Mugher ragaa jiraataa "Obsi fi ama
             <h4 className="text-[10px] md:text-sm font-black uppercase tracking-[0.2em] text-primary">Quick Links</h4>
             <nav className="flex flex-col gap-3 md:gap-4">
               {navLinks.map((link) => (
-                <Link key={link.name} href={link.href} className="text-xs md:text-sm font-bold text-muted-foreground hover:text-primary transition-colors uppercase tracking-tight">{link.name}</Link>
+                <Link key={link.name} href={link.href} className="text-xs md:sm font-bold text-muted-foreground hover:text-primary transition-colors uppercase tracking-tight">{link.name}</Link>
               ))}
             </nav>
           </div>
@@ -891,10 +872,10 @@ Xumura irratti: Mana Amantaa Guutuu Wangellaa Mugher ragaa jiraataa "Obsi fi ama
           <div className="space-y-6 md:space-y-8 text-center sm:text-left">
             <h4 className="text-[10px] md:text-sm font-black uppercase tracking-[0.2em] text-primary">Ministry Location</h4>
             <div className="space-y-4 flex flex-col items-center sm:items-start">
-              <div className="flex items-center gap-3 text-muted-foreground font-medium text-xs md:text-sm">
+              <div className="flex items-center gap-3 text-muted-foreground font-medium text-xs md:sm">
                 <MapPin className="h-4 w-4 md:h-5 md:w-5 text-secondary" /> Muger Mokada, Ethiopia
               </div>
-              <div className="flex items-center gap-3 text-muted-foreground font-medium text-xs md:text-sm">
+              <div className="flex items-center gap-3 text-muted-foreground font-medium text-xs md:sm">
                 <Clock className="h-4 w-4 md:h-5 md:w-5 text-secondary" /> Mon-Fri 9AM-5PM
               </div>
             </div>
