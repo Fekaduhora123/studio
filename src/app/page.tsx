@@ -260,12 +260,6 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5, duration: 1 }}
           >
-            <div className="inline-block p-1 md:p-2 bg-primary/20 backdrop-blur-md rounded-2xl border border-primary/20 mb-6">
-              <div className="bg-primary/40 px-3 md:px-4 py-1.5 rounded-xl border border-white/10 shadow-inner">
-                <span className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.4em] text-secondary">A Sanctuary of Transformation</span>
-              </div>
-            </div>
-
             <h1 className="text-3xl md:text-5xl font-headline font-black text-white uppercase tracking-tighter mb-6 drop-shadow-2xl">
               Welcome to <span className="text-secondary">Mugher Full Gospel</span>
             </h1>
@@ -416,7 +410,6 @@ export default function Home() {
                         - Wangeela naannoo Mugher fi naannoo ishee jiranitti bal’inaan qaqqabsiisuu.<br/>
                         - Amantoota hafuuraan bilchaatan fi biyyaaf bu’aa buusan horachuu.<br/>
                         - Hawaasummaa keessatti gahee ishee bahuun hiyyeeyyii fi warra gargaarsa barbaadan gargaaruu irratti xiyyeeffatti.<br/><br/>
-                        Xumura irratti: Mana Amantaa Guutuu Wangellaa Mugher ragaa jiraataa "Obsi fi amanamummaan bu'aa qaba" jedhuuti. Kaleessa dhiphuu keessa turte, har’a garuu tajaajila bal’aa fi miseensota kumaan lakkaa’aman qabattee ifa ta’ee mul’achaa jirti.
                       </motion.div>
                     )}
                   </AnimatePresence>
@@ -446,8 +439,8 @@ export default function Home() {
                         ቤተክርስቲያኗ ዛሬ ለደረሰችበት ክብር የበቃችው በቀላሉ አልነበረም። በሂደቱ ውስጥ እጅግ አስቸጋሪ የሆኑ መከራዎችን አልፋለች፦<br/>
                         - መንፈሳዊ ስደት: በወቅቱ የነበሩ የሃይማኖትና የማህበራዊ ተጽዕኖዎች አገልግሎቱን ለማደናቀፍ ሞክረው ነበር።<br/>
                         - የአምልኮ ስፍራ ማጣት: ለረጅም ዓመታት ቋሚ የሆነ የመሰብሰቢያ ቦታ ባለመኖሩ፣ ከአንድ ቦታ ወደ ሌላ ቦታ በመዘዋወር (በመሰደድ) ብዙ ዋጋ ተከፍሏል።<br/>
-                        - የቁሳቁስና የገንዘብ እጥረት: የአባላቱ ቁጥር አነስተኛ በነበረበት ወቅት፣ ህንጻ ለመገንባትና አገልግሎቱን ለማስፋፋት ከፍተኛ የኢኮኖሚ ፈተናዎች ነበሩ።<br/>
-                        - ቢሆንም ግን፣ "በዓለት ላይ የተመሰረተች ቤት አትናወጥም" እንደሚለው ቃል፣ በምዕመናን ጽናትና በጌታ ጸጋ ቆማ ቀርታለች።<br/><br/>
+                        - የቁሳቁስና የገንዘብ እጥረት: የአባላቱ ቁጥር አነስተኛ በነበረበት ወቅት፣ ህንጻ ለመገንባትና አገልግሎቱን በማስፋፋት ከፍተኛ የኢኮኖሚ ፈተናዎች ነበሩ።<br/>
+                        - ቢሆንም ግን፣ "በዓለት ላይ የተመሰረተች ቤት አትናወጥም" እንደሚለው ቃል، በምዕመናን ጽናትና በጌታ ጸጋ ቆማ ቀርታለች።<br/><br/>
                         
                         3. የአሁኑ ስኬትና እድገት<br/>
                         የሙገር ሙሉ ወንጌል አማኞች ቤተክርስቲያን ትናንት በለቅሶ የዘራችውን ዛሬ በደስታ እያጨደች ትገኛለች።<br/>
@@ -509,7 +502,7 @@ export default function Home() {
           <div className="text-center max-w-2xl mx-auto mb-12 md:mb-20 space-y-4">
             <Badge className="bg-primary/10 text-primary font-black uppercase tracking-widest text-[9px] md:text-[10px] px-6 py-1.5 rounded-full border border-primary/10">Specialized Fellowships</Badge>
             <h2 className="font-playfair font-medium italic text-3xl md:text-[48px] text-primary uppercase tracking-tighter">Our Ministries</h2>
-            <p className="text-muted-foreground font-medium text-base md:text-lg leading-relaxed px-4">Discover a place where you belong, grow, and serve with others.</p>
+            <p className="text-muted-foreground font-medium text-base md:lg leading-relaxed px-4">Discover a place where you belong, grow, and serve with others.</p>
           </div>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
