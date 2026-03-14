@@ -74,6 +74,7 @@ export default function Home() {
 
   const testimoniesQuery = React.useMemo(() => {
     if (!firestore) return null;
+    // Removed limit to allow all approved testimonies to stay on screen
     return query(collection(firestore, 'testimonies'), where('status', '==', 'approved'), orderBy('timestamp', 'desc'));
   }, [firestore]);
 
@@ -260,8 +261,8 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5, duration: 1 }}
           >
-            <h1 className="text-3xl md:text-5xl font-headline font-black text-white uppercase tracking-tighter mb-6 drop-shadow-2xl">
-              Welcome to <span className="text-secondary">Mugher Full Gospel</span>
+            <h1 className="text-3xl md:text-5xl font-headline font-black text-secondary uppercase tracking-tighter mb-6 drop-shadow-2xl">
+              Welcome to Mugher Full Gospel
             </h1>
             
             <div className="space-y-4 max-w-3xl mx-auto mb-8 md:mb-10">
@@ -394,17 +395,20 @@ export default function Home() {
                         transition={{ duration: 0.5 }}
                         className="overflow-hidden whitespace-pre-wrap mt-4 border-l-4 border-primary/20 pl-4 text-sm md:text-base"
                       >
-                        .1. Hundeeffama fi Jalqaba Mul’ataa Manni amantaa kun yeroo naannoon Mugher qophaatti ijaaramaa turtetti, obboloota muraasa murtoo qabaniin manatti tajaajila jalqabde. Akkuma kolfi fageenyatti mul’atu, isheenis "Ishee Jalqabaa" (pioneer) ta’uun namoota naannoo sanaa wangeelaan qaqqabuuf dhagaa bu’uuraa keesse.<br/>
+                        1. Hundeeffama fi Jalqaba Mul’ataa Manni amantaa kun yeroo naannoon Mugher qophaatti ijaaramaa turtetti, obboloota muraasa murtoo qabaniin manatti tajaajila jalqabde. Akkuma kolfi fageenyatti mul’atu, isheenis "Ishee Jalqabaa" (pioneer) ta’uun namoota naannoo sanaa wangeelaan qaqqabuuf dhagaa bu’uuraa keesse.<br/>
                         - Mul'ata Jalqabaa: Namoota muraasa kaayyoo tokkoof walitti dhufaniin, manaa manatti kadhannaa fi sagalee Waaqayyoo qoqqoodachuun jalqabame.<br/>
                         - Madda Jireenyaa: Mugher keessatti akka tajaajila hafuuraa qofaatti osoo hin taane, akka madda tasgabbii fi abdii ta’uun tajaajiluu jalqabde<br/><br/>
-                        . Qorumsa fi Rakkoo Dandamachuu Manni amantaa kun jireenya har’a mul’atu bira gahuuf karaa dukkanaa fi dhiphuu baay’ee keessa dabarteetti. Seenaa ishee keessatti yeroo hedduu rakkoolee akkasii dandamattee jirti:<br/>
+                        
+                        2. Qorumsa fi Rakkoo Dandamachuu Manni amantaa kun jireenya har’a mul’atu bira gahuuf karaa dukkanaa fi dhiphuu baay’ee keessa dabarteetti. Seenaa ishee keessatti yeroo hedduu rakkoolee akkasii dandamattee jirti:<br/>
                         - Ari’atama Hafuuraa: Yeroo sanatti akka amantaa haaraatti ilaalamuu isheetiin, mormii fi ari’atama dhuunfaa fi hawaasummaa garaa garaa keessa dabarteetti.<br/>
-                        - Bakka Tajaajilaa Dhabuu: Waggoota hedduuf bakka dhaabbataa itti waaqeffatan dhabuun, bakka tajaajilaa jijjiiruun (godaanuun) qorumsa guddaa ture.<br/><br/>
-                        3.Cinqii Dinagdee: Miseensota muraasa qabaachuu isheetiin, ijaarsa fi tajaajila babal’isuuf rakkoon maallaqaa fi meeshaa ishee quunnamee ture. Haa ta’u malee, akkuma Kitaabni Qulqulluun jedhu, "Manni dhagaa irratti ijaarame bubbee fi bishaan hin jignu," isheenis amanamummaa miseensota isheetiin jabaattee dhaabbatte.<br/><br/>
+                        - Bakka Tajaajilaa Dhabuu: Waggoota hedduuf bakka dhaabbataa itti waaqeffatan dhabuun, bakka tajaajilaa jijjiiruun (godaanuun) qorumsa guddaa ture.<br/>
+                        - Cinqii Dinagdee: Miseensota muraasa qabaachuu isheetiin, ijaarsa fi tajaajila babal’isuuf rakkoon maallaqaa fi meeshaa ishee quunnamee ture. Haa ta’u malee, akkuma Kitaabni Qulqulluun jedhu, "Manni dhagaa irratti ijaarame bubbee fi bishaan hin jignu," isheenis amanamummaa miseensota isheetiin jabaattee dhaabbatte.<br/><br/>
+                        
                         3. Guddina fi Firii Har’aa Har’a, Mana Amantaa Guutuu Wangellaa Mugher "tulluu guddachaa dhufe" ta’eetti. Rakkoon kaleessaa har’a gara seenaa fi galataatti jijjiirameera.<br/>
                         - Miseensota Kumaan Lakkaa’aman: Miseensota muraasa irraa kaatee, har’a kumaan kan lakkaa’aman (Dhaabbataa fi Miseensota tajaajilaa) horachuu dandeessetti.<br/>
                         - Tajaajila Babal'ate: Dubartoota, dargaggoota, fi ijoolleef tajaajila adda addaa diriirsuun jireenya hawaasichaa jijjiiraa jirti.<br/>
                         - Ijaarsa Mana Qulqullummaa: Bakka amantoonni itti walitti dhufanii Waaqayyoon galateeffatan, ijaarsa guddaa fi bareedaa qabaachuun ishee ragaa guddina isheeti<br/><br/>
+                        
                         4. Kaayyoo fi Mul’ata Gara Fuulduraa Manni amantaa kun seenaa boonsaa kana qabattee gara fuulduraatti:<br/>
                         - Wangeela naannoo Mugher fi naannoo ishee jiranitti bal’inaan qaqqabsiisuu.<br/>
                         - Amantoota hafuuraan bilchaatan fi biyyaaf bu’aa buusan horachuu.<br/>
