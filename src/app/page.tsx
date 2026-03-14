@@ -351,15 +351,14 @@ export default function Home() {
                 />
               )}
               <motion.div 
-                initial={{ opacity: 0, y: 100, scale: 0.95 }}
+                initial={{ opacity: 0, y: 120 }}
                 whileInView={{ 
                   opacity: 1, 
                   y: 0,
-                  scale: 1,
                   boxShadow: '0 0 40px rgba(59,130,246,0.3)' 
                 }}
                 viewport={{ once: true, amount: 0.5 }}
-                transition={{ duration: 1.5, ease: "easeOut" }}
+                transition={{ duration: 1.2, ease: "easeOut" }}
                 className="absolute top-1/2 left-6 right-6 md:left-10 md:right-10 -translate-y-1/2 z-20 border-[3px] rounded-[2.5rem] bg-blue-900/40 backdrop-blur-2xl p-8 md:p-10 ring-1 ring-white/20"
               >
                 <p className="text-blue-100 font-robotoSlab font-bold text-base md:text-[22px] leading-relaxed text-center drop-shadow-md">
