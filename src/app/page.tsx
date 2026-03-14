@@ -340,7 +340,7 @@ export default function Home() {
       <section id="about" className="py-16 md:py-40 container px-4 mx-auto overflow-hidden">
         <div className="grid lg:grid-cols-2 gap-12 md:gap-20 items-center">
           <div className="relative group">
-            <div className="relative aspect-[4/5] rounded-[2rem] md:rounded-[3rem] overflow-hidden shadow-2xl z-10">
+            <div className="relative aspect-[3/2] rounded-[2rem] md:rounded-[3rem] overflow-hidden shadow-2xl z-10">
               {interiorImg && (
                 <Image 
                   src={interiorImg.imageUrl} 
@@ -440,7 +440,7 @@ export default function Home() {
                         - መንፈሳዊ ስደት: በወቅቱ የነበሩ የሃይማኖትና የማህበራዊ ተጽዕኖዎች አገልግሎቱን ለማደናቀፍ ሞክረው ነበር።<br/>
                         - የአምልኮ ስፍራ ማጣት: ለረጅም ዓመታት ቋሚ የሆነ የመሰብሰቢያ ቦታ ባለመኖሩ፣ ከአንድ ቦታ ወደ ሌላ ቦታ በመዘዋወር (በመሰደድ) ብዙ ዋጋ ተከፍሏል።<br/>
                         - የቁሳቁስና የገንዘብ እጥረት: የአባላቱ ቁጥር አነስተኛ በነበረበት ወቅት፣ ህንጻ ለመገንባትና አገልግሎቱን በማስፋፋት ከፍተኛ የኢኮኖሚ ፈተናዎች ነበሩ።<br/>
-                        - ቢሆንም ግን፣ "በዓለት ላይ የተመሰረተች ቤት አትናወጥም" እንደሚለው ቃል، በምዕመናን ጽናትና በጌታ ጸጋ ቆማ ቀርታለች።<br/><br/>
+                        - ቢሆንም ግን፣ "በዓለት ላይ የተመሰረተች ቤት አትናወጥም" እንደሚለው ቃል፣ በምዕመናን ጽናትና በጌታ ጸጋ ቆማ ቀርታለች።<br/><br/>
                         
                         3. የአሁኑ ስኬትና እድገት<br/>
                         የሙገር ሙሉ ወንጌል አማኞች ቤተክርስቲያን ትናንት በለቅሶ የዘራችውን ዛሬ በደስታ እያጨደች ትገኛለች።<br/>
@@ -451,7 +451,7 @@ export default function Home() {
                         4. የወደፊት ራዕይና ተልዕኮ<br/>
                         ቤተክርስቲያኗ ካለፈችበት ታላቅ ታሪክ በመነሳት ወደፊት የሚከተሉትን ግቦች ሰንቃለች፦<br/>
                         - ወንጌልን በሙገርና በአካባቢው ባሉ ስፍራዎች ይበልጥ በስፋት ማዳረስ።<br/>
-                        - በመንፈሳዊ ህይወታቸው የበሰሉና ለሀገር የሚጠቅሙ ዜጎችን ማፍራት።<br/>
+                        - በመንፈሳዊ ህይወታቸው የበሰሉና ለሀገር የሚጠቅሙዜጎችን ማፍራት።<br/>
                         - ማህበራዊ ኃላፊነትን በመወጣት ረገድ ችግረኞችንና ድጋፍ የሚሹ ወገኖችን መርዳት።<br/><br/>
                         ለማጠቃለል፦ የሙገር ሙሉ ወንጌል አማኞች ቤተክርስቲያን "ጽናትና እምነት ፍሬ አለው" ለሚለው እውነት ህያው ምስክር ናት። ትናንት በፈተና ውስጥ የነበረችው ቤተክርስቲያን፣ ዛሬ በብዙ ሺህ አባላት ተከባ በክብር ትገኛለች።
                       </motion.div>
