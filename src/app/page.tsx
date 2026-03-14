@@ -350,21 +350,6 @@ export default function Home() {
                   className="object-cover group-hover:scale-110 transition-transform duration-1000"
                 />
               )}
-              <motion.div 
-                initial={{ opacity: 0, y: 120 }}
-                whileInView={{ 
-                  opacity: 1, 
-                  y: 0,
-                  boxShadow: '0 0 40px rgba(59,130,246,0.3)' 
-                }}
-                viewport={{ once: true, amount: 0.5 }}
-                transition={{ duration: 1.2, ease: "easeOut" }}
-                className="absolute top-1/2 left-6 right-6 md:left-10 md:right-10 -translate-y-1/2 z-20 border-[3px] rounded-[2.5rem] bg-blue-900/40 backdrop-blur-2xl p-8 md:p-10 ring-1 ring-white/20"
-              >
-                <p className="text-blue-100 font-robotoSlab font-bold text-base md:text-[22px] leading-relaxed text-center drop-shadow-md">
-                  kiristos lubbuu isaa nuuf kennuu isaatiin jaalalli maal akka ta'e hubanneerraa,egaa nus immoo lubbuu keenya obbolootaaf kennuun nuuf ta'a. <br /> <span className="text-blue-300 text-sm md:text-base mt-2 block">yohaniis 3:1</span>
-                </p>
-              </motion.div>
             </div>
           </div>
           
@@ -644,7 +629,7 @@ export default function Home() {
           <div className="text-white/80 max-w-3xl mx-auto font-bitter font-light italic text-base md:text-[20px] leading-relaxed px-4 space-y-4">
             <p>Your giving helps us spread the Gospel and serve the community excellence. Join us in building God's Kingdom.</p>
             <p>Kennaan keessan Wangeela babal’isuu fi hawaasa keenyaf tajaajila qulqullina qabuun tajaajiluuf nu gargaara. Mootummaa Waaqayyoo ijaaruu irratti nuun waliin hiriiraa.</p>
-            <p>የእርስዎ ስጦታ ወንጌልን ለማስፋፋት እና ማህበረሰቡን በላቀ ሁኔታ ለማገልገል ይረዳናል። የእግዚአብሔርን መንግሥት ለመገንባት ከእኛ ጋር ይተባበሩ</p>
+            <p>የእርስዎ ስጦታ ወንጌልን ለማስፋፋት እና ማህበረሰውን በላቀ ሁኔታ ለማገልገል ይረዳናል። የእግዚአብሔርን መንግሥት ለመገንባት ከእኛ ጋር ይተባበሩ</p>
           </div>
           <div className="flex flex-col sm:flex-row gap-4 md:gap-6 justify-center pt-6 md:pt-10">
             <Button asChild size="lg" className="w-full sm:w-auto bg-primary text-white font-black uppercase tracking-widest px-10 h-16 md:h-20 rounded-full shadow-2xl hover:scale-105 transition-transform text-base md:text-lg">
