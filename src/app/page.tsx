@@ -74,7 +74,6 @@ export default function Home() {
 
   const testimoniesQuery = React.useMemo(() => {
     if (!firestore) return null;
-    // Removed limit to allow all approved testimonies to stay on screen
     return query(collection(firestore, 'testimonies'), where('status', '==', 'approved'), orderBy('timestamp', 'desc'));
   }, [firestore]);
 
@@ -663,7 +662,7 @@ export default function Home() {
           <div className="text-center space-y-4 mb-12 md:mb-20">
              <Badge className="bg-primary/10 text-primary font-black uppercase tracking-widest text-[9px] md:text-[10px] px-6 py-1.5 rounded-full">Visual Testimony</Badge>
              <h2 className="font-playfair font-medium italic text-3xl md:text-[48px] text-primary uppercase tracking-tighter">Sacred Moments</h2>
-             <p className="text-muted-foreground font-medium text-base md:text-lg leading-relaxed px-4">Captured snapshots of God's presence in our congregation.</p>
+             <p className="text-muted-foreground font-medium text-base md:lg leading-relaxed px-4">Captured snapshots of God's presence in our congregation.</p>
           </div>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
