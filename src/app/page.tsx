@@ -74,7 +74,6 @@ export default function Home() {
 
   const testimoniesQuery = React.useMemo(() => {
     if (!firestore) return null;
-    // All approved testimonies stay on screen until admin deletes them
     return query(collection(firestore, 'testimonies'), where('status', '==', 'approved'), orderBy('timestamp', 'desc'));
   }, [firestore]);
 
@@ -266,6 +265,10 @@ export default function Home() {
                 <span className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.4em] text-secondary">A Sanctuary of Transformation</span>
               </div>
             </div>
+
+            <h1 className="text-4xl md:text-7xl font-headline font-black text-white uppercase tracking-tighter mb-6 drop-shadow-2xl">
+              Welcome to <span className="text-secondary">Mugher Full Gospel</span>
+            </h1>
             
             <div className="space-y-4 max-w-3xl mx-auto mb-8 md:mb-10">
               <p className="text-white/80 font-robotoSlab font-normal text-base md:text-[20px] leading-relaxed">
