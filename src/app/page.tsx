@@ -59,19 +59,30 @@ export default function Home() {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
     window.addEventListener('scroll', handleScroll);
     
-    const hour = new Date().getHours();
+    const now = new Date();
+    const hour = now.getHours();
+    const day = now.getDate();
+
+    const morningQuotes = [
+      { text: "Bara keenya guutuu gammadnee akka ililchinutti,ati ganama gaarummaa keetiin nu quufsi!", ref: "Faarfannaa 90:14" },
+      { text: "Araarri isaa hin dhumatu, gara-laafummaan isaas hin dhabbatu; isaan ganama ganama haaraa dha, amanamummaan kees guddaa dha.", ref: "Faaruu Ermiyaas 3:22-23" },
+      { text: "Yaa Waaqayyo, ati ganama sagalee koo in dhageessa; ganama nan si dura dhaabbadha, deebii kees nan eeggadha.", ref: "Faarfannaa 5:3" },
+      { text: "Ani sitti nan amanadhaatii, ganama ganama gaarummaa kee na dhageessisi; karaa ani irra deemuu qabu na beksisi.", ref: "Faarfannaa 143:8" },
+      { text: "Ganama ganama jaalala kee, halkan halkan immoo amanamummaa kee beksisuun gaarii dha.", ref: "Faarfannaa 92:2" }
+    ];
+
+    const eveningQuotes = [
+      { text: "Ani nagaadhaan nan ciisa, nan rafas, si qofatu yaaddoo malee na jiraachisa yaa Waaqayyo!", ref: "Faarfannaa 4:8" },
+      { text: "Guyyaa gaarummaa kee in ajajja, halkan immoo faarfannaan kee anaa wajjin jira.", ref: "Faarfannaa 42:8" },
+      { text: "Halkaniis halkaniif beekumsa in kenniti, guyyaanis guyyaaf sagalee in dabrasti.", ref: "Faarfannaa 19:2" }
+    ];
+
     if (hour >= 5 && hour < 17) {
-      setDailyQuote({
-        text: " Bara keenya guutuu gammadnee akka ililchinutti,ati ganama gaarummaa keetiin nu quufsi!",
-        ref: "Faarfannaa 90:14",
-        time: 'morning'
-      });
+      const q = morningQuotes[day % morningQuotes.length];
+      setDailyQuote({ ...q, time: 'morning' });
     } else {
-      setDailyQuote({
-        text: "Ani nagaadhaan nan ciisa, nan rafas, si qofatu yaaddoo malee na jiraachisa yaa Waaqayyo!",
-        ref: "Faarfannaa 4:8",
-        time: 'evening'
-      });
+      const q = eveningQuotes[day % eveningQuotes.length];
+      setDailyQuote({ ...q, time: 'evening' });
     }
     
     return () => window.removeEventListener('scroll', handleScroll);
