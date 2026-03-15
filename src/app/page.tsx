@@ -339,17 +339,26 @@ export default function Home() {
 
       <section id="about" className="py-16 md:py-40 container px-4 mx-auto overflow-hidden">
         <div className="grid lg:grid-cols-2 gap-12 md:gap-20 items-center">
-          <div className="relative group">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="relative aspect-[3/2] rounded-[2rem] md:rounded-[3rem] overflow-hidden shadow-2xl z-10">
               {interiorImg && (
                 <Image 
                   src={interiorImg.imageUrl} 
                   alt="Church Sanctuary" 
                   fill 
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                  className="object-cover group-hover:scale-110 transition-transform duration-1000"
+                  sizes="(max-width: 768px) 100vw, 25vw"
+                  className="object-cover hover:scale-110 transition-transform duration-1000"
                 />
               )}
+            </div>
+            <div className="relative aspect-[3/2] rounded-[2rem] md:rounded-[3rem] overflow-hidden shadow-2xl z-10">
+              <Image 
+                src="https://i.ibb.co/Q3xGPD8N/Elegant-Serif-Typography-with-Gold-Accents.jpg" 
+                alt="Elegant Serif Typography" 
+                fill 
+                sizes="(max-width: 768px) 100vw, 25vw"
+                className="object-cover hover:scale-110 transition-transform duration-1000"
+              />
             </div>
           </div>
           
