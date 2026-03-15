@@ -99,6 +99,13 @@ export default function SermonsManagementPage() {
 
   const thumbnailUrl = form.watch('thumbnailUrl');
 
+  const sanitizeUrl = (url: string) => {
+    if (!url) return '';
+    if (url.startsWith('http') || url.startsWith('data:')) return url;
+    const match = url.match(/src="([^"]+)"/);
+    return match ? match[1] : url;
+  };
+
   React.useEffect(() => {
     if (editingSermon) {
       form.reset({
@@ -144,6 +151,7 @@ export default function SermonsManagementPage() {
 
     const data = {
       ...values,
+      thumbnailUrl: sanitizeUrl(values.thumbnailUrl),
       createdAt: editingSermon ? editingSermon.createdAt : serverTimestamp(),
     };
 
@@ -399,57 +407,67 @@ export default function SermonsManagementPage() {
                     No sermons found.
                   </TableCell>
                 </TableRow>
-              ) : filteredSermons?.map((s) => (
-                <TableRow key={s.id} className="hover:bg-primary/5 transition-colors border-b border-primary/5">
-                  <TableCell className="pl-6 py-4">
-                    <div className="flex items-center gap-3">
-                      <div className="relative h-12 w-20 bg-muted rounded overflow-hidden flex items-center justify-center">
-                        {s.thumbnailUrl ? (
-                          <Image src={s.thumbnailUrl} alt={s.title} fill className="object-cover" sizes="80px" unoptimized={s.thumbnailUrl.startsWith('data:')} />
-                        ) : (
-                          <Video className="h-6 w-6 text-muted-foreground/30" />
-                        )}
-                        <Play className="absolute h-4 w-4 text-white fill-white opacity-50" />
+              ) : filteredSermons?.map((s) => {
+                const displayUrl = sanitizeUrl(s.thumbnailUrl);
+                return (
+                  <TableRow key={s.id} className="hover:bg-primary/5 transition-colors border-b border-primary/5">
+                    <TableCell className="pl-6 py-4">
+                      <div className="flex items-center gap-3">
+                        <div className="relative h-12 w-20 bg-muted rounded overflow-hidden flex items-center justify-center">
+                          {displayUrl ? (
+                            <Image 
+                              src={displayUrl} 
+                              alt={s.title} 
+                              fill 
+                              className="object-cover" 
+                              sizes="80px" 
+                              unoptimized={displayUrl.startsWith('data:')} 
+                            />
+                          ) : (
+                            <Video className="h-6 w-6 text-muted-foreground/30" />
+                          )}
+                          <Play className="absolute h-4 w-4 text-white fill-white opacity-50" />
+                        </div>
+                        <span className="font-bold text-sm text-primary">{s.title}</span>
                       </div>
-                      <span className="font-bold text-sm text-primary">{s.title}</span>
-                    </div>
-                  </TableCell>
-                  <TableCell className="text-xs font-bold text-slate-700">{s.speaker}</TableCell>
-                  <TableCell className="text-[11px] font-medium text-muted-foreground">
-                    <div className="flex items-center gap-1">
-                      <Calendar className="h-3 w-3" />
-                      {s.date}
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <Badge variant="outline" className="text-[9px] font-bold uppercase tracking-tighter border-primary/20">
-                      Link Available
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="text-right pr-6">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-primary">
-                          <MoreVertical className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="w-52">
-                        <DropdownMenuLabel className="text-[10px] font-bold uppercase tracking-widest">Management</DropdownMenuLabel>
-                        <DropdownMenuItem onClick={() => {
-                          setEditingSermon(s);
-                          setIsDialogOpen(true);
-                        }} className="text-xs font-bold text-blue-600">
-                          <Edit className="h-4 w-4 mr-2" /> Edit Details
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem onClick={() => handleDelete(s.id)} className="text-xs font-bold text-rose-700">
-                          <Trash2 className="h-4 w-4 mr-2" /> Delete Permanently
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
-                </TableRow>
-              ))}
+                    </TableCell>
+                    <TableCell className="text-xs font-bold text-slate-700">{s.speaker}</TableCell>
+                    <TableCell className="text-[11px] font-medium text-muted-foreground">
+                      <div className="flex items-center gap-1">
+                        <Calendar className="h-3 w-3" />
+                        {s.date}
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant="outline" className="text-[9px] font-bold uppercase tracking-tighter border-primary/20">
+                        Link Available
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="text-right pr-6">
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-primary">
+                            <MoreVertical className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" className="w-52">
+                          <DropdownMenuLabel className="text-[10px] font-bold uppercase tracking-widest">Management</DropdownMenuLabel>
+                          <DropdownMenuItem onClick={() => {
+                            setEditingSermon(s);
+                            setIsDialogOpen(true);
+                          }} className="text-xs font-bold text-blue-600">
+                            <Edit className="h-4 w-4 mr-2" /> Edit Details
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem onClick={() => handleDelete(s.id)} className="text-xs font-bold text-rose-700">
+                            <Trash2 className="h-4 w-4 mr-2" /> Delete Permanently
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
             </TableBody>
           </Table>
         </CardContent>

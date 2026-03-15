@@ -100,6 +100,13 @@ export default function TestimoniesManagementPage() {
 
   const imageUrl = form.watch('imageUrl');
 
+  const sanitizeUrl = (url: string) => {
+    if (!url) return '';
+    if (url.startsWith('http') || url.startsWith('data:')) return url;
+    const match = url.match(/src="([^"]+)"/);
+    return match ? match[1] : url;
+  };
+
   React.useEffect(() => {
     if (editingTestimony) {
       form.reset({
@@ -160,6 +167,7 @@ export default function TestimoniesManagementPage() {
 
     const data = {
       ...values,
+      imageUrl: sanitizeUrl(values.imageUrl || ""),
       timestamp: editingTestimony ? editingTestimony.timestamp : serverTimestamp(),
     };
 
@@ -291,11 +299,11 @@ export default function TestimoniesManagementPage() {
                       <div className="relative">
                         <div className={cn(
                           "border-2 border-dashed rounded-xl p-6 flex flex-col items-center justify-center gap-2 transition-all",
-                          uploadMethod === 'file' && imageUrl ? "bg-emerald-50 border-emerald-200" : "bg-muted/30 border-muted-foreground/20"
+                          imageUrl && uploadMethod === 'file' ? "bg-emerald-50 border-emerald-200" : "bg-muted/30 border-muted-foreground/20"
                         )}>
                           {isProcessingFile ? (
                             <Loader2 className="h-6 w-6 animate-spin text-primary" />
-                          ) : uploadMethod === 'file' && imageUrl ? (
+                          ) : imageUrl && uploadMethod === 'file' ? (
                             <>
                               <CheckCircle2 className="h-6 w-6 text-emerald-600" />
                               <p className="text-[10px] font-bold uppercase text-emerald-700">Image Attached</p>
@@ -404,72 +412,82 @@ export default function TestimoniesManagementPage() {
                     No submissions found.
                   </TableCell>
                 </TableRow>
-              ) : filteredTestimonies?.map((t) => (
-                <TableRow key={t.id} className="hover:bg-primary/5 transition-colors border-b border-primary/5">
-                  <TableCell className="pl-6 py-4">
-                    <div className="flex flex-col">
-                      <span className="font-bold text-sm text-primary">{t.name}</span>
-                      <span className="text-[10px] text-muted-foreground">{t.email || 'No email'}</span>
-                    </div>
-                  </TableCell>
-                  <TableCell className="max-w-xs md:max-w-md">
-                    <p className="text-xs leading-relaxed line-clamp-2 text-slate-700 italic">"{t.content}"</p>
-                  </TableCell>
-                  <TableCell>
-                    {t.imageUrl ? (
-                      <div className="relative h-8 w-12 rounded bg-muted overflow-hidden">
-                        <Image src={t.imageUrl} alt={t.name} fill className="object-cover" sizes="48px" unoptimized={t.imageUrl.startsWith('data:')} />
+              ) : filteredTestimonies?.map((t) => {
+                const displayUrl = sanitizeUrl(t.imageUrl);
+                return (
+                  <TableRow key={t.id} className="hover:bg-primary/5 transition-colors border-b border-primary/5">
+                    <TableCell className="pl-6 py-4">
+                      <div className="flex flex-col">
+                        <span className="font-bold text-sm text-primary">{t.name}</span>
+                        <span className="text-[10px] text-muted-foreground">{t.email || 'No email'}</span>
                       </div>
-                    ) : (
-                      <span className="text-[9px] text-muted-foreground uppercase font-bold">No Image</span>
-                    )}
-                  </TableCell>
-                  <TableCell className="text-[11px] font-medium text-muted-foreground">
-                    <div className="flex items-center gap-1">
-                      <Clock className="h-3 w-3" />
-                      {t.timestamp?.toDate ? format(t.timestamp.toDate(), 'MMM d, yyyy') : 'Recently'}
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <Badge className={`text-[9px] font-bold uppercase tracking-widest ${
-                      t.status === 'approved' ? 'bg-emerald-500 text-white' : 'bg-amber-500 text-white'
-                    }`}>
-                      {t.status}
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="text-right pr-6">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-primary">
-                          <MoreVertical className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="w-52">
-                        <DropdownMenuLabel className="text-[10px] font-bold uppercase tracking-widest">Management</DropdownMenuLabel>
-                        {t.status === 'pending' ? (
-                          <DropdownMenuItem onClick={() => handleUpdateStatus(t.id, 'approved')} className="text-xs font-bold text-emerald-600">
-                            <CheckCircle2 className="h-4 w-4 mr-2" /> Approve Story
+                    </TableCell>
+                    <TableCell className="max-w-xs md:max-w-md">
+                      <p className="text-xs leading-relaxed line-clamp-2 text-slate-700 italic">"{t.content}"</p>
+                    </TableCell>
+                    <TableCell>
+                      {displayUrl ? (
+                        <div className="relative h-8 w-12 rounded bg-muted overflow-hidden">
+                          <Image 
+                            src={displayUrl} 
+                            alt={t.name} 
+                            fill 
+                            className="object-cover" 
+                            sizes="48px" 
+                            unoptimized={displayUrl.startsWith('data:')} 
+                          />
+                        </div>
+                      ) : (
+                        <span className="text-[9px] text-muted-foreground uppercase font-bold">No Image</span>
+                      )}
+                    </TableCell>
+                    <TableCell className="text-[11px] font-medium text-muted-foreground">
+                      <div className="flex items-center gap-1">
+                        <Clock className="h-3 w-3" />
+                        {t.timestamp?.toDate ? format(t.timestamp.toDate(), 'MMM d, yyyy') : 'Recently'}
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <Badge className={`text-[9px] font-bold uppercase tracking-widest ${
+                        t.status === 'approved' ? 'bg-emerald-500 text-white' : 'bg-amber-500 text-white'
+                      }`}>
+                        {t.status}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="text-right pr-6">
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-primary">
+                            <MoreVertical className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" className="w-52">
+                          <DropdownMenuLabel className="text-[10px] font-bold uppercase tracking-widest">Management</DropdownMenuLabel>
+                          {t.status === 'pending' ? (
+                            <DropdownMenuItem onClick={() => handleUpdateStatus(t.id, 'approved')} className="text-xs font-bold text-emerald-600">
+                              <CheckCircle2 className="h-4 w-4 mr-2" /> Approve Story
+                            </DropdownMenuItem>
+                          ) : (
+                            <DropdownMenuItem onClick={() => handleUpdateStatus(t.id, 'pending')} className="text-xs font-bold text-amber-600">
+                              <XCircle className="h-4 w-4 mr-2" /> Move to Pending
+                            </DropdownMenuItem>
+                          )}
+                          <DropdownMenuItem onClick={() => {
+                            setEditingTestimony(t);
+                            setIsDialogOpen(true);
+                          }} className="text-xs font-bold text-blue-600">
+                            <Edit className="h-4 w-4 mr-2" /> Edit Content
                           </DropdownMenuItem>
-                        ) : (
-                          <DropdownMenuItem onClick={() => handleUpdateStatus(t.id, 'pending')} className="text-xs font-bold text-amber-600">
-                            <XCircle className="h-4 w-4 mr-2" /> Move to Pending
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem onClick={() => handleDelete(t.id)} className="text-xs font-bold text-rose-700">
+                            <Trash2 className="h-4 w-4 mr-2" /> Delete Permanently
                           </DropdownMenuItem>
-                        )}
-                        <DropdownMenuItem onClick={() => {
-                          setEditingTestimony(t);
-                          setIsDialogOpen(true);
-                        }} className="text-xs font-bold text-blue-600">
-                          <Edit className="h-4 w-4 mr-2" /> Edit Content
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem onClick={() => handleDelete(t.id)} className="text-xs font-bold text-rose-700">
-                          <Trash2 className="h-4 w-4 mr-2" /> Delete Permanently
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
-                </TableRow>
-              ))}
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
             </TableBody>
           </Table>
         </CardContent>

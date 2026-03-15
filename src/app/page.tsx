@@ -47,6 +47,13 @@ export default function Home() {
   const [isTestimonyOpen, setIsTestimonyOpen] = React.useState(false);
   const [testimonyUploadMethod, setTestimonyUploadMethod] = React.useState<'file' | 'link'>('file');
 
+  const sanitizeUrl = (url: string) => {
+    if (!url) return '';
+    if (url.startsWith('http') || url.startsWith('data:')) return url;
+    const match = url.match(/src="([^"]+)"/);
+    return match ? match[1] : url;
+  };
+
   React.useEffect(() => {
     setMounted(true);
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
@@ -120,11 +127,12 @@ export default function Home() {
     if (!firestore || !testimonyName || !testimonyContent) return;
     
     setIsSubmittingTestimony(true);
+    const finalImageUrl = sanitizeUrl(testimonyImage);
     try {
       await addDoc(collection(firestore, 'testimonies'), {
         name: testimonyName,
         content: testimonyContent,
-        imageUrl: testimonyImage,
+        imageUrl: finalImageUrl,
         status: 'pending',
         timestamp: serverTimestamp(),
       });
@@ -599,42 +607,45 @@ export default function Home() {
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10">
           {dbSermons && dbSermons.length > 0 ? (
-            dbSermons.map((s: any) => (
-              <motion.div 
-                key={s.id} 
-                whileHover={{ scale: 1.02 }}
-                className="group cursor-pointer bg-white rounded-[1.5rem] md:rounded-[2.5rem] overflow-hidden shadow-2xl border border-primary/5"
-              >
-                <Link href={s.videoUrl} target="_blank">
-                  <div className="relative aspect-video overflow-hidden">
-                    {s.thumbnailUrl ? (
-                      <Image 
-                        src={s.thumbnailUrl} 
-                        alt={s.title} 
-                        fill 
-                        sizes="(max-width: 768px) 100vw, 33vw"
-                        className="object-cover group-hover:scale-110 transition-transform duration-700"
-                        unoptimized={s.thumbnailUrl.startsWith('data:')}
-                      />
-                    ) : (
-                      <div className="absolute inset-0 bg-primary/10 flex items-center justify-center">
-                        <Video className="h-10 w-10 md:h-12 md:w-12 text-primary/20" />
+            dbSermons.map((s: any) => {
+              const displayUrl = sanitizeUrl(s.thumbnailUrl);
+              return (
+                <motion.div 
+                  key={s.id} 
+                  whileHover={{ scale: 1.02 }}
+                  className="group cursor-pointer bg-white rounded-[1.5rem] md:rounded-[2.5rem] overflow-hidden shadow-2xl border border-primary/5"
+                >
+                  <Link href={s.videoUrl} target="_blank">
+                    <div className="relative aspect-video overflow-hidden">
+                      {displayUrl ? (
+                        <Image 
+                          src={displayUrl} 
+                          alt={s.title} 
+                          fill 
+                          sizes="(max-width: 768px) 100vw, 33vw"
+                          className="object-cover group-hover:scale-110 transition-transform duration-700"
+                          unoptimized={displayUrl.startsWith('data:')}
+                        />
+                      ) : (
+                        <div className="absolute inset-0 bg-primary/10 flex items-center justify-center">
+                          <Video className="h-10 w-10 md:h-12 md:w-12 text-primary/20" />
+                        </div>
+                      )}
+                      <div className="absolute inset-0 bg-black/50 group-hover:bg-black/30 transition-colors flex items-center justify-center">
+                        <Play className="text-white fill-white h-10 w-10 md:h-12 md:w-12" />
                       </div>
-                    )}
-                    <div className="absolute inset-0 bg-black/50 group-hover:bg-black/30 transition-colors flex items-center justify-center">
-                      <Play className="text-white fill-white h-10 w-10 md:h-12 md:w-12" />
+                    </div>
+                  </Link>
+                  <div className="p-6 md:p-10">
+                    <h3 className="text-lg md:text-xl font-headline font-black text-primary uppercase tracking-tight mb-4 md:mb-6 group-hover:text-secondary transition-colors">{s.title}</h3>
+                    <div className="flex items-center justify-between border-t border-primary/5 pt-4 md:pt-6 text-[8px] md:text-[10px] font-black uppercase text-muted-foreground">
+                      <span className="truncate max-w-[120px]">{s.speaker}</span>
+                      <span className="text-secondary whitespace-nowrap">{s.date}</span>
                     </div>
                   </div>
-                </Link>
-                <div className="p-6 md:p-10">
-                  <h3 className="text-lg md:text-xl font-headline font-black text-primary uppercase tracking-tight mb-4 md:mb-6 group-hover:text-secondary transition-colors">{s.title}</h3>
-                  <div className="flex items-center justify-between border-t border-primary/5 pt-4 md:pt-6 text-[8px] md:text-[10px] font-black uppercase text-muted-foreground">
-                    <span className="truncate max-w-[120px]">{s.speaker}</span>
-                    <span className="text-secondary whitespace-nowrap">{s.date}</span>
-                  </div>
-                </div>
-              </motion.div>
-            ))
+                </motion.div>
+              );
+            })
           ) : (
             <div className="col-span-full py-16 text-center text-muted-foreground italic">
               New sermons coming soon!
@@ -675,27 +686,32 @@ export default function Home() {
           
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
             {dbMoments && dbMoments.length > 0 ? (
-              dbMoments.map((moment: any, i: number) => (
-                <motion.div 
-                  key={moment.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  className="relative aspect-square rounded-[1.5rem] md:rounded-[2rem] overflow-hidden shadow-lg group"
-                >
-                  <Image 
-                    src={moment.imageUrl} 
-                    alt={moment.title} 
-                    fill 
-                    sizes="(max-width: 768px) 100vw, 25vw"
-                    className="object-cover group-hover:scale-110 transition-transform duration-700"
-                    unoptimized={moment.imageUrl.startsWith('data:')}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-6">
-                    <span className="text-white font-headline font-bold uppercase tracking-widest text-xs">{moment.title}</span>
-                  </div>
-                </motion.div>
-              ))
+              dbMoments.map((moment: any, i: number) => {
+                const displayUrl = sanitizeUrl(moment.imageUrl);
+                return (
+                  <motion.div 
+                    key={moment.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    className="relative aspect-square rounded-[1.5rem] md:rounded-[2rem] overflow-hidden shadow-lg group"
+                  >
+                    {displayUrl && (
+                      <Image 
+                        src={displayUrl} 
+                        alt={moment.title} 
+                        fill 
+                        sizes="(max-width: 768px) 100vw, 25vw"
+                        className="object-cover group-hover:scale-110 transition-transform duration-700"
+                        unoptimized={displayUrl.startsWith('data:')}
+                      />
+                    )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-6">
+                      <span className="text-white font-headline font-bold uppercase tracking-widest text-xs">{moment.title}</span>
+                    </div>
+                  </motion.div>
+                );
+              })
             ) : (
               <div className="col-span-full py-12 text-center text-muted-foreground italic text-sm">
                 No moments captured yet.
@@ -801,39 +817,55 @@ export default function Home() {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10 max-w-7xl mx-auto">
             {dbTestimonies && dbTestimonies.length > 0 ? (
-              dbTestimonies.map((t: any, i: number) => (
-                <motion.div 
-                  key={i} 
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  className="bg-white p-8 md:p-12 rounded-[2rem] md:rounded-[4rem] relative shadow-lg group hover:shadow-2xl transition-all duration-500 overflow-hidden"
-                >
-                  {t.imageUrl && (
-                    <div className="absolute inset-0 opacity-10 group-hover:opacity-20 transition-opacity">
-                      <Image src={t.imageUrl} alt="" fill className="object-cover" unoptimized={t.imageUrl.startsWith('data:')} />
-                    </div>
-                  )}
-                  <div className="space-y-6 md:space-y-8 relative z-10">
-                    <p className="text-primary font-medium italic text-lg md:text-xl leading-relaxed">"{t.content}"</p>
-                    <div className="flex items-center gap-3 md:gap-4 border-t border-primary/10 pt-6 md:pt-8">
-                      {t.imageUrl ? (
-                        <div className="w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden border-2 border-primary/20 shadow-md">
-                          <Image src={t.imageUrl} alt={t.name} width={48} height={48} className="object-cover" unoptimized={t.imageUrl.startsWith('data:')} />
+              dbTestimonies.map((t: any, i: number) => {
+                const displayUrl = sanitizeUrl(t.imageUrl);
+                return (
+                  <motion.div 
+                    key={i} 
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    className="bg-white p-8 md:p-12 rounded-[2rem] md:rounded-[4rem] relative shadow-lg group hover:shadow-2xl transition-all duration-500 overflow-hidden"
+                  >
+                    {displayUrl && (
+                      <div className="absolute inset-0 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <Image 
+                          src={displayUrl} 
+                          alt="" 
+                          fill 
+                          className="object-cover" 
+                          unoptimized={displayUrl.startsWith('data:')} 
+                        />
+                      </div>
+                    )}
+                    <div className="space-y-6 md:space-y-8 relative z-10">
+                      <p className="text-primary font-medium italic text-lg md:text-xl leading-relaxed">"{t.content}"</p>
+                      <div className="flex items-center gap-3 md:gap-4 border-t border-primary/10 pt-6 md:pt-8">
+                        {displayUrl ? (
+                          <div className="w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden border-2 border-primary/20 shadow-md">
+                            <Image 
+                              src={displayUrl} 
+                              alt={t.name} 
+                              width={48} 
+                              height={48} 
+                              className="object-cover" 
+                              unoptimized={displayUrl.startsWith('data:')} 
+                            />
+                          </div>
+                        ) : (
+                          <div className="w-10 h-10 md:w-12 md:h-12 bg-primary text-white rounded-full flex items-center justify-center font-black uppercase text-sm">
+                            {(t.name || 'C').charAt(0)}
+                          </div>
+                        )}
+                        <div className="flex flex-col">
+                          <span className="font-headline font-bold text-primary uppercase tracking-widest text-[10px] md:text-xs">{t.name}</span>
+                          <span className="text-[8px] md:text-[9px] font-bold uppercase text-muted-foreground tracking-widest">Member</span>
                         </div>
-                      ) : (
-                        <div className="w-10 h-10 md:w-12 md:h-12 bg-primary text-white rounded-full flex items-center justify-center font-black uppercase text-sm">
-                          {(t.name || 'C').charAt(0)}
-                        </div>
-                      )}
-                      <div className="flex flex-col">
-                        <span className="font-headline font-bold text-primary uppercase tracking-widest text-[10px] md:text-xs">{t.name}</span>
-                        <span className="text-[8px] md:text-[9px] font-bold uppercase text-muted-foreground tracking-widest">Member</span>
                       </div>
                     </div>
-                  </div>
-                </motion.div>
-              ))
+                  </motion.div>
+                );
+              })
             ) : (
               <div className="col-span-full py-12 text-center text-muted-foreground italic text-sm">
                 Our church family's stories are being reviewed.

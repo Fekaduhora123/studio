@@ -79,6 +79,13 @@ export default function SacredMomentsPage() {
 
   const imageUrl = form.watch('imageUrl');
 
+  const sanitizeUrl = (url: string) => {
+    if (!url) return '';
+    if (url.startsWith('http') || url.startsWith('data:')) return url;
+    const match = url.match(/src="([^"]+)"/);
+    return match ? match[1] : url;
+  };
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -102,6 +109,7 @@ export default function SacredMomentsPage() {
 
     const data = {
       ...values,
+      imageUrl: sanitizeUrl(values.imageUrl),
       createdAt: serverTimestamp(),
     };
 
@@ -297,28 +305,38 @@ export default function SacredMomentsPage() {
                     Gallery is empty.
                   </TableCell>
                 </TableRow>
-              ) : filteredMoments?.map((m) => (
-                <TableRow key={m.id} className="hover:bg-primary/5 transition-colors border-b border-primary/5">
-                  <TableCell className="pl-6 py-4">
-                    <div className="relative h-12 w-20 bg-muted rounded overflow-hidden">
-                      {m.imageUrl && (
-                        <Image src={m.imageUrl} alt={m.title} fill className="object-cover" sizes="80px" unoptimized={m.imageUrl.startsWith('data:')} />
-                      )}
-                    </div>
-                  </TableCell>
-                  <TableCell className="font-bold text-sm text-primary">{m.title}</TableCell>
-                  <TableCell className="text-right pr-6">
-                    <Button 
-                      variant="ghost" 
-                      size="icon" 
-                      className="text-rose-600 hover:text-rose-700 hover:bg-rose-50"
-                      onClick={() => handleDelete(m.id)}
-                    >
-                      <Trash2 className="h-5 w-5" />
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
+              ) : filteredMoments?.map((m) => {
+                const displayUrl = sanitizeUrl(m.imageUrl);
+                return (
+                  <TableRow key={m.id} className="hover:bg-primary/5 transition-colors border-b border-primary/5">
+                    <TableCell className="pl-6 py-4">
+                      <div className="relative h-12 w-20 bg-muted rounded overflow-hidden">
+                        {displayUrl && (
+                          <Image 
+                            src={displayUrl} 
+                            alt={m.title} 
+                            fill 
+                            className="object-cover" 
+                            sizes="80px" 
+                            unoptimized={displayUrl.startsWith('data:')} 
+                          />
+                        )}
+                      </div>
+                    </TableCell>
+                    <TableCell className="font-bold text-sm text-primary">{m.title}</TableCell>
+                    <TableCell className="text-right pr-6">
+                      <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        className="text-rose-600 hover:text-rose-700 hover:bg-rose-50"
+                        onClick={() => handleDelete(m.id)}
+                      >
+                        <Trash2 className="h-5 w-5" />
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
             </TableBody>
           </Table>
         </CardContent>
