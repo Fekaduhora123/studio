@@ -363,7 +363,8 @@ export default function TestimoniesManagementPage() {
           <CardContent>
             <div className="text-3xl font-bold">{testimonies?.filter(t => t.status === 'pending').length || 0}</div>
           </CardContent>
-        </div>
+        </Card>
+      </div>
 
       <Card className="border-none shadow-xl overflow-hidden">
         <CardHeader className="bg-white/50 border-b p-4">
