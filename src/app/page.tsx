@@ -10,7 +10,7 @@ import {
   Church, MapPin, Clock, ArrowRight, 
   Loader2, Play, BookOpen, Sunrise, Sunset, 
   Menu, X, Sparkles, Megaphone, Video, ChevronDown,
-  UserCircle, MessageSquare, Send
+  UserCircle, MessageSquare, Send, Upload, Link as LinkIcon
 } from 'lucide-react';
 import { useCollection, useFirestore, useUser } from '@/firebase';
 import { collection, query, orderBy, limit, addDoc, serverTimestamp, where } from 'firebase/firestore';
@@ -28,6 +28,7 @@ import { cn } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export default function Home() {
   const firestore = useFirestore();
@@ -41,8 +42,10 @@ export default function Home() {
   
   const [testimonyName, setTestimonyName] = React.useState('');
   const [testimonyContent, setTestimonyContent] = React.useState('');
+  const [testimonyImage, setTestimonyImage] = React.useState('');
   const [isSubmittingTestimony, setIsSubmittingTestimony] = React.useState(false);
   const [isTestimonyOpen, setIsTestimonyOpen] = React.useState(false);
+  const [testimonyUploadMethod, setTestimonyUploadMethod] = React.useState<'file' | 'link'>('file');
 
   React.useEffect(() => {
     setMounted(true);
@@ -104,6 +107,14 @@ export default function Home() {
     { name: 'Donate', href: '/donate' },
   ];
 
+  const handleTestimonyFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (event) => setTestimonyImage(event.target?.result as string);
+    reader.readAsDataURL(file);
+  };
+
   const handleTestimonySubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!firestore || !testimonyName || !testimonyContent) return;
@@ -113,6 +124,7 @@ export default function Home() {
       await addDoc(collection(firestore, 'testimonies'), {
         name: testimonyName,
         content: testimonyContent,
+        imageUrl: testimonyImage,
         status: 'pending',
         timestamp: serverTimestamp(),
       });
@@ -122,6 +134,7 @@ export default function Home() {
       });
       setTestimonyName('');
       setTestimonyContent('');
+      setTestimonyImage('');
       setIsTestimonyOpen(false);
     } catch (err) {
       toast({
@@ -601,6 +614,7 @@ export default function Home() {
                         fill 
                         sizes="(max-width: 768px) 100vw, 33vw"
                         className="object-cover group-hover:scale-110 transition-transform duration-700"
+                        unoptimized={s.thumbnailUrl.startsWith('data:')}
                       />
                     ) : (
                       <div className="absolute inset-0 bg-primary/10 flex items-center justify-center">
@@ -675,6 +689,7 @@ export default function Home() {
                     fill 
                     sizes="(max-width: 768px) 100vw, 25vw"
                     className="object-cover group-hover:scale-110 transition-transform duration-700"
+                    unoptimized={moment.imageUrl.startsWith('data:')}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-6">
                     <span className="text-white font-headline font-bold uppercase tracking-widest text-xs">{moment.title}</span>
@@ -729,6 +744,46 @@ export default function Home() {
                       required
                     />
                   </div>
+
+                  <div className="space-y-2">
+                    <label className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">Optional Photo</label>
+                    <Tabs value={testimonyUploadMethod} onValueChange={(v) => {
+                      setTestimonyUploadMethod(v as 'file' | 'link');
+                      setTestimonyImage('');
+                    }} className="w-full">
+                      <TabsList className="grid w-full grid-cols-2">
+                        <TabsTrigger value="file" className="text-[10px] font-bold uppercase"><Upload className="h-3 w-3 mr-2" /> File</TabsTrigger>
+                        <TabsTrigger value="link" className="text-[10px] font-bold uppercase"><LinkIcon className="h-3 w-3 mr-2" /> Link</TabsTrigger>
+                      </TabsList>
+                      <TabsContent value="file" className="pt-2">
+                        <div className="relative">
+                          <div className={cn(
+                            "border-2 border-dashed rounded-xl p-6 flex flex-col items-center justify-center gap-2 transition-all",
+                            testimonyImage && testimonyUploadMethod === 'file' ? "bg-emerald-50 border-emerald-200" : "bg-muted/30 border-muted-foreground/20"
+                          )}>
+                            {testimonyImage && testimonyUploadMethod === 'file' ? (
+                              <p className="text-[10px] font-bold uppercase text-emerald-700">Photo Attached</p>
+                            ) : (
+                              <>
+                                <Upload className="h-5 w-5 text-muted-foreground/40" />
+                                <p className="text-[9px] font-bold uppercase text-muted-foreground">Upload from device</p>
+                                <Input type="file" accept="image/*" className="absolute inset-0 opacity-0 cursor-pointer" onChange={handleTestimonyFileChange} />
+                              </>
+                            )}
+                          </div>
+                        </div>
+                      </TabsContent>
+                      <TabsContent value="link" className="pt-2">
+                        <Input 
+                          placeholder="https://example.com/photo.jpg" 
+                          className="h-10 rounded-xl text-sm"
+                          value={testimonyImage}
+                          onChange={(e) => setTestimonyImage(e.target.value)}
+                        />
+                      </TabsContent>
+                    </Tabs>
+                  </div>
+
                   <DialogFooter>
                     <Button 
                       type="submit" 
@@ -752,14 +807,25 @@ export default function Home() {
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  className="bg-white p-8 md:p-12 rounded-[2rem] md:rounded-[4rem] relative shadow-lg group hover:shadow-2xl transition-all duration-500"
+                  className="bg-white p-8 md:p-12 rounded-[2rem] md:rounded-[4rem] relative shadow-lg group hover:shadow-2xl transition-all duration-500 overflow-hidden"
                 >
-                  <div className="space-y-6 md:space-y-8">
+                  {t.imageUrl && (
+                    <div className="absolute inset-0 opacity-10 group-hover:opacity-20 transition-opacity">
+                      <Image src={t.imageUrl} alt="" fill className="object-cover" unoptimized={t.imageUrl.startsWith('data:')} />
+                    </div>
+                  )}
+                  <div className="space-y-6 md:space-y-8 relative z-10">
                     <p className="text-primary font-medium italic text-lg md:text-xl leading-relaxed">"{t.content}"</p>
                     <div className="flex items-center gap-3 md:gap-4 border-t border-primary/10 pt-6 md:pt-8">
-                      <div className="w-10 h-10 md:w-12 md:h-12 bg-primary text-white rounded-full flex items-center justify-center font-black uppercase text-sm">
-                        {(t.name || 'C').charAt(0)}
-                      </div>
+                      {t.imageUrl ? (
+                        <div className="w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden border-2 border-primary/20 shadow-md">
+                          <Image src={t.imageUrl} alt={t.name} width={48} height={48} className="object-cover" unoptimized={t.imageUrl.startsWith('data:')} />
+                        </div>
+                      ) : (
+                        <div className="w-10 h-10 md:w-12 md:h-12 bg-primary text-white rounded-full flex items-center justify-center font-black uppercase text-sm">
+                          {(t.name || 'C').charAt(0)}
+                        </div>
+                      )}
                       <div className="flex flex-col">
                         <span className="font-headline font-bold text-primary uppercase tracking-widest text-[10px] md:text-xs">{t.name}</span>
                         <span className="text-[8px] md:text-[9px] font-bold uppercase text-muted-foreground tracking-widest">Member</span>

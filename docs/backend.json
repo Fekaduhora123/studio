@@ -1,4 +1,3 @@
-
 {
   "entities": {
     "Donation": {
@@ -97,6 +96,7 @@
         "name": { "type": "string" },
         "content": { "type": "string" },
         "email": { "type": "string", "format": "email" },
+        "imageUrl": { "type": "string", "description": "Optional image for the testimony." },
         "status": { "type": "string", "enum": ["pending", "approved"], "default": "pending" },
         "timestamp": { "type": "string", "format": "date-time" }
       },

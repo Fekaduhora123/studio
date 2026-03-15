@@ -22,7 +22,8 @@ import {
   Loader2, 
   Trash2, 
   Upload,
-  CheckCircle2
+  CheckCircle2,
+  Link as LinkIcon
 } from 'lucide-react';
 import { useCollection, useFirestore } from '@/firebase';
 import { collection, query, orderBy, doc, deleteDoc, addDoc, serverTimestamp } from 'firebase/firestore';
@@ -37,6 +38,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { useToast } from '@/hooks/use-toast';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 const momentSchema = z.object({
   title: z.string().min(2, "Title is required"),
@@ -53,6 +55,7 @@ export default function SacredMomentsPage() {
   const [searchTerm, setSearchTerm] = React.useState('');
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
   const [isProcessingFile, setIsProcessingFile] = React.useState(false);
+  const [uploadMethod, setUploadMethod] = React.useState<'file' | 'link'>('file');
 
   React.useEffect(() => {
     setMounted(true);
@@ -74,7 +77,6 @@ export default function SacredMomentsPage() {
     },
   });
 
-  // Watch imageUrl to trigger re-renders when a file is selected
   const imageUrl = form.watch('imageUrl');
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -178,40 +180,65 @@ export default function SacredMomentsPage() {
                 />
                 
                 <div className="space-y-3">
-                  <label className="text-[10px] font-bold uppercase tracking-wider">Image File</label>
-                  <div className="relative">
-                    <div className={cn(
-                      "border-2 border-dashed rounded-xl p-8 flex flex-col items-center justify-center gap-3 transition-all",
-                      imageUrl ? "bg-emerald-50 border-emerald-200" : "bg-muted/30 border-muted-foreground/20"
-                    )}>
-                      {isProcessingFile ? (
-                        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-                      ) : imageUrl ? (
-                        <>
-                          <CheckCircle2 className="h-8 w-8 text-emerald-600" />
-                          <p className="text-[10px] font-bold uppercase text-emerald-700">Image Selected</p>
-                          <Button 
-                            variant="ghost" 
-                            size="sm" 
-                            className="text-[9px] uppercase font-bold"
-                            type="button"
-                            onClick={() => form.setValue('imageUrl', '')}
-                          >Change Image</Button>
-                        </>
-                      ) : (
-                        <>
-                          <Upload className="h-8 w-8 text-muted-foreground/40" />
-                          <p className="text-[10px] font-bold uppercase text-muted-foreground text-center">Click or drag image to upload from your computer</p>
-                          <Input 
-                            type="file" 
-                            accept="image/*" 
-                            className="absolute inset-0 opacity-0 cursor-pointer" 
-                            onChange={handleFileChange}
-                          />
-                        </>
-                      )}
-                    </div>
-                  </div>
+                  <label className="text-[10px] font-bold uppercase tracking-wider">Image Source</label>
+                  <Tabs value={uploadMethod} onValueChange={(v) => {
+                    setUploadMethod(v as 'file' | 'link');
+                    form.setValue('imageUrl', '');
+                  }} className="w-full">
+                    <TabsList className="grid w-full grid-cols-2">
+                      <TabsTrigger value="file" className="text-[10px] font-bold uppercase"><Upload className="h-3 w-3 mr-2" /> Computer</TabsTrigger>
+                      <TabsTrigger value="link" className="text-[10px] font-bold uppercase"><LinkIcon className="h-3 w-3 mr-2" /> Link</TabsTrigger>
+                    </TabsList>
+                    <TabsContent value="file" className="pt-2">
+                      <div className="relative">
+                        <div className={cn(
+                          "border-2 border-dashed rounded-xl p-8 flex flex-col items-center justify-center gap-3 transition-all",
+                          uploadMethod === 'file' && imageUrl ? "bg-emerald-50 border-emerald-200" : "bg-muted/30 border-muted-foreground/20"
+                        )}>
+                          {isProcessingFile ? (
+                            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                          ) : uploadMethod === 'file' && imageUrl ? (
+                            <>
+                              <CheckCircle2 className="h-8 w-8 text-emerald-600" />
+                              <p className="text-[10px] font-bold uppercase text-emerald-700">Image Selected</p>
+                              <Button 
+                                variant="ghost" 
+                                size="sm" 
+                                className="text-[9px] uppercase font-bold"
+                                type="button"
+                                onClick={() => form.setValue('imageUrl', '')}
+                              >Change Image</Button>
+                            </>
+                          ) : (
+                            <>
+                              <Upload className="h-8 w-8 text-muted-foreground/40" />
+                              <p className="text-[10px] font-bold uppercase text-muted-foreground text-center">Click or drag image to upload from your computer</p>
+                              <Input 
+                                type="file" 
+                                accept="image/*" 
+                                className="absolute inset-0 opacity-0 cursor-pointer" 
+                                onChange={handleFileChange}
+                              />
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    </TabsContent>
+                    <TabsContent value="link" className="pt-2">
+                      <FormField
+                        control={form.control}
+                        name="imageUrl"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormControl>
+                              <Input placeholder="https://example.com/image.jpg" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </TabsContent>
+                  </Tabs>
                   {form.formState.errors.imageUrl && <p className="text-xs text-destructive">{form.formState.errors.imageUrl.message}</p>}
                 </div>
 
@@ -275,7 +302,7 @@ export default function SacredMomentsPage() {
                   <TableCell className="pl-6 py-4">
                     <div className="relative h-12 w-20 bg-muted rounded overflow-hidden">
                       {m.imageUrl && (
-                        <Image src={m.imageUrl} alt={m.title} fill className="object-cover" sizes="80px" />
+                        <Image src={m.imageUrl} alt={m.title} fill className="object-cover" sizes="80px" unoptimized={m.imageUrl.startsWith('data:')} />
                       )}
                     </div>
                   </TableCell>

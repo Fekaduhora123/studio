@@ -35,7 +35,8 @@ import {
   Play,
   Calendar,
   Upload,
-  CheckCircle2
+  CheckCircle2,
+  Link as LinkIcon
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { useCollection, useFirestore } from '@/firebase';
@@ -52,6 +53,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { useToast } from '@/hooks/use-toast';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 const sermonSchema = z.object({
   title: z.string().min(2, "Title is required"),
@@ -71,6 +73,7 @@ export default function SermonsManagementPage() {
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
   const [editingSermon, setEditingSermon] = React.useState<any>(null);
   const [isProcessingFile, setIsProcessingFile] = React.useState(false);
+  const [uploadMethod, setUploadMethod] = React.useState<'file' | 'link'>('file');
 
   React.useEffect(() => {
     setMounted(true);
@@ -94,7 +97,6 @@ export default function SermonsManagementPage() {
     },
   });
 
-  // Watch thumbnailUrl to trigger re-renders when a file is selected
   const thumbnailUrl = form.watch('thumbnailUrl');
 
   React.useEffect(() => {
@@ -106,6 +108,7 @@ export default function SermonsManagementPage() {
         videoUrl: editingSermon.videoUrl,
         thumbnailUrl: editingSermon.thumbnailUrl || "",
       });
+      setUploadMethod(editingSermon.thumbnailUrl?.startsWith('data:') ? 'file' : 'link');
     } else {
       form.reset({
         title: "",
@@ -114,6 +117,7 @@ export default function SermonsManagementPage() {
         videoUrl: "",
         thumbnailUrl: "",
       });
+      setUploadMethod('file');
     }
   }, [editingSermon, form]);
 
@@ -274,40 +278,65 @@ export default function SermonsManagementPage() {
                 />
                 
                 <div className="space-y-3">
-                  <label className="text-[10px] font-bold uppercase tracking-wider">Thumbnail Image</label>
-                  <div className="relative">
-                    <div className={cn(
-                      "border-2 border-dashed rounded-xl p-8 flex flex-col items-center justify-center gap-3 transition-all",
-                      thumbnailUrl ? "bg-emerald-50 border-emerald-200" : "bg-muted/30 border-muted-foreground/20"
-                    )}>
-                      {isProcessingFile ? (
-                        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-                      ) : thumbnailUrl ? (
-                        <>
-                          <CheckCircle2 className="h-8 w-8 text-emerald-600" />
-                          <p className="text-[10px] font-bold uppercase text-emerald-700">Thumbnail Ready</p>
-                          <Button 
-                            variant="ghost" 
-                            size="sm" 
-                            className="text-[9px] uppercase font-bold"
-                            type="button"
-                            onClick={() => form.setValue('thumbnailUrl', '')}
-                          >Change Image</Button>
-                        </>
-                      ) : (
-                        <>
-                          <Upload className="h-8 w-8 text-muted-foreground/40" />
-                          <p className="text-[10px] font-bold uppercase text-muted-foreground text-center">Click to upload thumbnail from computer</p>
-                          <Input 
-                            type="file" 
-                            accept="image/*" 
-                            className="absolute inset-0 opacity-0 cursor-pointer" 
-                            onChange={handleFileChange}
-                          />
-                        </>
-                      )}
-                    </div>
-                  </div>
+                  <label className="text-[10px] font-bold uppercase tracking-wider">Thumbnail Source</label>
+                  <Tabs value={uploadMethod} onValueChange={(v) => {
+                    setUploadMethod(v as 'file' | 'link');
+                    form.setValue('thumbnailUrl', '');
+                  }} className="w-full">
+                    <TabsList className="grid w-full grid-cols-2">
+                      <TabsTrigger value="file" className="text-[10px] font-bold uppercase"><Upload className="h-3 w-3 mr-2" /> Computer</TabsTrigger>
+                      <TabsTrigger value="link" className="text-[10px] font-bold uppercase"><LinkIcon className="h-3 w-3 mr-2" /> Link</TabsTrigger>
+                    </TabsList>
+                    <TabsContent value="file" className="pt-2">
+                      <div className="relative">
+                        <div className={cn(
+                          "border-2 border-dashed rounded-xl p-8 flex flex-col items-center justify-center gap-3 transition-all",
+                          uploadMethod === 'file' && thumbnailUrl ? "bg-emerald-50 border-emerald-200" : "bg-muted/30 border-muted-foreground/20"
+                        )}>
+                          {isProcessingFile ? (
+                            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                          ) : uploadMethod === 'file' && thumbnailUrl ? (
+                            <>
+                              <CheckCircle2 className="h-8 w-8 text-emerald-600" />
+                              <p className="text-[10px] font-bold uppercase text-emerald-700">Thumbnail Ready</p>
+                              <Button 
+                                variant="ghost" 
+                                size="sm" 
+                                className="text-[9px] uppercase font-bold"
+                                type="button"
+                                onClick={() => form.setValue('thumbnailUrl', '')}
+                              >Change Image</Button>
+                            </>
+                          ) : (
+                            <>
+                              <Upload className="h-8 w-8 text-muted-foreground/40" />
+                              <p className="text-[10px] font-bold uppercase text-muted-foreground text-center">Click to upload thumbnail from computer</p>
+                              <Input 
+                                type="file" 
+                                accept="image/*" 
+                                className="absolute inset-0 opacity-0 cursor-pointer" 
+                                onChange={handleFileChange}
+                              />
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    </TabsContent>
+                    <TabsContent value="link" className="pt-2">
+                      <FormField
+                        control={form.control}
+                        name="thumbnailUrl"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormControl>
+                              <Input placeholder="https://example.com/thumb.jpg" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </TabsContent>
+                  </Tabs>
                   {form.formState.errors.thumbnailUrl && <p className="text-xs text-destructive">{form.formState.errors.thumbnailUrl.message}</p>}
                 </div>
 
@@ -376,7 +405,7 @@ export default function SermonsManagementPage() {
                     <div className="flex items-center gap-3">
                       <div className="relative h-12 w-20 bg-muted rounded overflow-hidden flex items-center justify-center">
                         {s.thumbnailUrl ? (
-                          <Image src={s.thumbnailUrl} alt={s.title} fill className="object-cover" sizes="80px" />
+                          <Image src={s.thumbnailUrl} alt={s.title} fill className="object-cover" sizes="80px" unoptimized={s.thumbnailUrl.startsWith('data:')} />
                         ) : (
                           <Video className="h-6 w-6 text-muted-foreground/30" />
                         )}

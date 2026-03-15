@@ -34,7 +34,9 @@ import {
   MessageSquare,
   Clock,
   Plus,
-  Edit
+  Edit,
+  Upload,
+  Link as LinkIcon
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { useCollection, useFirestore } from '@/firebase';
@@ -50,11 +52,15 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { cn } from '@/lib/utils';
+import Image from 'next/image';
 
 const testimonySchema = z.object({
   name: z.string().min(2, "Name is required"),
   email: z.string().email("Invalid email").optional().or(z.literal('')),
   content: z.string().min(10, "Story content is too short"),
+  imageUrl: z.string().optional().or(z.literal('')),
   status: z.enum(["approved", "pending"]).default("pending"),
 });
 
@@ -67,6 +73,8 @@ export default function TestimoniesManagementPage() {
   const [searchTerm, setSearchTerm] = React.useState('');
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
   const [editingTestimony, setEditingTestimony] = React.useState<any>(null);
+  const [isProcessingFile, setIsProcessingFile] = React.useState(false);
+  const [uploadMethod, setUploadMethod] = React.useState<'file' | 'link'>('file');
 
   React.useEffect(() => {
     setMounted(true);
@@ -85,9 +93,12 @@ export default function TestimoniesManagementPage() {
       name: "",
       email: "",
       content: "",
+      imageUrl: "",
       status: "pending",
     },
   });
+
+  const imageUrl = form.watch('imageUrl');
 
   React.useEffect(() => {
     if (editingTestimony) {
@@ -95,17 +106,39 @@ export default function TestimoniesManagementPage() {
         name: editingTestimony.name,
         email: editingTestimony.email || "",
         content: editingTestimony.content,
+        imageUrl: editingTestimony.imageUrl || "",
         status: editingTestimony.status || "pending",
       });
+      setUploadMethod(editingTestimony.imageUrl?.startsWith('data:') ? 'file' : 'link');
     } else {
       form.reset({
         name: "",
         email: "",
         content: "",
+        imageUrl: "",
         status: "pending",
       });
+      setUploadMethod('file');
     }
   }, [editingTestimony, form]);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsProcessingFile(true);
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const result = event.target?.result as string;
+      form.setValue('imageUrl', result, { shouldValidate: true });
+      setIsProcessingFile(false);
+    };
+    reader.onerror = () => {
+      toast({ variant: "destructive", title: "Error processing image" });
+      setIsProcessingFile(false);
+    };
+    reader.readAsDataURL(file);
+  };
 
   const handleUpdateStatus = (id: string, status: 'approved' | 'pending') => {
     if (!firestore) return;
@@ -243,8 +276,60 @@ export default function TestimoniesManagementPage() {
                     </FormItem>
                   )}
                 />
+
+                <div className="space-y-3">
+                  <label className="text-[10px] font-bold uppercase tracking-wider">Testimony Image (Optional)</label>
+                  <Tabs value={uploadMethod} onValueChange={(v) => {
+                    setUploadMethod(v as 'file' | 'link');
+                    form.setValue('imageUrl', '');
+                  }} className="w-full">
+                    <TabsList className="grid w-full grid-cols-2">
+                      <TabsTrigger value="file" className="text-[10px] font-bold uppercase"><Upload className="h-3 w-3 mr-2" /> Computer</TabsTrigger>
+                      <TabsTrigger value="link" className="text-[10px] font-bold uppercase"><LinkIcon className="h-3 w-3 mr-2" /> Link</TabsTrigger>
+                    </TabsList>
+                    <TabsContent value="file" className="pt-2">
+                      <div className="relative">
+                        <div className={cn(
+                          "border-2 border-dashed rounded-xl p-6 flex flex-col items-center justify-center gap-2 transition-all",
+                          uploadMethod === 'file' && imageUrl ? "bg-emerald-50 border-emerald-200" : "bg-muted/30 border-muted-foreground/20"
+                        )}>
+                          {isProcessingFile ? (
+                            <Loader2 className="h-6 w-6 animate-spin text-primary" />
+                          ) : uploadMethod === 'file' && imageUrl ? (
+                            <>
+                              <CheckCircle2 className="h-6 w-6 text-emerald-600" />
+                              <p className="text-[10px] font-bold uppercase text-emerald-700">Image Attached</p>
+                              <Button variant="ghost" size="sm" className="text-[9px] uppercase font-bold h-7" type="button" onClick={() => form.setValue('imageUrl', '')}>Change</Button>
+                            </>
+                          ) : (
+                            <>
+                              <Upload className="h-6 w-6 text-muted-foreground/40" />
+                              <p className="text-[9px] font-bold uppercase text-muted-foreground text-center">Upload from computer</p>
+                              <Input type="file" accept="image/*" className="absolute inset-0 opacity-0 cursor-pointer" onChange={handleFileChange} />
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    </TabsContent>
+                    <TabsContent value="link" className="pt-2">
+                      <FormField
+                        control={form.control}
+                        name="imageUrl"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormControl>
+                              <Input placeholder="https://example.com/photo.jpg" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </TabsContent>
+                  </Tabs>
+                </div>
+
                 <DialogFooter className="pt-4">
-                  <Button type="submit" className="w-full bg-primary font-bold uppercase text-xs h-12">
+                  <Button type="submit" className="w-full bg-primary font-bold uppercase text-xs h-12" disabled={isProcessingFile}>
                     {editingTestimony ? 'Update Entry' : 'Post to Database'}
                   </Button>
                 </DialogFooter>
@@ -278,8 +363,7 @@ export default function TestimoniesManagementPage() {
           <CardContent>
             <div className="text-3xl font-bold">{testimonies?.filter(t => t.status === 'pending').length || 0}</div>
           </CardContent>
-        </Card>
-      </div>
+        </div>
 
       <Card className="border-none shadow-xl overflow-hidden">
         <CardHeader className="bg-white/50 border-b p-4">
@@ -299,6 +383,7 @@ export default function TestimoniesManagementPage() {
               <TableRow>
                 <TableHead className="text-[10px] font-bold uppercase tracking-wider py-4 pl-6">Member</TableHead>
                 <TableHead className="text-[10px] font-bold uppercase tracking-wider">Story / Idea</TableHead>
+                <TableHead className="text-[10px] font-bold uppercase tracking-wider">Image</TableHead>
                 <TableHead className="text-[10px] font-bold uppercase tracking-wider">Date</TableHead>
                 <TableHead className="text-[10px] font-bold uppercase tracking-wider">Status</TableHead>
                 <TableHead className="text-right text-[10px] font-bold uppercase tracking-wider pr-6">Actions</TableHead>
@@ -307,14 +392,14 @@ export default function TestimoniesManagementPage() {
             <TableBody>
               {loading ? (
                 <TableRow>
-                  <TableCell colSpan={5} className="text-center py-20 italic text-muted-foreground text-sm">
+                  <TableCell colSpan={6} className="text-center py-20 italic text-muted-foreground text-sm">
                     <Loader2 className="h-8 w-8 animate-spin mx-auto mb-2 text-primary/20" />
                     Loading submissions...
                   </TableCell>
                 </TableRow>
               ) : filteredTestimonies?.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={5} className="text-center py-20 text-muted-foreground italic text-sm">
+                  <TableCell colSpan={6} className="text-center py-20 text-muted-foreground italic text-sm">
                     No submissions found.
                   </TableCell>
                 </TableRow>
@@ -326,8 +411,17 @@ export default function TestimoniesManagementPage() {
                       <span className="text-[10px] text-muted-foreground">{t.email || 'No email'}</span>
                     </div>
                   </TableCell>
-                  <TableCell className="max-w-md">
+                  <TableCell className="max-w-xs md:max-w-md">
                     <p className="text-xs leading-relaxed line-clamp-2 text-slate-700 italic">"{t.content}"</p>
+                  </TableCell>
+                  <TableCell>
+                    {t.imageUrl ? (
+                      <div className="relative h-8 w-12 rounded bg-muted overflow-hidden">
+                        <Image src={t.imageUrl} alt={t.name} fill className="object-cover" sizes="48px" unoptimized={t.imageUrl.startsWith('data:')} />
+                      </div>
+                    ) : (
+                      <span className="text-[9px] text-muted-foreground uppercase font-bold">No Image</span>
+                    )}
                   </TableCell>
                   <TableCell className="text-[11px] font-medium text-muted-foreground">
                     <div className="flex items-center gap-1">
